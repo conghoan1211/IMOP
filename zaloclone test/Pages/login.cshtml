@@ -1,0 +1,110 @@
+﻿@page
+@model Server.Pages.loginModel
+
+@{
+    Layout = "";
+}
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <!-- css -->
+    <link rel="stylesheet" href="~/css/base.css">
+    <link rel="stylesheet" href="~/css/common.css">
+    <link rel="stylesheet" href="~/css/login.css">
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <!-- icon title -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="~/img/Designer.png">
+</head>
+
+<body>
+    <div class="login">
+        <header class="flex-column login-head">
+            <img src="https://stc-zaloid.zdn.vn/zaloid/client/images/zlogo.png" class="login-logo" />
+            <div class="login-describe">Đăng nhập tài khoản Zalo </div>
+            <div class="login-describe">để kết nối với ứng dụng Zalo Web</div>
+        </header>
+        <div class="login-body" id="form-login">
+            <form class="flex-column login-form">
+                <div class="flex-align-center login-info">
+                    <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                    <span class="login-number-country">(+84)</span>
+                    <input required type="text" minlength="10" maxlength="10" class="login-input"
+                           placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                </div>
+                <div class="flex-align-center login-info">
+                    <span class="login-icon"><i class="fa-solid fa-lock"></i></span>
+                    <input required type="password" class="login-input" placeholder="Mật khẩu" />
+                </div>
+                <div class="flex-align-center-between login-btn-more">
+                    <div class="login-btn-remember">
+                        <input id="remember" type="checkbox" />
+                        <label for="remember"> Nhớ mật khẩu?</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn login-btn disabled" disabled>Đăng nhập với mật khẩu</button>
+                <div class="login-btn-forgot">
+                    <a href="">Quên mật khẩu?</a>
+                </div>
+            </form>
+        </div>
+        <div class="login-body" id="form-forget" style="display: none;">
+            <div class="flex-align-center login-tab">
+                <button type="button" class="flex-align-justify-center login-tab-item" id="email-tab">Email</button>
+                <button type="button" class="flex-align-justify-center login-tab-item active" id="phone-tab">Số điện thoại</button>
+            </div>
+            <div class="flex-column login-forgot-form">
+                <div class="flex-align-center login-info" id="phone-input">
+                    <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                    <span class="login-number-country">(+84)</span>
+                    <input type="text" minlength="10" maxlength="10" class="login-input" placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                    <button class="flex-align-center clear-icon">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+                <div class="flex-align-center login-info" id="email-input" style="display: none;">
+                    <span class="login-icon phone"><i class="fa-regular fa-envelope"></i></span>
+                    <input type="email" class="login-input" placeholder="Nhập email" />
+                    <button class="flex-align-center clear-icon">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+                <button class="btn login-btn">Send OTP</button>
+
+                <div class="flex-align-center login-otp-form">
+                    <div class=" flex-align-center login-info">
+                        <span class="login-icon verify"><i class="bx bxs-check-shield"></i></span>
+                        <input type="text" maxlength="6" class="login-input" placeholder="OTP here"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                    </div>
+                    <button class="btn login-otp-btn">Verify</button>
+                </div>
+                <button type="button" class="flex-align-center btn-return">
+                    <i class="fa-solid fa-angles-left"></i>&nbsp;
+                    Quay lại
+                </button>
+            </div>
+        </div>
+        <footer class="login-footer">
+            <span class="login-footer-title">Bạn chưa có tài khoản?</span>
+            <a href="register" class="login-footer-link">Đăng kí ngay!</a>
+        </footer>
+    </div>
+    <script src="~/js/login/tab.js"></script>
+
+</body>
+
+</html>

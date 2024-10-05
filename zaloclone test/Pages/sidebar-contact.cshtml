@@ -1,0 +1,44 @@
+﻿@page
+@model Server.Pages.sidebar_contactModel
+@{
+}
+<sidebar class="message-container">
+    <header class="flex header-search">
+        <div class="flex-justify-center search">
+            <button class="flex-align-center search-icon">
+                <i class="fa-solid fa-magnifying-glass "></i>
+            </button>
+            <input class="search-input" type="text" placeholder="Tìm kiếm">
+            <button class="flex-align-center clear-icon">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+        </div>
+        <button class="btn-search-add">
+            <i class="fa-solid fa-user-plus btn-search-add__icon"></i>
+        </button>
+        <button class="btn-search-add">
+            <i class="fa-solid fa-user-group btn-search-add__icon"></i>
+        </button>
+    </header>
+
+    <div class="cont-list-msg">
+        <div class="flex-column contact-menu">
+            <button class="flex-align-center item-menu" id="friendList">
+                <img class="img-menu-item" src="https://cdn-icons-png.flaticon.com/512/77/77543.png" alt="">
+                <div class="name-menu">Danh sách bạn bè</div>
+            </button>
+            <button class="flex-align-center item-menu" id="groupList">
+                <img class="img-menu-item" src="https://cdn-icons-png.flaticon.com/256/1040/1040056.png" alt="">
+                <div class="name-menu">Danh sách nhóm và cộng đồng</div>
+            </button>
+            <button class="flex-align-center item-menu" id="friendRequest">
+                <img class="img-menu-item" src="https://cdn4.iconfinder.com/data/icons/users-114/24/user_login-512.png" alt="">
+                <div class="name-menu">Lời mời kết bạn</div>
+            </button>
+            <button class="flex-align-center item-menu" id="groupInvite">
+                <img class="img-menu-item" src="https://cdn-icons-png.flaticon.com/512/1387/1387940.png" alt="">
+                <div class="name-menu">Lời mời vào nhóm và cộng đồng</div>
+            </button>
+        </div>
+    </div>
+</sidebar>

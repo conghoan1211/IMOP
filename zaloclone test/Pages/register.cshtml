@@ -1,0 +1,96 @@
+﻿@page
+@model zaloclone_test.ViewModels.UserRegister;
+@{
+    ViewData["Title"] = "Đăng ký";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/base.css">
+    <link rel="stylesheet" href="~/assets/css/common.css">
+    <link rel="stylesheet" href="~/css/login.css">
+    <link rel="stylesheet" href="~/css/register.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <!-- Icon title -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="~/img/Designer.png">
+</head>
+
+<body>
+    <div class="login">
+        <header class="flex-column register-head">
+            <img src="https://stc-zaloid.zdn.vn/zaloid/client/images/zlogo.png" class="login-logo" />
+            <div class="login-describe">Đăng ký tài khoản Zalo</div>
+        </header>
+        <div class="login-body" id="form-login">
+            <form class="flex-column login-form" method="post" asp-page-handler="Register">
+                <div class="flex-align-center login-info">
+                    <input asp-for="UserName" required minlength="5" maxlength="40" class="login-input"
+                           placeholder="Nhập tên bạn muốn hiển thị" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="flex-align-center register-gender">
+                    <div class="flex-align-center">
+                        <input asp-for="Sex" type="radio" class="register-gender-btn" value="1">
+                        <label class="register-gender-text">Nam</label>
+                    </div>
+                    <div class="flex-align-center">
+                        <input asp-for="Sex" type="radio" class="register-gender-btn" value="2">
+                        <label class="register-gender-text">Nữ</label>
+                    </div>
+                    <div class="flex-align-center">
+                        <input asp-for="Sex" type="radio" class="register-gender-btn" value="3">
+                        <label class="register-gender-text">Khác</label>
+                    </div>
+                    <span asp-validation-for="Sex" class="text-danger"></span>
+                </div>
+                <div class="flex-column">
+                    <input asp-for="Dob" class="register-dob" type="date" />
+                    <span asp-validation-for="Dob" class="text-danger"></span>
+                </div>
+                <div class="flex-align-center login-info">
+                    <span class="login-number-country">(+84)</span>
+                    <input asp-for="Phone" required minlength="10" maxlength="10" class="login-input"
+                           placeholder="Số điện thoại" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="flex-align-center login-info">
+                    <input asp-for="Email" required class="login-input" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="flex-align-center login-info">
+                    <input asp-for="Password" required type="password" class="login-input" placeholder="Mật khẩu" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="flex-align-center login-info">
+                    <input asp-for="RePassword" required type="password" class="login-input" placeholder="Nhập lại mật khẩu" />
+                    <span asp-validation-for="RePassword" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn login-btn">Đăng ký ngay</button>
+
+                <a href="login" class="flex-align-center register-return">
+                    <i class="fa-solid fa-angles-left"></i>&nbsp;
+                    Quay lại
+                </a>
+            </form>
+        </div>
+    </div>
+    <script src="~/js/login/tab.js"></script>
+</body>
+
+</html>

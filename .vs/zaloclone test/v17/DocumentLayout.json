@@ -1,0 +1,45 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\services\\authenticateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\services\\authenticateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthenticateService.cs",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Services\\AuthenticateService.cs",
+              "RelativeDocumentMoniker": "zaloclone test\\Services\\AuthenticateService.cs",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Services\\AuthenticateService.cs",
+              "RelativeToolTip": "zaloclone test\\Services\\AuthenticateService.cs",
+              "ViewState": "AQIAAEoAAAAAAAAAAAAmwEgAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-05T09:23:51.026Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

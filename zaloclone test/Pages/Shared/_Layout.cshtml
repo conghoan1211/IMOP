@@ -1,0 +1,39 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zalo - user</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <!-- css -->
+    <link rel="stylesheet" href="./assests/css/base.css">
+    <link rel="stylesheet" href="./assests/css/common.css">
+    <link rel="stylesheet" href="./assests/css/nav-header.css">
+    <link rel="stylesheet" href="./assests/css/message-sidebar.css">
+    <link rel="stylesheet" href="./assests/css/message-dialog.css">
+    <link rel="stylesheet" href="./assests/css/contact-sidebar.css">
+    <link rel="stylesheet" href="./assests/css/aside-contact.css">
+    <link rel="stylesheet" href="./assests/css/aside-invitation.css">
+    <link rel="stylesheet" href="./assests/css/profile-dialog.css">
+    <link rel="stylesheet" href="./assests/css/sidebar-search.css">
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+    <!-- icon title -->
+    <link rel="icon" type="image/x-icon" href="./assests/img/Designer.png">
+</head>
+<body>
+
+    <main role="main" class="flex">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

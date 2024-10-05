@@ -1,0 +1,141 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1;
+    height: 100%;
+    min-height: 100%;
+}
+
+.sidebar-head {
+    width: var(--layer-header-width);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--layer-background-leftmenu);
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
+
+.nav-btn {
+    width: 100%;
+    height: var(--layer-header-width);
+}
+
+.avatar {
+    padding: 28px 0 10px 0;
+    height: 100px;
+}
+
+.nav-btn:hover {
+    background-color: var(--layer-background-leftmenu-hover);
+}
+
+.nav-btn.active {
+    background-color: var(--layer-background-leftmenu-selected);
+}
+
+.avatar:hover {
+    background-color: transparent;
+}
+
+.nav-btn-icon {
+    font-size: 2.3rem;
+    color: var(--icon-on-color);
+    font-weight: 300;
+}
+
+.nav-btn-img {
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--icon-on-color);
+}
+
+
+/* default welcome aside*/
+
+.aside-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-text {
+    width: 415px;
+    text-align: center;
+    color: var(--text-primary);
+    margin-bottom: 60px;
+    max-width: calc(100% - 24px);
+}
+
+.welcome-text h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.welcome-detail {
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.welcome-img {
+    width: 380px;
+    object-fit: contain;
+}
+
+.welcome-desc {
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    margin: 26px 0 10px;
+    color: var(--text-information);
+    width: 100%;
+}
+
+/*setting modal*/
+.nav-setting {
+    position: relative;
+}
+
+/* Initially hide the modal */
+.setting-modal {
+    display: none;
+    position: absolute;
+    bottom: 64px;
+    left: 14px;
+    background-color: white;
+    box-shadow: var(--box-shadow-025);
+    padding: 10px 0;
+    z-index: 1000;
+    border-radius: 3px;
+    width: 180px;
+}
+
+/* Show the modal */
+.setting-modal.active {
+    display: block;
+}
+
+.setting-btn {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 0px 14px;
+    font-size: 1.4rem;
+    height: 36px;
+
+    &:hover {
+        background-color: var(--layer-msg-bg-hover);
+    }
+
+    &.btn-red {
+        color: var(--icon-count-noti-bg);
+        border-top: 1px solid var(--border);
+        padding-top: 10px;
+    }
+}

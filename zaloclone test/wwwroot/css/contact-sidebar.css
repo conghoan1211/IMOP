@@ -1,0 +1,35 @@
+.contact-menu {
+    height: var(--conversation-list-height);
+    width: 100%;
+    max-width: 100%;
+    min-width: 300px;
+    transition: visibility 0s, opacity .5s linear;
+}
+
+.item-menu {
+    font-size: 1.55rem;
+    font-weight: 500;
+    line-height: 1.5;
+    height: 56px;
+    padding: 0 19px;
+    color: var(--text-primary);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--layer-msg-bg-hover);
+    }
+
+    &.active {
+        background-color: var(--layer-msg-bg-selected);
+    }
+}
+
+.name-menu {
+    margin: 0;
+    padding: 0 14px;
+}
+
+.img-menu-item {
+    width: 24px;
+    height: 24px;
+}

@@ -1,0 +1,64 @@
+.register-head {
+    margin-bottom: 14px;
+    align-items: center;
+}
+
+.register-gender {
+    margin-top: 10px;
+
+    div {
+        margin-right: 34px;
+    }
+}
+
+.register-gender-btn {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+.register-gender-text {
+    font-size: 1.35rem;
+    color: var(--text-primary);
+    padding-left: 7px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.register-dob {
+    width: 70%;
+    margin-bottom: 14px;
+    margin-top: 20px;
+    border: 1px solid var(--border);
+    background-color: transparent;
+    font-size: 1.4rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: all .3s;
+    height: 36px;
+
+    &:focus-within {
+        border-color: var(--button-primary-normal);
+        background-color: transparent !important;
+    }
+}
+
+.register-return {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-top: 10px;
+    text-decoration: none;
+    
+    &:hover {
+        color: var(--text-information);
+    }
+
+    i {
+        padding-top: 1px;
+    }
+}
+
+.login-otp-form {
+    margin-top: 8px;
+}

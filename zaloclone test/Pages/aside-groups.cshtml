@@ -1,0 +1,87 @@
+﻿@page
+@model Server.Pages.aside_groupsModel
+@{
+}
+<aside class="flex-column aside-container-msg">
+    <header class="flex-align-center aside-contact-head">
+        <img class="aside-contact-head-img" src="https://cdn-icons-png.flaticon.com/256/1040/1040056.png" alt="">
+        <div class="aside-contact-name">Danh sách nhóm và cộng đồng</div>
+    </header>
+
+    <div class="contact">
+        <div class="flex-align-center contact-list-title">
+            <span>Nhóm và cộng đồng </span>
+            <span>&nbsp;(59)</span>
+        </div>
+        <div class="cont-contact">
+            <div class="contact-filter">
+                <div class="flex-justify-center search contact-search">
+                    <button class="flex-align-center search-icon">
+                        <i class="fa-solid fa-magnifying-glass "></i>
+                    </button>
+                    <input class="search-input" type="text" placeholder="Tìm kiếm">
+                    <button class="flex-align-center clear-icon">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+                <div class="flex-align-center wrapper-filter">
+                    <select name="" id="" class="contact-filter-select">
+                        <option value="">Tên (A-Z)</option>
+                        <option value="">Tên (Z-A)</option>
+                    </select>
+                    <select name="" id="" class="contact-filter-select">
+                        <option value="">Tất Cả</option>
+                        <option value="">Mới nhất</option>
+                        <option value="">Cũ nhất</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex-align-center contact-item">
+                <img class="avatar-img friend-avatar" src="~/img/avt.jpeg" alt="">
+                <div class="flex-align-center-between friend-info">
+                    <div class="flex-column group-info">
+                        <span class="friend-name">SE1749-PRU212-Fall2024</span>
+                        <span class="group-member-count">39 thành viên</span>
+                    </div>
+                    <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
+                        <i class="fa-solid fa-ellipsis friend-more-icon"></i>
+                    </button>
+                    <div class="friend-options" style="display: none;">
+                        <ul>
+                            <li onclick="viewInfo('Dad')">Xem thông tin</li>
+                            <li onclick="blockFriend('Dad')">Chặn</li>
+                            <li onclick="deleteFriend('Dad')">Xóa bạn</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-align-center contact-item">
+                <img class="avatar-img friend-avatar" src="~/img/avt.jpeg" alt="">
+                <div class="flex-align-center-between friend-info">
+                    <div class="flex-column group-info">
+                        <span class="friend-name">EXE101-SE1746-G2</span>
+                        <span class="group-member-count">39 thành viên</span>
+                    </div>
+                    <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
+                        <i class="fa-solid fa-ellipsis friend-more-icon"></i>
+                    </button>
+                    <div class="friend-options" style="display: none;">
+                        <ul>
+                            <li onclick="viewInfo('Mom')">Xem thông tin</li>
+                            <li onclick="blockFriend('Mom')">Chặn</li>
+                            <li onclick="deleteFriend('Mom')">Xóa bạn</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- list friend go here  -->
+</aside>
