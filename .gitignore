@@ -1,7 +1,10 @@
 .vs/
 
-
 *.pdb
 *.obj
 *.exe
 *.log
+
+
+*.tmp
+*.swp
