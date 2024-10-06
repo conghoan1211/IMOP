@@ -3,9 +3,10 @@
     "",
     "\\zaloclone test",
     "\\zaloclone test\\Pages",
-    "\\zaloclone test\\wwwroot",
-    "\\zaloclone test\\wwwroot\\css"
+    "\\zaloclone test\\Services",
+    "\\zaloclone test\\Utilities",
+    "\\zaloclone test\\wwwroot\\js\\login"
   ],
-  "SelectedNode": "\\zaloclone test\\wwwroot\\css\\profile-dialog.css",
+  "SelectedNode": "\\zaloclone test\\Pages\\TestBranch.txt",
   "PreviewInSolutionExplorer": false
 }
