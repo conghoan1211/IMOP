@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("zaloclone")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a4051c4448e3465fd8d0ea2f4a43a1213c526cab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+875a867e3f06c2d55004b43b5673caf52d69d859")]
 [assembly: System.Reflection.AssemblyProductAttribute("zaloclone")]
 [assembly: System.Reflection.AssemblyTitleAttribute("zaloclone")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
