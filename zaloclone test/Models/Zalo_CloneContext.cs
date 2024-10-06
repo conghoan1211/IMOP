@@ -284,6 +284,8 @@ namespace zaloclone_test.Models
 
                 entity.Property(e => e.Email).HasMaxLength(255);
 
+                entity.Property(e => e.IsVerified).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Password).HasMaxLength(255);
 
                 entity.Property(e => e.Phone).HasMaxLength(10);

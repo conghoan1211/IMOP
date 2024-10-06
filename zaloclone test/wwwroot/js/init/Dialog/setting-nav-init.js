@@ -28,7 +28,7 @@
             changePassDialog.style.display = 'flex'; // Hiển thị dialog thay đổi mật khẩu
         });
 
-        // Close the change password dialog when close button or cancel button is clicked
+        // Close the change password dialog when close button or cancel button is clicked   
         closeBtn.addEventListener('click', function () {
             changePassDialog.style.display = 'none'; // Ẩn dialog khi nhấn nút đóng
         });

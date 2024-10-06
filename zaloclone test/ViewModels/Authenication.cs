@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using ExpressiveAnnotations.Attributes;
 
 namespace zaloclone_test.ViewModels
 {
@@ -17,13 +18,17 @@ namespace zaloclone_test.ViewModels
         [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
         [StringLength(50, ErrorMessage = "Tên đăng nhập Không hợp lệ")]
         public string? UserName { get; set; }
+        [Required(ErrorMessage = "Số điện thoại không được để trống")]
         [RegularExpression(@"^\d{10,10}$", ErrorMessage = "Số điện thoại là chuỗi 10 ký tự chữ số")]
         public string Phone { get; set; }
         [Required(ErrorMessage = "Email không được để trống")]
         [StringLength(100, ErrorMessage = "Email quá dài")]
         [EmailAddress(ErrorMessage = "Định dạng Email không đúng")]
         public string? Email { get; set; }
-        public int Sex { get; set; } 
+        [Required(ErrorMessage = "Giới tính không được để trống")]
+        public int Sex { get; set; }
+        [Required(ErrorMessage = "Ngày sinh không được để trống")]
+        [AssertThat("Dob <= Now()", ErrorMessage = "Ngày sinh không được vượt quá ngày hiện tại")]
         public DateTime Dob { get; set; }
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
         [MinLength(8, ErrorMessage = "Mật khẩu chứa ít nhất 8 ký tự")]
