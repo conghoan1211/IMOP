@@ -1,10 +1,10 @@
 .vs/
+bin/
+obj/
 
 *.pdb
-*.obj
 *.exe
-*.log
+*.dll
 
-
-*.tmp
-*.swp
+obj/Debug/
+obj/Release/
