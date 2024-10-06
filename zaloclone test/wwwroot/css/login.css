@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
+    justify-content: center;
     height: 100vh;
     width: 100%;
-    background-color: var(--layer-bg-login);
+    background: var(--layer-bg-login);
     padding-top: 70px;
 }
 
@@ -15,8 +15,11 @@
 }
 
 .login-logo {
-    margin-bottom: 20px;
-    width: 150px;
+    font-size: 7rem;
+    text-transform: uppercase;
+    color: #1312e2;
+    font-weight: 600;
+    margin-bottom: 42px;
 }
 
 .login-describe {
@@ -44,41 +47,46 @@
     border-bottom: 1px solid #ecedf0;
     margin-bottom: 7px;
     position: relative;
+    transition: all .3s;
+    &:focus-within
 
-    &:focus-within {
-        border-color: var(--layer-background-leftmenu-selected);
-    }
+{
+    border-color: var(--layer-background-leftmenu-selected);
+}
+
 }
 
 .login-icon {
     margin-right: 15px;
     margin-left: 5px;
     color: rgba(0, 0, 0, 0.5);
+    i
 
-    i {
-        font-size: 1.4rem;
-    }
+{
+    font-size: 1.4rem;
+}
 
-    &.phone {
-        margin-top: 2px;
-    }
+&.phone {
+    margin-top: 2px;
+}
 
-    &.verify {
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--text-information);
-        color: var(--icon-on-color);
-        border-radius: 50%;
-        margin-bottom: 4px;
+&.verify {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--text-information);
+    color: var(--icon-on-color);
+    border-radius: 50%;
+    margin-bottom: 4px;
+    i
 
-        i {
-            font-size: 1.2rem;
+{
+    font-size: 1.2rem;
+}
 
-        }
-    }
+}
 }
 
 .login-input {
@@ -88,7 +96,6 @@
     padding: 8px 4px;
     flex: 1;
     transition: all .3s;
-    width:75%;
 }
 
 .login-number-country {
@@ -105,37 +112,42 @@
     display: flex;
     align-items: center;
     user-select: none;
+    input
 
-    input {
-        margin: 0;
-        width: 17px;
-        height: 17px;
-    }
+{
+    margin: 0;
+    width: 17px;
+    height: 17px;
+}
 
-    label {
-        margin: 0;
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding-left: 8px;
-    }
+label {
+    margin: 0;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding-left: 8px;
+}
+
 }
 
 .login-btn-forgot {
     height: 66px;
     align-items: center;
     display: flex;
+    a
 
-    a {
-        margin: 0 auto;
-        text-decoration: none;
-        color: var(--text-primary);
-        font-size: 1.33rem;
+{
+    margin: 0 auto;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 1.33rem;
+    &:hover
 
-        &:hover {
-            text-decoration: underline;
-            color: var(--text-information);
-        }
-    }
+{
+    text-decoration: underline;
+    color: var(--text-information);
+}
+
+}
 }
 
 .login-btn {
@@ -150,10 +162,12 @@
     font-weight: 400;
     border-radius: 5px;
     margin-top: 12px;
+    &:hover
 
-    &:hover {
-        background-color: var(--button-secondary-text);
-    }
+{
+    background-color: var(--button-secondary-text);
+}
+
 }
 
 .btn.disable {
@@ -180,28 +194,34 @@
     margin-left: 15px;
     width: 100px;
     height: 40px;
+    &:hover
 
-    &:hover {
-        background-color: var(--button-secondary-hover);
-    }
+{
+    background-color: var(--button-secondary-hover);
+}
+
 }
 
 .login-otp-input {
     border-bottom: 1px solid #ecedf0;
     width: 120px;
+    &:focus-within
 
-    &:focus-within {
-        border-color: var(--layer-background-leftmenu-selected);
-    }
+{
+    border-color: var(--layer-background-leftmenu-selected);
+}
+
 }
 
 .btn-return {
     font-size: 1.1rem;
     margin-top: 10px;
+    &:hover
 
-    &:hover {
-        color: var(--text-information);
-    }
+{
+    color: var(--text-information);
+}
+
 }
 
 .login-tab {
@@ -220,11 +240,13 @@
     color: #6f6f6f;
     text-transform: uppercase;
     border-bottom: 1px solid transparent;
+    &.active
 
-    &.active {
-        border-color: var(--text-primary);
-        color: var(--text-primary);
-    }
+{
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+}
+
 }
 
 .clear-icon {
@@ -235,12 +257,19 @@
     color: #6e6f70;
     cursor: pointer;
     display: none;
+    &:hover
 
-    &:hover {
-        color: var(--button-primary-normal);
-    }
+{
+    color: var(--button-primary-normal);
 }
 
+}
+
+.register-errors-text {
+    margin: 6px 4px;
+    font-size: 1.4rem;
+    color: var(--text-errors);
+}
 
 /*footer login*/
 .login-footer {
@@ -249,13 +278,13 @@
 }
 
 .login-footer-title {
-
 }
 
 .login-footer-link {
     color: var(--text-information);
+    &:hover
 
-    &:hover {
-        font-weight: 500;
-    }
+{
+    font-weight: 500;
+}
 }

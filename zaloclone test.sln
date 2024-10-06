@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zaloclone", "zaloclone test\zaloclone.csproj", "{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppGlobal", "AppGlobal\AppGlobal.csproj", "{41A6304B-284F-4C27-B9C4-7EE6272B6A2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppGlobal", "AppGlobal\AppGlobal.csproj", "{41A6304B-284F-4C27-B9C4-7EE6272B6A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

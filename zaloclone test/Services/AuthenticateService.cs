@@ -55,10 +55,10 @@ namespace zaloclone_test.Services
 
             msg = Converter.StringToMD5(input.Password, out string mkMd5);
             if (msg.Length > 0) return $"Error convert to MD5: {msg}";
-
+            var userid = Guid.NewGuid().ToString();
             var user = new User
             {
-                UserId = Guid.NewGuid().ToString(),
+                UserId = userid,
                 Username = input.UserName,
                 Phone = input.Phone,
                 Email = input.Email,
@@ -67,7 +67,11 @@ namespace zaloclone_test.Services
                 Sex = input.Sex,
                 Dob = input.Dob,
                 CreateAt = DateTime.Now,
+                CreateUser = userid,
                 Status = (int)UserStatus.Inactive,
+                IsActive = true,
+                IsDisable = false,
+                IsVerified = false,
             };
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -81,7 +85,12 @@ namespace zaloclone_test.Services
 
         public string DoVerifyOTP(VerifyOTP input, out object obj)
         {
-            throw new NotImplementedException();
+            obj = null;
+            string msg = "";
+
+
+
+            return string.Empty;
         }
     }
 }

@@ -3,8 +3,52 @@
   "WorkspaceRootPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\wwwroot\\js\\init\\dialog\\setting-nav-init.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\wwwroot\\js\\init\\dialog\\setting-nav-init.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\services\\authenticateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\services\\authenticateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\pages\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\pages\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\pages\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\pages\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\utilities\\emailhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\utilities\\emailhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\configurations\\configmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\configurations\\configmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41A6304B-284F-4C27-B9C4-7EE6272B6A2C}|AppGlobal\\AppGlobal.csproj|d:\\he170404\\ky7_he170404\\imop\\appglobal\\common\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41A6304B-284F-4C27-B9C4-7EE6272B6A2C}|AppGlobal\\AppGlobal.csproj|solutionrelative:appglobal\\common\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\viewmodels\\authenication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\viewmodels\\authenication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\wwwroot\\css\\base.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\wwwroot\\css\\base.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\wwwroot\\css\\register.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\wwwroot\\css\\register.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\wwwroot\\css\\login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\wwwroot\\css\\login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|d:\\he170404\\ky7_he170404\\imop\\zaloclone test\\pages\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE1A53D4-0F8D-4224-A7C3-B0CEBE6CA1D5}|zaloclone test\\zaloclone.csproj|solutionrelative:zaloclone test\\pages\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,14 +71,157 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "setting-nav-init.js",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\js\\init\\Dialog\\setting-nav-init.js",
+              "RelativeDocumentMoniker": "zaloclone test\\wwwroot\\js\\init\\Dialog\\setting-nav-init.js",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\js\\init\\Dialog\\setting-nav-init.js",
+              "RelativeToolTip": "zaloclone test\\wwwroot\\js\\init\\Dialog\\setting-nav-init.js",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAuwCQAAABSAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-06T17:43:22.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ConfigManager.cs",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Configurations\\ConfigManager.cs",
+              "RelativeDocumentMoniker": "zaloclone test\\Configurations\\ConfigManager.cs",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Configurations\\ConfigManager.cs",
+              "RelativeToolTip": "zaloclone test\\Configurations\\ConfigManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T17:05:34.792Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Utils.cs",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\Common\\Utils.cs",
+              "RelativeDocumentMoniker": "AppGlobal\\Common\\Utils.cs",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\Common\\Utils.cs",
+              "RelativeToolTip": "AppGlobal\\Common\\Utils.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T15:53:24.657Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmailHandler.cs",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Utilities\\EmailHandler.cs",
+              "RelativeDocumentMoniker": "zaloclone test\\Utilities\\EmailHandler.cs",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Utilities\\EmailHandler.cs",
+              "RelativeToolTip": "zaloclone test\\Utilities\\EmailHandler.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAsAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T15:51:21.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "register.cshtml.cs",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Pages\\register.cshtml.cs",
+              "RelativeDocumentMoniker": "zaloclone test\\Pages\\register.cshtml.cs",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Pages\\register.cshtml.cs",
+              "RelativeToolTip": "zaloclone test\\Pages\\register.cshtml.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAA5wBsAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T06:15:15.646Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "register.cshtml",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Pages\\register.cshtml",
+              "RelativeDocumentMoniker": "zaloclone test\\Pages\\register.cshtml",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Pages\\register.cshtml",
+              "RelativeToolTip": "zaloclone test\\Pages\\register.cshtml",
+              "ViewState": "AQIAACUAAAAAAAAAAAAAACkAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-05T18:03:35.627Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "AuthenticateService.cs",
               "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Services\\AuthenticateService.cs",
               "RelativeDocumentMoniker": "zaloclone test\\Services\\AuthenticateService.cs",
               "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Services\\AuthenticateService.cs",
               "RelativeToolTip": "zaloclone test\\Services\\AuthenticateService.cs",
-              "ViewState": "AQIAAEoAAAAAAAAAAAAmwEgAAAAjAAAA",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAUwD8AAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-05T09:23:51.026Z",
+              "WhenOpened": "2024-10-05T17:26:55.937Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "base.css",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\css\\base.css",
+              "RelativeDocumentMoniker": "zaloclone test\\wwwroot\\css\\base.css",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\css\\base.css",
+              "RelativeToolTip": "zaloclone test\\wwwroot\\css\\base.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-06T12:44:06.271Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "login.css",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\css\\login.css",
+              "RelativeDocumentMoniker": "zaloclone test\\wwwroot\\css\\login.css",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\css\\login.css",
+              "RelativeToolTip": "zaloclone test\\wwwroot\\css\\login.css",
+              "ViewState": "AQIAAAgBAAAAAAAAAAAAAAoBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-06T12:34:06.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "login.cshtml",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Pages\\login.cshtml",
+              "RelativeDocumentMoniker": "zaloclone test\\Pages\\login.cshtml",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\Pages\\login.cshtml",
+              "RelativeToolTip": "zaloclone test\\Pages\\login.cshtml",
+              "ViewState": "AQIAABUAAAAAAAAAAAAAACQAAABHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T06:09:06.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "register.css",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\css\\register.css",
+              "RelativeDocumentMoniker": "zaloclone test\\wwwroot\\css\\register.css",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\wwwroot\\css\\register.css",
+              "RelativeToolTip": "zaloclone test\\wwwroot\\css\\register.css",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAA4AAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-06T06:22:52.006Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Authenication.cs",
+              "DocumentMoniker": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\ViewModels\\Authenication.cs",
+              "RelativeDocumentMoniker": "zaloclone test\\ViewModels\\Authenication.cs",
+              "ToolTip": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\ViewModels\\Authenication.cs",
+              "RelativeToolTip": "zaloclone test\\ViewModels\\Authenication.cs",
+              "ViewState": "AQIAAC4AAAAAAAAAAAAcwDIAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-05T17:26:49.973Z",
               "EditorCaption": ""
             }
           ]

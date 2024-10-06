@@ -1,7 +1,13 @@
+﻿using Microsoft.Extensions.Configuration;
+using zaloclone_test.Configurations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSession();
+    
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -12,6 +18,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -21,5 +28,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapGet("/", () => Results.Redirect("/register")); 
 
 app.Run();
