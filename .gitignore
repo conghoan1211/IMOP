@@ -2,6 +2,7 @@
 bin/
 obj/
 
+# Ignore debug files
 *.pdb
 *.exe
 *.dll
