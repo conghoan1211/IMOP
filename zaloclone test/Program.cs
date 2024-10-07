@@ -5,9 +5,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSession();
-    
+
+// Add session 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian chờ phiên
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true; // Chắc chắn cookie có mặt
+});
+
 builder.Services.ConfigureServices(builder.Configuration);
+
+ConfigManager.CreateManager(builder.Configuration);
 
 var app = builder.Build();
 

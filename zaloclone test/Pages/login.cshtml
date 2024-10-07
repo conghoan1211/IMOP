@@ -38,16 +38,22 @@
             <div class="login-describe">Đăng nhập ngay người thương đang chờ bạn đó!!</div>
         </header>
         <div class="login-body" id="form-login">
-            <form class="flex-column login-form">
-                <div class="flex-align-center login-info">
-                    <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
-                    <span class="login-number-country">(+84)</span>
-                    <input required type="text" minlength="10" maxlength="10" class="login-input"
-                           placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+            <form class="flex-column login-form" method="post" asp-page-handler="Login">
+                <div>
+                    <div class="flex-align-center login-info">
+                        <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                        <span class="login-number-country">(+84)</span>
+                        <input asp-for="Input.Phone" required type="text" minlength="10" maxlength="10" class="login-input"
+                               placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                    </div>
+                    <span asp-validation-for="Input.Phone" class="register-input-error"></span>
                 </div>
-                <div class="flex-align-center login-info">
-                    <span class="login-icon"><i class="fa-solid fa-lock"></i></span>
-                    <input required type="password" class="login-input" placeholder="Mật khẩu" />
+                <div>
+                    <div class="flex-align-center login-info">
+                        <span class="login-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input asp-for="Input.Password" required type="password" class="login-input" placeholder="Mật khẩu" />
+                    </div>
+                    <span asp-validation-for="Input.Password" class="register-input-error"></span>
                 </div>
                 <div class="flex-align-center-between login-btn-more">
                     <div class="login-btn-remember">
@@ -55,7 +61,13 @@
                         <label for="remember"> Nhớ mật khẩu?</label>
                     </div>
                 </div>
-                <button type="submit" class="btn login-btn disabled" disabled>Đăng nhập với mật khẩu</button>
+                <button type="submit" class="btn login-btn">Đăng nhập với mật khẩu</button>
+                @if (!string.IsNullOrEmpty(Model.MessageError))
+                {
+                    <div class="register-errors-text">
+                        Error: @Model.MessageError
+                    </div>
+                }
                 <div class="login-btn-forgot">
                     <a href="">Quên mật khẩu?</a>
                 </div>

@@ -119,21 +119,33 @@
                                     Error: @Model.MessageError
                                 </div>
                             }
-                            <button type="submit" class="btn login-btn">Đăng kí ngay</button>
+                            <button type="submit" class="btn login-btn" onclick="disableButton()">Đăng kí ngay</button>
                         </form>
                     }
                     @if (Model.IsRegister)
                     {
-                        <form>
+                        <form method="post" asp-page-handler="VerifiedOTP">
                             <div class="flex-align-center login-otp-form">
-                                <div class=" flex-align-center login-info">
+                                <div class="flex-align-center login-info">
                                     <span class="login-icon verify"><i class="bx bxs-check-shield"></i></span>
-                                    <input type="text" maxlength="6" class="login-input" placeholder="OTP here"
-                                           oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                                    <input type="text" maxlength="6" class="login-input" placeholder="OTP here" name="InputOTP"
+                                           required oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                                 </div>
-                                <button class="btn login-otp-btn">Gửi lại</button>
+                                <button class="btn login-otp-btn" formaction="?handler=ResendOTP">Resend</button>
                             </div>
-                            <button type="submit" class="btn login-btn">Verify</button>
+                            <button type="submit" name="verify" class="btn login-btn">Verify</button>
+                            @if (!string.IsNullOrEmpty(Model.MessageError))
+                            {
+                                <div class="register-errors-text">
+                                    Error: @Model.MessageError
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.MessageSuccess))
+                            {
+                                <div class="register-success-text" style="margin-top: 10px">
+                                    Error: @Model.MessageSuccess
+                                </div>
+                            }
                         </form>
                     }
                     <a href="login" class="flex-align-center register-return">
@@ -145,6 +157,11 @@
         </div>
     </div>
     <script src="~/js/login/tab.js"></script>
+    <script>
+        function disableButton() {
+            document.getElementById("register-btn").disabled = true;
+        }
+    </script>
 </body>
 
 </html>

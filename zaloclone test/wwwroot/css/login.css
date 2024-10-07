@@ -79,7 +79,6 @@
     background-color: var(--text-information);
     color: var(--icon-on-color);
     border-radius: 50%;
-    margin-bottom: 4px;
     i
 
 {
@@ -269,6 +268,20 @@ label {
     margin: 6px 4px;
     font-size: 1.4rem;
     color: var(--text-errors);
+}
+.register-success-text {
+    margin: 6px 4px;
+    font-size: 1.4rem;
+    color: var(--text-success);
+}
+
+
+.register-input-error {
+    font-size: 1.1rem;
+    color: var(--text-errors);
+    font-weight: 400;
+    padding: 0 4px;
+    margin-bottom: 4px;
 }
 
 /*footer login*/

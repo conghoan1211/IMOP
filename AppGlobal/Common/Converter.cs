@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace AppGlobal.Common
 {
@@ -127,6 +126,59 @@ namespace AppGlobal.Common
 
             return result;
         }
+        //public static string ObjectToJson(object obj, out string value)
+        //{
+        //    value = string.Empty;
+        //    try
+        //    {
+        //        value = JsonConvert.SerializeObject(obj);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.ToString();
+        //    }
+        //    return string.Empty; // Trả về chuỗi rỗng nếu không có lỗi
+        //}
+
+        //public static string ToJson(this object obj)
+        //{
+        //    string value;
+        //    string error = ObjectToJson(obj, out value);
+        //    if (!string.IsNullOrEmpty(error))
+        //    {
+        //        return "ToJson Error: " + error;
+        //    }
+        //    return value;
+        //}
+
+        //public static string JsonToObject<T>(object data, out T obj) where T : class
+        //{
+        //    obj = null;
+        //    try
+        //    {
+        //        obj = JsonConvert.DeserializeObject<T>(Convert.ToString(data));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.ToString();
+        //    }
+        //    return string.Empty; // Trả về chuỗi rỗng nếu không có lỗi
+        //}
+
+        //public static string JsonToObject(object data, Type type, out object obj)
+        //{
+        //    obj = null;
+        //    try
+        //    {
+        //        obj = JsonConvert.DeserializeObject(Convert.ToString(data), type); // Sửa lỗi JsonConverter thành JsonConvert
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.ToString();
+        //    }
+        //    return string.Empty; // Trả về chuỗi rỗng nếu không có lỗi
+        //}
+
 
         public static string StringToNumber(string s, out long value)
         {

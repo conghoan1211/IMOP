@@ -6,10 +6,13 @@ namespace zaloclone_test.ViewModels
 {
     public class UserLogin
     {
-        [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
-        [StringLength(50, ErrorMessage = "Tên đăng nhập Không hợp lệ")]
-        public string? UserName { get; set; }
+        [Required(ErrorMessage = "Số điện thoại không được để trống")]
+        [RegularExpression(@"^\d{10,10}$", ErrorMessage = "Số điện thoại là chuỗi 10 ký tự chữ số")]
+        public string? Phone { get; set; }
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
+        [MinLength(8, ErrorMessage = "Mật khẩu chứa ít nhất 8 ký tự")]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#?!])[A-Za-z\d@#?!]{8,}$",
+         ErrorMessage = "Mật khẩu phải chứa ít nhất 8 ký tự, trong đó có ít nhất một chữ thường, một chữ hoa, một số và một ký tự đặc biệt.")]
         public string? Password { get; set; }
     }
 
@@ -28,7 +31,7 @@ namespace zaloclone_test.ViewModels
         [Required(ErrorMessage = "Giới tính không được để trống")]
         public int Sex { get; set; }
         [Required(ErrorMessage = "Ngày sinh không được để trống")]
-        [AssertThat("Dob <= Now()", ErrorMessage = "Ngày sinh không được vượt quá ngày hiện tại")]
+        [AssertThat("Dob <= Now()  && Dob.Year >= 1990", ErrorMessage = "Ngày sinh phải nằm từ năm 1990 đến ngày hiện tại!")]
         public DateTime Dob { get; set; }
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
         [MinLength(8, ErrorMessage = "Mật khẩu chứa ít nhất 8 ký tự")]
