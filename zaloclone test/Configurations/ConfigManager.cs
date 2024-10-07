@@ -38,6 +38,7 @@
             }
             catch (Exception e)
             {
+                Console.WriteLine($"Error: {e.Message}; InnerException: {e.InnerException}");
                 EmailDisplayName = "Interactive Messaging Online Platform";
                 EmailHost = "smtp.gmail.com";
                 EmailUsername = "hoanpche170404@fpt.edu.vn";

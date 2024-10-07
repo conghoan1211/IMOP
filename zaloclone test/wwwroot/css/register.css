@@ -23,15 +23,6 @@
     text-align: center;
 }
 
-
-.register-input-error {
-    font-size: 1.1rem;
-    color: var(--text-errors);
-    font-weight: 400;
-    padding: 0 4px;
-    margin-bottom: 4px;
-}
-
 .register-wrapper-field {
     transition: all .3s;
     background-color: transparent;

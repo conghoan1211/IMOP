@@ -11,7 +11,7 @@ namespace zaloclone_test.Configurations
         {
             // Register the DbContext with connection string from the configuration
             services.AddDbContext<Zalo_CloneContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("MyStockDB")));
+                options.UseSqlServer(configuration.GetConnectionString("MyDB")));
 
             services.AddScoped<IAuthenticateService, AuthenticateService>();
         }
