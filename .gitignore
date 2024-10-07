@@ -396,3 +396,13 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Bỏ qua thư mục Debug, Release
+[Dd]ebug/
+[Rr]elease/
+
+# Bỏ qua thư mục FileContentIndex
+**/FileContentIndex/
+
+# Bỏ qua file slnx.sqlite
+.vs/slnx.sqlite
