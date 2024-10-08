@@ -89,12 +89,12 @@ namespace AppGlobal.Common
             return result;
         }
 
-        public static string StringToMD5(string s, out string value)
+        public static string StringToMD5(string? s, out string value)
         {
-            string text = "";
             value = null;
             try
             {
+                if (string.IsNullOrEmpty(s)) return "Chuỗi đầu vào trống.";
                 byte[] bytes = Encoding.ASCII.GetBytes(s);
                 return BytesToMD5(bytes, out value);
             }

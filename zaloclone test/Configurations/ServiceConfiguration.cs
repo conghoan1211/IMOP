@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using zaloclone_test.Models;
 using zaloclone_test.Services;
+using zaloclone_test.Utilities;
 
 namespace zaloclone_test.Configurations
 {
@@ -14,6 +15,8 @@ namespace zaloclone_test.Configurations
                 options.UseSqlServer(configuration.GetConnectionString("MyDB")));
 
             services.AddScoped<IAuthenticateService, AuthenticateService>();
+            services.AddScoped<JwtAuthentication>(); // Register JwtAuthentication
+
         }
     }
 }

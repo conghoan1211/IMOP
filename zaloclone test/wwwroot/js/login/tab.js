@@ -4,15 +4,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const forgotPasswordLink = document.querySelector('.login-btn-forgot a');
     const returnButton = document.querySelector('.btn-return');
     
+    // Check which form should be displayed from localStorage
+    if (localStorage.getItem('formState') === 'forgot') {
+        formLogin.style.display = 'none'; // Hide login form
+        formForget.style.display = 'block'; // Show forgot form
+    } else {
+        formLogin.style.display = 'block'; // Show login form
+        formForget.style.display = 'none'; // Hide forgot form
+    }
+
     forgotPasswordLink.addEventListener('click', function (event) {
         event.preventDefault(); // Prevent default behavior
         formLogin.style.display = 'none'; // Hide login form
         formForget.style.display = 'block'; // Show forgot form
+        localStorage.setItem('formState', 'forgot'); // Save state in localStorage
     });
 
     returnButton.addEventListener('click', function () {
         formForget.style.display = 'none'; // Hide forgot form
         formLogin.style.display = 'block'; // Show login form
+        localStorage.setItem('formState', 'login'); // Save state in localStorage
     });
 
     const phoneInput = document.querySelector('#form-login input[type="text"]');
@@ -32,13 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     phoneInput.addEventListener('input', checkInputs);
     passwordInput.addEventListener('input', checkInputs);
 
-    const phoneInputText = document.querySelector('.login-input');
-
-    phoneInputText.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-    });
-    
-
     // Disable login button by default
     loginButton.disabled = true;
     loginButton.classList.add('disabled');
@@ -48,24 +52,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const emailInputOTP = document.querySelector('#email-input');
     const phoneInputOTP = document.querySelector('#phone-input');
 
+    const phoneInputField = document.querySelector('#login-phone-input');
+    const emailInputField = document.querySelector('#login-email-input');
+
     // Email tab click event
     emailTab.addEventListener('click', function () {
-        emailInputOTP.style.display = 'block';  // Show email input
+        emailInputOTP.style.display = 'flex';  // Show email input
         phoneInputOTP.style.display = 'none';  // Hide phone input
         emailTab.classList.add('active');      // Activate email tab
         phoneTab.classList.remove('active');   // Deactivate phone tab
-        phoneInputField.value = null;
         phoneInputField.value = '';
+        phoneInputField.value = null;
     });
 
     // Phone tab click event
     phoneTab.addEventListener('click', function () {
-        phoneInputOTP.style.display = 'block';  // Show phone input
+        phoneInputOTP.style.display = 'flex';  // Show phone input
         emailInputOTP.style.display = 'none';  // Hide email input
         phoneTab.classList.add('active');      // Activate phone tab
         emailTab.classList.remove('active');   // Deactivate email tab
+        emailInputField.value = '';
         emailInputField.value = null; 
-        emailInputField.value = ''; 
     });
 // Select all input fields with a clear icon
 const inputContainers = document.querySelectorAll('.login-info');

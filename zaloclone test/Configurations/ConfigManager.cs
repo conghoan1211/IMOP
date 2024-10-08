@@ -10,6 +10,13 @@
         public string EmailUsername { get; set; }
         public string EmailPassword { get; set; }
 
+        // JWT settings
+        public string SecretKey { get; set; }
+        public string Issuer { get; set; }
+        public string Audience { get; set; }
+        public int ExpiresInMinutes { get; set; }
+
+
         public static ConfigManager gI()
         {
             return _instance;
@@ -35,6 +42,10 @@
                 EmailHost = _configuration.GetSection("EmailSettings").GetSection("EmailHost").Value;
                 EmailUsername = _configuration.GetSection("EmailSettings").GetSection("EmailUsername").Value;
                 EmailPassword = _configuration.GetSection("EmailSettings").GetSection("EmailPassword").Value;
+                SecretKey = _configuration.GetSection("JwtSettings").GetSection("SecretKey").Value;
+                Issuer = _configuration.GetSection("JwtSettings").GetSection("SecretKey").Value;
+                Audience = _configuration.GetSection("JwtSettings").GetSection("Audience").Value;
+                ExpiresInMinutes = int.Parse(_configuration.GetSection("JwtSettings").GetSection("ExpiresInMinutes").Value);
             }
             catch (Exception e)
             {

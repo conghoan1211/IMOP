@@ -1,28 +1,34 @@
 ﻿using AppGlobal.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using zaloclone_test.Helper;
 using zaloclone_test.Models;
+using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
 
 namespace zaloclone_test.Services
 {
     public interface IAuthenticateService
     {
-        public Task<string> DoLogin(UserLogin userLogin);
+        public Task<string> DoLogin(UserLogin userLogin, HttpContext httpContext);
         public Task<string> DoRegister(UserRegister userRegister);
-        public Task<string> DoLogout();
-        public Task<string> DoForgetPassword(ForgetPassword input);
+        public Task<string> DoLogout(HttpContext httpContext);
+        public Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext);
         public Task<string> DoVerifyOTP(string otp, HttpContext httpContext);
         public Task<string> DoResetPassword(ResetPassword input);
         public Task<string> DoChangePassword(string username, ChangePassword input);
+        public Task<(string message, User? user)> DoSearchByEmail(string? email);
+        public Task<(string message, User? user)> DoSearchByPhone(string? phone);
     }
 
     public class AuthenticateService : IAuthenticateService
     {
         private readonly Zalo_CloneContext _context;
-        public AuthenticateService(Zalo_CloneContext context)
+        private readonly JwtAuthentication _jwtAuthen;
+        public AuthenticateService(Zalo_CloneContext context, JwtAuthentication jwtAuthen)
         {
             _context = context;
+            _jwtAuthen = jwtAuthen;
         }
 
         public Task<string> DoChangePassword(string username, ChangePassword input)
@@ -30,29 +36,64 @@ namespace zaloclone_test.Services
             throw new NotImplementedException();
         }
 
-        public Task<string> DoForgetPassword(ForgetPassword input)
+        public async Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext)
         {
-            throw new NotImplementedException();
+            var (msg, user) = await DoSearchByEmail(input.Email);
+            if (msg.Length > 0) return msg;
+            else if (user != null)
+            {
+                string newpass = "";
+                (msg, newpass) = await EmailHandler.SendPasswordAndSaveSession(input.Email, httpContext);
+                if (msg.Length > 0) return msg;
+
+                httpContext.Session.Remove("newPassword");
+                msg = Converter.StringToMD5(newpass, out string mkMd5);
+                if (msg.Length > 0) return $"Error convert to MD5: {msg}";
+
+                user.Password = mkMd5;
+                user.UpdateUser = user.UserId;
+                user.UpdateAt = DateTime.Now;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+            }
+
+            return "";
         }
 
-        public async Task<string> DoLogin(UserLogin userLogin)
+        public async Task<string> DoLogin(UserLogin userLogin, HttpContext httpContext)
         {
             var (msg, user) = await DoSearchByPhone(userLogin.Phone);
             if (msg.Length > 0) return msg;
 
             msg = Converter.StringToMD5(userLogin.Password, out string mkMd5);
             if (msg.Length > 0) return $"Error convert to MD5: {msg}";
-            if (!user.Password.Equals(mkMd5)) return "Mật khẩu không chính xác";
-           
-            //create token here...
+            if (!user.Password.ToUpper().Equals(mkMd5.ToUpper())) return "Mật khẩu không chính xác";
 
+            if (user.IsVerified == false) return ConstMessage.ACCOUNT_UNVERIFIED;
+            if (user.IsActive == false) return "Tài khoản đã bị khóa.";
+
+            //create token here...
+            var token = _jwtAuthen.GenerateJwtToken(user);
+            httpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, 
+                SameSite = SameSiteMode.Strict // Prevent cross-site attacks
+            });
             return "";
         }
 
-        public Task<string> DoLogout()
+        public Task<string> DoLogout(HttpContext httpContext)
         {
-            throw new NotImplementedException();
+            // Xóa cookie chứa JWT token
+            httpContext.Response.Cookies.Delete("JwtToken");
+
+            // Nếu có session, bạn có thể xóa session tại đây (tùy theo yêu cầu ứng dụng của bạn)
+            httpContext.Session.Clear();
+
+            return Task.FromResult("Đăng xuất thành công.");
         }
+
 
         public async Task<string> DoRegister(UserRegister input)
         {
@@ -77,12 +118,12 @@ namespace zaloclone_test.Services
                 RoleId = (int)Role.User,
                 Sex = input.Sex,
                 Dob = input.Dob,
-                CreateAt = DateTime.Now,
-                CreateUser = userid,
                 Status = (int)UserStatus.Inactive,
                 IsActive = true,
                 IsDisable = false,
                 IsVerified = false,
+                CreateAt = DateTime.Now,
+                CreateUser = userid,
             };
 
             _context.Users.Add(user);
@@ -102,13 +143,14 @@ namespace zaloclone_test.Services
             if (otp != storedOtp) return "Mã OTP nhập không hợp lệ!";
 
             var emailVerify = httpContext.Session.GetString("email_verify");
-            if (string.IsNullOrEmpty(emailVerify)) return "Vui lòng vào trang đăng nhập để được verify tài khoản.";
+            if (string.IsNullOrEmpty(emailVerify)) return "Vui lòng đăng nhập lại để được verify tài khoản.";
 
             var (msg, user) = await DoSearchByEmail(emailVerify);
             if (msg.Length > 0) return msg;
             else if (user != null)
             {
                 user.IsVerified = true;
+                user.UpdateAt = DateTime.Now;
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
             }
@@ -125,18 +167,17 @@ namespace zaloclone_test.Services
                 return ("Email không hợp lệ", null);
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-            if (user == null)
-                return ("Tài khoản Email không tồn tại.", null);
+            if (user == null) return ("Tài khoản Email không tồn tại.", null);
 
             return (string.Empty, user);
         }
+
         public async Task<(string message, User? user)> DoSearchByPhone(string? phone)
         {
             if (string.IsNullOrEmpty(phone)) return ("Số điện thoại không hợp lệ", null);
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Phone == phone);
-            if (user == null)
-                return ("Tài khoản không tồn tại.", null);
+            if (user == null) return ("Tài khoản không tồn tại.", null);
 
             return (string.Empty, user);
         }

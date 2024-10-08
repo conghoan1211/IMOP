@@ -38,116 +38,87 @@
             </header>
             <div class="login-body" id="form-login">
                 <div class="flex-column login-form">
-                    @if (!Model.IsRegister)
-                    {
-                        <form method="post" asp-page-handler="Register">
-                            <div class="flex-column register-wrapper-field">
-                                <div class="flex-align-center login-info">
-                                    <input asp-for="Input.UserName" required type="text" minlength="5" maxlength="40" class="login-input"
-                                           placeholder="Nhập tên bạn muốn hiển thị" />
-                                </div>
-                                @if (ViewData.ModelState["Input.UserName"]?.Errors.Count > 0)
-                                {
-                                    <span asp-validation-for="Input.UserName" class="register-input-error"></span>
-                                }
+                    <form method="post" asp-page-handler="Register">
+                        <div class="flex-column register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.UserName" required type="text" minlength="5" maxlength="40" class="login-input"
+                                       placeholder="Nhập tên bạn muốn hiển thị" />
                             </div>
-                            <div class="flex-align-center register-gender">
-                                <div class="flex-align-center">
-                                    <input asp-for="Input.Sex" required value="0" name="gender" id="male" type="radio" class="register-gender-btn">
-                                    <label class="register-gender-text" for="male">Nam</label>
-                                </div>
-                                <div class="flex-align-center">
-                                    <input asp-for="Input.Sex" value="1" name="gender" id="female" type="radio" class="register-gender-btn">
-                                    <label class="register-gender-text" for="female">Nữ</label>
-                                </div>
-                                <div class="flex-align-center">
-                                    <input asp-for="Input.Sex" value="2" name="gender" id="other" type="radio" class="register-gender-btn">
-                                    <label class="register-gender-text" for="other">Khác</label>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-align-center register-dob-field">
-                                    <span class="register-dob-name">Ngày sinh</span>
-                                    <input asp-for="Input.Dob" class="register-dob" required type="date">
-                                </div>
-                                @if (ViewData.ModelState["Input.Dob"]?.Errors.Count > 0)
-                                {
-                                    <span asp-validation-for="Input.Dob" class="register-input-error"></span>
-                                }
-                            </div>
-                            <div class="register-wrapper-field">
-                                <div class="flex-align-center login-info">
-                                    <span class="login-number-country">(+84)</span>
-                                    <input asp-for="Input.Phone" required type="text" minlength="10" maxlength="10" class="login-input"
-                                           placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
-                                </div>
-                                @if (ViewData.ModelState["Input.Phone"]?.Errors.Count > 0)
-                                {
-                                    <span asp-validation-for="Input.Phone" class="register-input-error"></span>
-                                }
-                            </div>
-                            <div class="register-wrapper-field">
-                                <div class="flex-align-center login-info">
-                                    <input asp-for="Input.Email" required type="email" class="login-input" placeholder="Email" />
-                                </div>
-                                @if (ViewData.ModelState["Input.Email"]?.Errors.Count > 0)
-                                {
-                                    <span asp-validation-for="Input.Email" class="register-input-error"></span>
-                                }
-                            </div>
-                            <div class="register-wrapper-field">
-                                <div class="flex-align-center login-info">
-                                    <input asp-for="Input.Password" required type="password" class="login-input" placeholder="Mật khẩu" />
-                                </div>
-                                @if (ViewData.ModelState["Input.Password"]?.Errors.Count > 0)
-                                {
-                                    <span asp-validation-for="Input.Password" class="register-input-error"></span>
-                                }
-                            </div>
-                            <div class="register-wrapper-field">
-                                <div class="flex-align-center login-info">
-                                    <input asp-for="Input.RePassword" required type="password" class="login-input" placeholder="Nhập lại mật khẩu" />
-                                </div>
-                                @if (ViewData.ModelState["Input.RePassword"]?.Errors.Count > 0)
-                                {
-                                    <span asp-validation-for="Input.RePassword" class="register-input-error"></span>
-                                }
-                            </div>
-                            @if (!string.IsNullOrEmpty(Model.MessageError))
+                            @if (ViewData.ModelState["Input.UserName"]?.Errors.Count > 0)
                             {
-                                <div class="register-errors-text">
-                                    Error: @Model.MessageError
-                                </div>
+                                <span asp-validation-for="Input.UserName" class="register-input-error"></span>
                             }
-                            <button type="submit" class="btn login-btn" onclick="disableButton()">Đăng kí ngay</button>
-                        </form>
-                    }
-                    @if (Model.IsRegister)
-                    {
-                        <form method="post" asp-page-handler="VerifiedOTP">
-                            <div class="flex-align-center login-otp-form">
-                                <div class="flex-align-center login-info">
-                                    <span class="login-icon verify"><i class="bx bxs-check-shield"></i></span>
-                                    <input type="text" maxlength="6" class="login-input" placeholder="OTP here" name="InputOTP"
-                                           required oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
-                                </div>
-                                <button class="btn login-otp-btn" formaction="?handler=ResendOTP">Resend</button>
+                        </div>
+                        <div class="flex-align-center register-gender">
+                            <div class="flex-align-center">
+                                <input asp-for="Input.Sex" required value="0" name="gender" id="male" type="radio" class="register-gender-btn">
+                                <label class="register-gender-text" for="male">Nam</label>
                             </div>
-                            <button type="submit" name="verify" class="btn login-btn">Verify</button>
-                            @if (!string.IsNullOrEmpty(Model.MessageError))
+                            <div class="flex-align-center">
+                                <input asp-for="Input.Sex" value="1" name="gender" id="female" type="radio" class="register-gender-btn">
+                                <label class="register-gender-text" for="female">Nữ</label>
+                            </div>
+                            <div class="flex-align-center">
+                                <input asp-for="Input.Sex" value="2" name="gender" id="other" type="radio" class="register-gender-btn">
+                                <label class="register-gender-text" for="other">Khác</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="flex-align-center register-dob-field">
+                                <span class="register-dob-name">Ngày sinh</span>
+                                <input asp-for="Input.Dob" class="register-dob" required type="date">
+                            </div>
+                            @if (ViewData.ModelState["Input.Dob"]?.Errors.Count > 0)
                             {
-                                <div class="register-errors-text">
-                                    Error: @Model.MessageError
-                                </div>
+                                <span asp-validation-for="Input.Dob" class="register-input-error"></span>
                             }
-                            @if (!string.IsNullOrEmpty(Model.MessageSuccess))
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <span class="login-number-country">(+84)</span>
+                                <input asp-for="Input.Phone" required type="text" minlength="10" maxlength="10" class="login-input"
+                                       placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                            </div>
+                            @if (ViewData.ModelState["Input.Phone"]?.Errors.Count > 0)
                             {
-                                <div class="register-success-text" style="margin-top: 10px">
-                                    Error: @Model.MessageSuccess
-                                </div>
+                                <span asp-validation-for="Input.Phone" class="register-input-error"></span>
                             }
-                        </form>
-                    }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.Email" required type="email" class="login-input" placeholder="Email" />
+                            </div>
+                            @if (ViewData.ModelState["Input.Email"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.Email" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.Password" required type="password" class="login-input" placeholder="Mật khẩu" />
+                            </div>
+                            @if (ViewData.ModelState["Input.Password"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.Password" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.RePassword" required type="password" class="login-input" placeholder="Nhập lại mật khẩu" />
+                            </div>
+                            @if (ViewData.ModelState["Input.RePassword"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.RePassword" class="register-input-error"></span>
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.MessageError))
+                        {
+                            <div class="register-errors-text">
+                                Error: @Model.MessageError
+                            </div>
+                        }
+                        <button type="submit" class="btn login-btn" onclick="disableButton()">Đăng kí ngay</button>
+                    </form>
                     <a href="login" class="flex-align-center register-return">
                         <i class="fa-solid fa-angles-left"></i>&nbsp;
                         Quay lại
