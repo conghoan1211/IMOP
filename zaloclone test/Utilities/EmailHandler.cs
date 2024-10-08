@@ -1,9 +1,11 @@
-﻿using MailKit.Net.Smtp;
+﻿using AppGlobal.Common;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
 using zaloclone_test.Configurations;
+using zaloclone_test.Models;
 
 namespace zaloclone_test.Utilities
 {
@@ -33,6 +35,30 @@ namespace zaloclone_test.Utilities
             finally { smtp.Disconnect(true); }
 
             return "";
+        }
+
+        public static async Task<string> SendOtpAndSaveSession(string email, HttpContext httpContext)
+        {
+            int otp = Utils.Generate6Number();
+            httpContext.Session.SetString("Otp", otp.ToString()); // Lưu OTP
+
+            var emailVerify = httpContext.Session.GetString("email_verify");
+            if  (string.IsNullOrEmpty(emailVerify))
+                httpContext.Session.SetString("email_verify", email); // Lưu email to verify
+
+            string msg = await SendEmailAsync(email, "Xác thực Email của bạn", $"Đây là mã xác thực của bạn: {otp}");
+            if (msg.Length > 0) return msg;
+            return "";
+        }
+
+        public static async Task<(string message, string pass)> SendPasswordAndSaveSession(string email, HttpContext httpContext)
+        {
+            string pass = Utils.Generate6Character();
+            httpContext.Session.SetString("newPassword", pass.ToString()); // Lưu OTP
+
+            string msg = await SendEmailAsync(email, "Khôi phục mật khẩu", $"Đây là mật khẩu mới của bạn: {pass}");
+            if (msg.Length > 0) return (msg, "");
+            return (string.Empty, pass);
         }
     }
 
