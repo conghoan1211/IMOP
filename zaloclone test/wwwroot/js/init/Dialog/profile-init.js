@@ -43,7 +43,6 @@ function initProfileDialog() {
         cancelButton.addEventListener('click', function () {
             editProfile.style.display = 'none';
             viewProfile.style.display = 'block';
-            console.log("clicjk cancel");
         });
 
         returnButton.addEventListener('click', function () {

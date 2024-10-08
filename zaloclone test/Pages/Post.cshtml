@@ -1,0 +1,52 @@
+﻿@page
+@model zaloclone_test.Pages.PostModel
+@{
+    ViewData["Title"] = "Post";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/Post.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Thanh điều hướng -->
+        <header class="navbar">
+            <h1>IMOP</h1>
+            <input type="text" placeholder="Tìm kiếm..." class="search-bar">
+        </header>
+
+        <!-- Khu vực tạo bài viết mới -->
+        <section class="new-post">
+            <textarea placeholder="Bạn đang nghĩ gì?" rows="3"></textarea>
+            <button>Đăng</button>
+        </section>
+
+        <!-- Danh sách bài viết -->
+        <section class="posts">
+            <div class="post">
+                <div class="post-header">
+                    <strong>Người dùng 1</strong> <span>2 giờ trước</span>
+                </div>
+                <p>Nội dung bài viết của người dùng 1.</p>
+            </div>
+            <div class="post">
+                <div class="post-header">
+                    <strong>Người dùng 2</strong> <span>1 ngày trước</span>
+                </div>
+                <p>Nội dung bài viết của người dùng 2.</p>
+            </div>
+            <div class="post">
+                <div class="post-header">
+                    <strong>Người dùng 3</strong> <span>3 ngày trước</span>
+                </div>
+                <p>Nội dung bài viết của người dùng 3.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
