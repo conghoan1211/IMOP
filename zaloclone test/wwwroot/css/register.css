@@ -1,6 +1,31 @@
+.register {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: auto;
+    align-items: center;
+    width: 65vw;
+    max-width: 1000px;
+}
+
 .register-head {
     margin-bottom: 14px;
     align-items: center;
+    max-width: 400px;
+    flex-wrap: wrap;
+    height: 35vh;
+}
+
+.register-describe {
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin-top: 4px;
+    text-align: center;
+}
+
+.register-wrapper-field {
+    transition: all .3s;
+    background-color: transparent;
 }
 
 .register-gender {
@@ -25,10 +50,17 @@
     user-select: none;
 }
 
+.register-dob-field {
+    margin: 18px 0 10px;
+}
+
+.register-dob-name {
+    font-size: 1.34rem;
+    margin: 0 8px 0 4px;
+}
+
 .register-dob {
     width: 70%;
-    margin-bottom: 14px;
-    margin-top: 20px;
     border: 1px solid var(--border);
     background-color: transparent;
     font-size: 1.4rem;
@@ -36,11 +68,13 @@
     border-radius: 4px;
     transition: all .3s;
     height: 36px;
+    &:focus-within
 
-    &:focus-within {
-        border-color: var(--button-primary-normal);
-        background-color: transparent !important;
-    }
+{
+    border-color: var(--button-primary-normal);
+    background-color: transparent !important;
+}
+
 }
 
 .register-return {
@@ -49,10 +83,10 @@
     color: var(--text-primary);
     margin-top: 10px;
     text-decoration: none;
-    
+
     &:hover {
         color: var(--text-information);
-    }
+     }
 
     i {
         padding-top: 1px;
@@ -60,5 +94,15 @@
 }
 
 .login-otp-form {
-    margin-top: 8px;
+    margin-top: 18px;
+}
+
+@media (max-width: 900px) {
+    .register-head {
+        display: none;
+    }
+
+    .register {
+        justify-content: center;
+    }
 }

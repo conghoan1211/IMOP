@@ -17,6 +17,17 @@ namespace AppGlobal.Common
 
             return obj.ToString();
         }
+        public static int Generate6Number()
+        {
+            Random random = new Random();
+            return random.Next(100000, 999999);
+        }
+        public static string Generate6Character()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
 
         //add more utils here ...
 

@@ -27,7 +27,7 @@ namespace zaloclone_test.Models
         public int? RoleId { get; set; }
         public int? Sex { get; set; }
         public DateTime? Dob { get; set; }
-        public string? Bio { get; set; }
+        public string? Bio { get; set; } = string.Empty;
         public bool? IsDisable { get; set; }
         public bool? IsActive { get; set; }
         public DateTime? CreateAt { get; set; }
@@ -35,6 +35,7 @@ namespace zaloclone_test.Models
         public string? CreateUser { get; set; }
         public string? UpdateUser { get; set; }
         public int? Status { get; set; }
+        public bool? IsVerified { get; set; }
 
         public virtual ICollection<Friend> FriendUserId1Navigations { get; set; }
         public virtual ICollection<Friend> FriendUserId2Navigations { get; set; }
