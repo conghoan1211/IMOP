@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\zaloclone.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\IMOP\\zaloclone test\\zaloclone.csproj": {}
   },
   "projects": {
-    "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\AppGlobal.csproj": {
+    "C:\\Users\\Admin\\Desktop\\IMOP\\AppGlobal\\AppGlobal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\AppGlobal.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\IMOP\\AppGlobal\\AppGlobal.csproj",
         "projectName": "AppGlobal",
-        "projectPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\AppGlobal.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\IMOP\\AppGlobal\\AppGlobal.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\IMOP\\AppGlobal\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -35,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -61,21 +55,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\zaloclone.csproj": {
+    "C:\\Users\\Admin\\Desktop\\IMOP\\zaloclone test\\zaloclone.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\zaloclone.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\IMOP\\zaloclone test\\zaloclone.csproj",
         "projectName": "zaloclone",
-        "projectPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\zaloclone.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\zaloclone test\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\IMOP\\zaloclone test\\zaloclone.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\IMOP\\zaloclone test\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -83,15 +77,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\AppGlobal.csproj": {
-                "projectPath": "D:\\HE170404\\Ky7_HE170404\\IMOP\\AppGlobal\\AppGlobal.csproj"
+              "C:\\Users\\Admin\\Desktop\\IMOP\\AppGlobal\\AppGlobal.csproj": {
+                "projectPath": "C:\\Users\\Admin\\Desktop\\IMOP\\AppGlobal\\AppGlobal.csproj"
               }
             }
           }
@@ -100,11 +93,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -118,6 +106,10 @@
             "MailKit": {
               "target": "Package",
               "version": "[4.8.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.33, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -161,7 +153,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
