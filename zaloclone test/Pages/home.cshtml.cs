@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using zaloclone_test.Services;
 
 namespace zaloclone_test.Pages
 {
-    public class headerModel : PageModel
+    [Authorize]
+    public class HomeModel : PageModel
     {
         private readonly IAuthenticateService _authenService;
-        public headerModel(IAuthenticateService authenService)
+        public HomeModel(IAuthenticateService authenService)
         {
             _authenService = authenService;
         }
@@ -25,7 +27,7 @@ namespace zaloclone_test.Pages
         {
             // Lấy thông tin từ JWT
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-
+      
             var claims = claimsIdentity.Claims;
 
             // Lấy thông tin từ các claims

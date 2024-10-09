@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -23,11 +24,7 @@ builder.Services.AddSession(options =>
 });
 
 // Add JWT Authentication
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -36,25 +33,24 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = ConfigManager.gI().Issuer, // Replace with your issuer
-        ValidAudience = ConfigManager.gI().Audience, // Replace with your audience
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigManager.gI().SecretKey)) // Replace with a secret key
+        ValidIssuer = ConfigManager.gI().Issuer,
+        ValidAudience = ConfigManager.gI().Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigManager.gI().SecretKey))
     };
 
     options.Events = new JwtBearerEvents
     {
-        OnAuthenticationFailed = context =>
+        OnMessageReceived = context =>
         {
-            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            Console.WriteLine("Token validated successfully.");
+            // Lấy token từ cookie
+            var token = context.Request.Cookies["JwtToken"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                context.Token = token;
+            }
             return Task.CompletedTask;
         }
     };
-
 });
 
 builder.Services.AddAuthorization();
@@ -77,28 +73,17 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.MapGet("/", (HttpContext context) =>
-//{
-//    var isAuthenticated = context.Session.GetString("phone") != null;
-
-//    if (isAuthenticated)
-//    {
-//        return Results.Redirect("/index");
-//    }
-//    else
-//    {
-//        return Results.Redirect("/login");
-//    }
-//});
-
-app.MapGet("/", (HttpContext context) =>
+app.MapGet("/", async (HttpContext context) =>
 {
-    if (!context.User.Identity?.IsAuthenticated ?? true)
+    // Sử dụng Authentication scheme đã được thêm vào
+    var authenticateResult = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated ==  false)
     {
         return Results.Redirect("/login");
     }
-    return Results.Redirect("/index");
+    return Results.Redirect("/home");
 });
+
 
 app.MapRazorPages();
 
