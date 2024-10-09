@@ -6,8 +6,8 @@ namespace zaloclone_test.Services
 {
     public interface IProfile
     {
-        Task<ProfileViewModels> ViewProfile(string userId); // Trả về ProfileViewModels theo UserId
-        Task<(bool Success, string Message)> UpdateProfile(UpdateProfileModels updateProfile); // Sửa tên thành UpdateProfilModels
+       public Task<ProfileViewModels> ViewProfile(string userId); // Trả về ProfileViewModels theo UserId
+       public Task<(bool Success, string Message)> UpdateProfile(UpdateProfileModels updateProfile); // Sửa tên thành UpdateProfilModels
     }
     public class ProfileService : IProfile
     {
