@@ -47,10 +47,12 @@ namespace zaloclone_test.Helper
             if (msg.Length > 0) return msg;
             if (!result.ObjToString().IsValidEmailFormat()) return "Email không đúng định dạng";
 
-            bool check = query.Any(u => u.Email.Equals(result.ObjToString(), StringComparison.OrdinalIgnoreCase));
-            if (check) return "Email đã được sử dụng";
+            bool check = query.Any(u => u.Email.ToLower() == result.ObjToString().ToLower());
+            if (check) return ConstMessage.EMAIL_EXISTED;
 
             return "";
         }
+
+        // add more 
     }
 }

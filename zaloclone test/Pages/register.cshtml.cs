@@ -1,43 +1,45 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppGlobal.Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using zaloclone_test.Models;
 using zaloclone_test.Services;
+using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
 
-namespace Server.Pages
+namespace zaloclone_test.Pages
 {
     public class registerModel : PageModel
     {
-
-        private readonly IAuthenticateService _authenService; // Inject interface thay vì class trực tiếp
+        private readonly IAuthenticateService _authenService;
         public registerModel(IAuthenticateService authenService)
         {
             _authenService = authenService;
         }
+
+        public string MessageError { get; set; } = string.Empty;
+        public string MessageSuccess { get; set; } = string.Empty;
         [BindProperty]
         public UserRegister Input { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnPostRegister()
         {
-        }
+            if (!ModelState.IsValid) return await Task.FromResult(Page());
 
-        public IActionResult OnPostRegister()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var result = _authenService.DoRegister(Input);
-
+            var result = await _authenService.DoRegister(Input);
             if (!string.IsNullOrEmpty(result))
             {
-                ModelState.AddModelError(string.Empty, result);
-                return Page();
+                MessageError = result;
+                return await Task.FromResult(Page());
             }
 
-            // Redirect to a success page or login page after successful registration
-            return RedirectToPage("Login");
+            string msg = await EmailHandler.SendOtpAndSaveSession(Input.Email, HttpContext);
+            if (msg.Length > 0)
+            {
+                MessageError = msg;
+                return await Task.FromResult(Page());
+            }
+            TempData["MsOtp"] = "Mã OTP đã được gửi về Email của bạn.";
+            return RedirectToPage("./verify");
         }
     }
 }

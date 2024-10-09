@@ -14,7 +14,7 @@ function initProfileDialog() {
         dialog.style.display = 'flex';  // Hiển thị dialog
     });
 
-    const closeButton = document.querySelector('.close-btn');
+    const closeButton = document.querySelector('#close-profile-btn');
     if (closeButton) {
         closeButton.addEventListener('click', function () {
             const dialog = document.getElementById('profileDialog');

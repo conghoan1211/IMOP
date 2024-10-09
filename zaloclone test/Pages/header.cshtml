@@ -1,6 +1,7 @@
 ﻿@page
-@model zaloclone_test.Pages.Index1Model
+@model zaloclone_test.Pages.headerModel
 @{
+    Layout = "";
 }
 <header class="sidebar-head">
     <div class="nav-top">
@@ -62,17 +63,23 @@
             </span>
         </div>
         <div class="changepass-wrapper">
-            <div class="flex-column profile-edit">
+            <div class="flex-column profile-edit">  @{
+                    string username = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                }
                 <span class="profile-edit-text changepass-name">Mật khẩu hiện tại</span>
-                <input class="profile-edit-name" type="password" name="" id="" maxlength="50">
+                <input class="profile-edit-name" type="password" name="" id="" maxlength="50" value="@username">
+              
+                <div class="register-input-error">Tên hiển thị  @username </div>
             </div>
             <div class="flex-column profile-edit">
                 <span class="profile-edit-text changepass-name">Mật khẩu mới</span>
                 <input class="profile-edit-name" type="password" name="" id="" maxlength="50">
+                <div class="register-input-error">Tên hiển thị ko được để trống </div>
             </div>
             <div class="flex-column profile-edit">
                 <span class="profile-edit-text changepass-name">Nhập lại mật khẩu</span>
                 <input class="profile-edit-name" type="password" name="" id="" maxlength="50">
+                <div class="register-input-error">Tên hiển thị ko được để trống </div>
             </div>
             <div class="edit-profile-footer">
                 <button class="btn btn-neutral changepass-cancel">Hủy</button>
@@ -88,7 +95,7 @@
         <div id="view-profile">
             <div class="flex-align-center-between profile-head">
                 <div class="profile-title">Thông tin tài khoản</div>
-                <span class="flex-align-justify-center close-btn">
+                <span class="flex-align-justify-center close-btn" id="close-profile-btn">
                     <i class="fa-solid fa-xmark "></i>
                 </span>
             </div>
@@ -140,14 +147,17 @@
                 </div>
             </div>
             <div class="profile-edit-cont">
-                <div class="flex-column profile-edit">
-                    <span class="profile-edit-text">Tên hiển thị</span>
-                    <input class="profile-edit-name" type="text" name="" id="" maxlength="50">
+                <div>
+                    <div class="flex-column profile-edit">
+                        <span class="profile-edit-text">Tên hiển thị</span>
+                        <input class="profile-edit-name" type="text" name="" id="" maxlength="50" value="">
+                    </div>
+                    <div class="register-input-error">Tên hiển thị ko được để trống </div>
                 </div>
                 <div class="edit-profile-title">Thông tin cá nhân</div>
                 <div class="flex-align-center edit-profile-gender">
                     <div class="flex-align-center">
-                        <input name="gender" id="male" type="radio" class="edit-profile-gender_btn">
+                        <input required name="gender" id="male" type="radio" class="edit-profile-gender_btn">
                         <label for="male" class="profile-edit-gender_text">Nam</label>
                     </div>
                     <div class="flex-align-center">
@@ -162,10 +172,13 @@
                 <div class="flex-column">
                     <span class="profile-edit-text">Ngày sinh</span>
                     <input class="profile-edit-date" type="date" name="" id="">
+                    <div class="register-input-error">Tên hiển thị ko được để trống </div>
+
                 </div>
-                <div class="flex-column">
+                <div class="flex-column profile-edit-bio_wrapper">
                     <span class="profile-edit-text">Bio</span>
                     <textarea class="profile-edit-bio" name="" id="" maxlength="60"></textarea>
+                    <div class="register-input-error">Tên hiển thị ko được để trống </div>
                 </div>
             </div>
             <div class="edit-profile-footer">

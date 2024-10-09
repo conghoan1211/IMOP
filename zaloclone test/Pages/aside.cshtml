@@ -214,3 +214,62 @@
         </div>
     </div>
 </aside>
+
+ @* profile other dialog  *@
+<div id="profileOtherDialog" class="dialog-overlay" style="display: none;">
+    <div class="dialog-content">
+        <div id="view-profile">
+            <div class="flex-align-center-between profile-head">
+                <div class="profile-title">Thông tin tài khoản</div>
+                <span class="flex-align-justify-center close-btn" id="close-other-profile">
+                    <i class="fa-solid fa-xmark "></i>
+                </span>
+            </div>
+            <div class="flex-align-center profile-info">
+                <img src="https://s120-ava-talk.zadn.vn/f/4/0/3/5/120/d4b18e254c63eb8d920ef756817e0442.jpg"
+                     class="avatar-img profile-avatar" alt="avatar" id="profileAvatar">
+                <div class="profile-name">Phạm Hoan</div>
+                <button class="profile-edit"><i class="fa-solid fa-pencil"></i></button>
+                <input type="file" id="fileInput" style="display: none;" accept="image/*">
+            </div>
+            <button class="btn btn-secondary large profile-btn-message">Nhắn tin</button>
+            <div class="profile-border-4px"></div>
+            <div class="profile-title">Thông tin cá nhân</div>
+            <div class="profile-detail">
+                <div class="profile-detail-list">
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Bio</span>
+                        <span>-.-</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Giới tính</span>
+                        <span>Nam</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Ngày sinh</span>
+                        <span>12 tháng 11, 2003</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Điện thoại</span>
+                        <span>0326644740</span>
+                    </div>
+                    <div class="profile-note">Chỉ bạn bè đã chấp nhận kết bạn mới xem được số điện thoại này</div>
+                </div>
+            </div>
+            <div class="profile-other-action">
+                <button class="flex-align-center profile-action-btn">
+                    <i class="fa-solid fa-ban"></i>
+                    <div class="profile-action-btn__name">Chặn tin nhắn và cuộc gọi</div>
+                </button>
+                <button class="flex-align-center profile-action-btn">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div class="profile-action-btn__name">Báo xấu</div>
+                </button>
+                <button class="flex-align-center profile-action-btn">
+                    <i class="fa-regular fa-trash-can"></i>
+                    <div class="profile-action-btn__name">Xóa khỏi danh sách bạn bè</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

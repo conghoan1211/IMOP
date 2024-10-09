@@ -1,8 +1,6 @@
 ﻿@page
-@model zaloclone_test.ViewModels.UserRegister;
+@model zaloclone_test.Pages.registerModel
 @{
-    ViewData["Title"] = "Đăng ký";
-    Layout = "";
 }
 
 <!DOCTYPE html>
@@ -15,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <!-- CSS -->
     <link rel="stylesheet" href="~/css/base.css">
-    <link rel="stylesheet" href="~/assets/css/common.css">
+    <link rel="stylesheet" href="~/css/common.css">
     <link rel="stylesheet" href="~/css/login.css">
     <link rel="stylesheet" href="~/css/register.css">
 
@@ -32,65 +30,109 @@
 
 <body>
     <div class="login">
-        <header class="flex-column register-head">
-            <img src="https://stc-zaloid.zdn.vn/zaloid/client/images/zlogo.png" class="login-logo" />
-            <div class="login-describe">Đăng ký tài khoản Zalo</div>
-        </header>
-        <div class="login-body" id="form-login">
-            <form class="flex-column login-form" method="post" asp-page-handler="Register">
-                <div class="flex-align-center login-info">
-                    <input asp-for="UserName" required minlength="5" maxlength="40" class="login-input"
-                           placeholder="Nhập tên bạn muốn hiển thị" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+        <div class="register">
+            <header class="flex-column register-head">
+                <div class="login-logo">ChitChat</div>
+                <div class="login-describe">Đăng ký tài khoản ChitChat </div>
+                <div class="register-describe">Tạo tài khoản miễn phí ngay hôm nay để bắt đầu trò chuyện với bạn bè, khám phá những cuộc trò chuyện thú vị và mở rộng mạng lưới bạn bè của bạn.  </div>
+            </header>
+            <div class="login-body" id="form-login">
+                <div class="flex-column login-form">
+                    <form method="post" asp-page-handler="Register">
+                        <div class="flex-column register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.UserName" required type="text" minlength="5" maxlength="40" class="login-input"
+                                       placeholder="Nhập tên bạn muốn hiển thị" />
+                            </div>
+                            @if (ViewData.ModelState["Input.UserName"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.UserName" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="flex-align-center register-gender">
+                            <div class="flex-align-center">
+                                <input asp-for="Input.Sex" required value="0" name="gender" id="male" type="radio" class="register-gender-btn">
+                                <label class="register-gender-text" for="male">Nam</label>
+                            </div>
+                            <div class="flex-align-center">
+                                <input asp-for="Input.Sex" value="1" name="gender" id="female" type="radio" class="register-gender-btn">
+                                <label class="register-gender-text" for="female">Nữ</label>
+                            </div>
+                            <div class="flex-align-center">
+                                <input asp-for="Input.Sex" value="2" name="gender" id="other" type="radio" class="register-gender-btn">
+                                <label class="register-gender-text" for="other">Khác</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="flex-align-center register-dob-field">
+                                <span class="register-dob-name">Ngày sinh</span>
+                                <input asp-for="Input.Dob" class="register-dob" required type="date">
+                            </div>
+                            @if (ViewData.ModelState["Input.Dob"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.Dob" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <span class="login-number-country">(+84)</span>
+                                <input asp-for="Input.Phone" required type="text" minlength="10" maxlength="10" class="login-input"
+                                       placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                            </div>
+                            @if (ViewData.ModelState["Input.Phone"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.Phone" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.Email" required type="email" class="login-input" placeholder="Email" />
+                            </div>
+                            @if (ViewData.ModelState["Input.Email"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.Email" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.Password" required type="password" class="login-input" placeholder="Mật khẩu" />
+                            </div>
+                            @if (ViewData.ModelState["Input.Password"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.Password" class="register-input-error"></span>
+                            }
+                        </div>
+                        <div class="register-wrapper-field">
+                            <div class="flex-align-center login-info">
+                                <input asp-for="Input.RePassword" required type="password" class="login-input" placeholder="Nhập lại mật khẩu" />
+                            </div>
+                            @if (ViewData.ModelState["Input.RePassword"]?.Errors.Count > 0)
+                            {
+                                <span asp-validation-for="Input.RePassword" class="register-input-error"></span>
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.MessageError))
+                        {
+                            <div class="register-errors-text">
+                                Error: @Model.MessageError
+                            </div>
+                        }
+                        <button type="submit" class="btn login-btn" onclick="disableButton()">Đăng kí ngay</button>
+                    </form>
+                    <a href="login" class="flex-align-center register-return">
+                        <i class="fa-solid fa-angles-left"></i>&nbsp;
+                        Quay lại
+                    </a>
                 </div>
-                <div class="flex-align-center register-gender">
-                    <div class="flex-align-center">
-                        <input asp-for="Sex" type="radio" class="register-gender-btn" value="1">
-                        <label class="register-gender-text">Nam</label>
-                    </div>
-                    <div class="flex-align-center">
-                        <input asp-for="Sex" type="radio" class="register-gender-btn" value="2">
-                        <label class="register-gender-text">Nữ</label>
-                    </div>
-                    <div class="flex-align-center">
-                        <input asp-for="Sex" type="radio" class="register-gender-btn" value="3">
-                        <label class="register-gender-text">Khác</label>
-                    </div>
-                    <span asp-validation-for="Sex" class="text-danger"></span>
-                </div>
-                <div class="flex-column">
-                    <input asp-for="Dob" class="register-dob" type="date" />
-                    <span asp-validation-for="Dob" class="text-danger"></span>
-                </div>
-                <div class="flex-align-center login-info">
-                    <span class="login-number-country">(+84)</span>
-                    <input asp-for="Phone" required minlength="10" maxlength="10" class="login-input"
-                           placeholder="Số điện thoại" />
-                    <span asp-validation-for="Phone" class="text-danger"></span>
-                </div>
-                <div class="flex-align-center login-info">
-                    <input asp-for="Email" required class="login-input" placeholder="Email" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="flex-align-center login-info">
-                    <input asp-for="Password" required type="password" class="login-input" placeholder="Mật khẩu" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="flex-align-center login-info">
-                    <input asp-for="RePassword" required type="password" class="login-input" placeholder="Nhập lại mật khẩu" />
-                    <span asp-validation-for="RePassword" class="text-danger"></span>
-                </div>
-
-                <button type="submit" class="btn login-btn">Đăng ký ngay</button>
-
-                <a href="login" class="flex-align-center register-return">
-                    <i class="fa-solid fa-angles-left"></i>&nbsp;
-                    Quay lại
-                </a>
-            </form>
+            </div>
         </div>
     </div>
     <script src="~/js/login/tab.js"></script>
+    <script>
+        function disableButton() {
+            document.getElementById("register-btn").disabled = true;
+        }
+    </script>
 </body>
 
 </html>
