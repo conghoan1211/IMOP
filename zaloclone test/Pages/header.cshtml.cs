@@ -12,11 +12,15 @@ namespace zaloclone_test.Pages
         {
             _authenService = authenService;
         }
-        public string Username { get; set; }
-        public string Email { get; set; }
+        public string UserID { get; set; }
+
 
         public async Task<IActionResult> OnPostLogoutAsync()
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            string Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             var message = await _authenService.DoLogout(HttpContext);
             return RedirectToPage("/login");
         }
@@ -25,14 +29,12 @@ namespace zaloclone_test.Pages
         {
             // Lấy thông tin từ JWT
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-
             var claims = claimsIdentity.Claims;
 
             // Lấy thông tin từ các claims
-            Username = claims.FirstOrDefault(c => c.Type == "Username")?.Value;
-            Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            UserID = claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
 
-            // Sử dụng Username và Email trong ViewModel
+
         }
     }
 }

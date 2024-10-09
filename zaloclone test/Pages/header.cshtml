@@ -49,7 +49,9 @@
         <button class="setting-btn"> Thông tin tài khoản </button>
         <button class="setting-btn"> Đổi mật khẩu</button>
         <button class="setting-btn"> Cài đặt</button>
-        <button class="setting-btn btn-red"> Đăng xuất</button>
+        <form method="post" asp-page-handler="Logout">
+            <button class="setting-btn btn-red" type="submit">Đăng xuất</button>
+        </form>
     </div>
 </div>
 

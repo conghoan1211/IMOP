@@ -12,7 +12,7 @@ namespace zaloclone_test.Services
     {
         public Task<string> DoLogin(UserLogin userLogin, HttpContext httpContext);
         public Task<string> DoRegister(UserRegister userRegister);
-        public Task<string> DoLogout(HttpContext httpContext);
+        public Task<string> DoLogout(HttpContext httpContext, string email);
         public Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext);
         public Task<string> DoVerifyOTP(string otp, HttpContext httpContext);
         public Task<string> DoResetPassword(ResetPassword input);
@@ -80,24 +80,28 @@ namespace zaloclone_test.Services
             httpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, 
+                Secure = true,
                 SameSite = SameSiteMode.Strict // Prevent cross-site attacks
             });
             return "";
         }
 
-        public Task<string> DoLogout(HttpContext httpContext)
+        public async Task<string> DoLogout(HttpContext httpContext, string? email)
         {
             // Xóa cookie chứa JWT token
             httpContext.Response.Cookies.Delete("JwtToken");
-
-            // Nếu có session, bạn có thể xóa session tại đây (tùy theo yêu cầu ứng dụng của bạn)
             httpContext.Session.Clear();
 
-            //user.Status = (int)UserStatus.Inactive;
-            //await _context.SaveChangesAsync();
+            var (msg, user) = await DoSearchByEmail(email);
+            if (msg.Length > 0) return msg;
+            else if (user != null)
+            {
+                user.Status = (int)UserStatus.Inactive;
+                user.UpdateAt = DateTime.Now;
 
-            return Task.FromResult("Đăng xuất thành công.");
+                await _context.SaveChangesAsync();
+            }
+            return "";
         }
 
 
