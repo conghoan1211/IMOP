@@ -210,7 +210,6 @@
 
 .profile-edit-date {
     width: 60%;
-    margin-bottom: 20px;
 }
 
 .profile-edit-bio {
@@ -230,6 +229,10 @@
         border-color: var(--button-primary-normal);
         background-color: var(--search-bg-outline);
     }
+}
+
+.profile-edit-bio_wrapper {
+    margin-top: 15px;
 }
 
 .edit-profile-footer {

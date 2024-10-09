@@ -1,5 +1,5 @@
 ﻿function initProfileOtherDialog() {
-    const closeButton = document.querySelector('.close-btn');
+    const closeButton = document.querySelector('#close-other-profile');
     if (closeButton) {
         closeButton.addEventListener('click', function () {
             const dialog = document.getElementById('profileOtherDialog');

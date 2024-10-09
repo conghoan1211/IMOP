@@ -14,7 +14,6 @@ namespace Server.Pages
     public class loginModel : PageModel
     {
         private readonly IAuthenticateService _authenService;
-        private readonly Zalo_CloneContext _context;
         public loginModel(IAuthenticateService authenService)
         {
             _authenService = authenService;
@@ -32,7 +31,6 @@ namespace Server.Pages
             ModelState.Remove(nameof(Forgot.Email));
             if (!ModelState.IsValid)
                 return Page(); // No need to await
-
 
             var result = await _authenService.DoLogin(Input, HttpContext);
          
@@ -60,8 +58,7 @@ namespace Server.Pages
                 return await Task.FromResult(Page());
             }
 
-       //     HttpContext.Session.SetString("phone", Input.Phone);  // change this to jwt 
-            return RedirectToPage("/index");
+            return RedirectToPage("./home");
         }
 
         public async Task<IActionResult> OnPostResetPass()
@@ -83,10 +80,6 @@ namespace Server.Pages
             return await Task.FromResult(Page());
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            var message = await _authenService.DoLogout(HttpContext);
-            return RedirectToPage("/login");
-        }
+     
     }
 }

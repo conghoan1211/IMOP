@@ -72,6 +72,9 @@ namespace zaloclone_test.Services
             if (user.IsVerified == false) return ConstMessage.ACCOUNT_UNVERIFIED;
             if (user.IsActive == false) return "Tài khoản đã bị khóa.";
 
+            user.Status = (int)UserStatus.Active;
+            await _context.SaveChangesAsync();
+
             //create token here...
             var token = _jwtAuthen.GenerateJwtToken(user);
             httpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions
@@ -90,6 +93,9 @@ namespace zaloclone_test.Services
 
             // Nếu có session, bạn có thể xóa session tại đây (tùy theo yêu cầu ứng dụng của bạn)
             httpContext.Session.Clear();
+
+            //user.Status = (int)UserStatus.Inactive;
+            //await _context.SaveChangesAsync();
 
             return Task.FromResult("Đăng xuất thành công.");
         }
