@@ -21,7 +21,7 @@ namespace zaloclone_test.Pages
             var claims = claimsIdentity.Claims;
             string Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            var message = await _authenService.DoLogout(HttpContext);
+            var message = await _authenService.DoLogout(HttpContext, Email);
             return RedirectToPage("/login");
         }
 

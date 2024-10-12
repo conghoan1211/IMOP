@@ -19,7 +19,7 @@ namespace zaloclone_test.Pages
 
         public async Task<IActionResult> OnPostLogoutAsync()
         {
-            var message = await _authenService.DoLogout(HttpContext);
+            var message = await _authenService.DoLogout(HttpContext, Email);
             return RedirectToPage("/login");
         }
 

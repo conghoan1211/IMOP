@@ -13,7 +13,14 @@
     <div class="contact">
         <div class="flex-align-center contact-list-title">
             <span>Lời mời đã nhận</span>
-            <span>&nbsp;(4)</span>
+             @if (Model.allInvitation.Count > 0)
+             {
+                 <span>&nbsp;(@Model.allInvitation.Count)</span>
+             } 
+             else
+             {
+                 <span>&nbsp;(Error)</span>
+             }
         </div>
 
         <div class="flex contact-invitation-list">
