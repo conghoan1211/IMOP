@@ -74,6 +74,12 @@
                         Error: @Model.MessageError
                     </div>
                 }
+                @if (ViewData["MsLogout"] != null)
+                {
+                    <div class="register-errors-text" style="margin-top: 10px">
+                        @ViewData["MsLogout"]
+                    </div>
+                }
                 @if (!string.IsNullOrEmpty(Model.MessageSuccess))
                 {
                     <div class="register-success-text" style="margin-top: 10px">

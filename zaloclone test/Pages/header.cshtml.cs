@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using zaloclone_test.Services;
 
 namespace zaloclone_test.Pages
 {
+    [Authorize]
     public class headerModel : PageModel
     {
         private readonly IAuthenticateService _authenService;
@@ -21,7 +23,11 @@ namespace zaloclone_test.Pages
             var claims = claimsIdentity.Claims;
             string Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            var message = await _authenService.DoLogout(HttpContext);
+            if (!string.IsNullOrEmpty(Email))
+            {
+                var message = await _authenService.DoLogout(HttpContext, Email);
+                TempData["MsLogout"] = message;
+            }
             return RedirectToPage("/login");
         }
 

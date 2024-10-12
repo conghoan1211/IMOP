@@ -75,7 +75,6 @@ namespace zaloclone_test.Services
             user.Status = (int)UserStatus.Active;
             await _context.SaveChangesAsync();
 
-            //create token here...
             var token = _jwtAuthen.GenerateJwtToken(user);
             httpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions
             {
@@ -88,7 +87,6 @@ namespace zaloclone_test.Services
 
         public async Task<string> DoLogout(HttpContext httpContext, string? email)
         {
-            // Xóa cookie chứa JWT token
             httpContext.Response.Cookies.Delete("JwtToken");
             httpContext.Session.Clear();
 
