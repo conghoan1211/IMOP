@@ -7,7 +7,10 @@ namespace zaloclone_test.Services
 {
     public interface IInvitationService
     {
-        public Task<(string, List<Friend>)> GetAllInvitation(string UserId);
+        public Task<(string, List<User>)> GetAllInvitation(string UserId);
+        public Task<(string, List<User>)> GetAllRequested(string UserId);
+        public Task<string> RevokeInvitation(string UserId1, string UserId2);
+
     }
 
     public class InvitationService : IInvitationService
@@ -17,12 +20,30 @@ namespace zaloclone_test.Services
         {
             _context = context;
         }
-        public async Task<(string, List<Friend>?)> GetAllInvitation(string UserId)
+        public async Task<(string, List<User>?)> GetAllInvitation(string UserId)
         {
-           if(string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
-            var allInvitation = await _context.Friends.Where(x => x.Status == 0).ToListAsync();
+            if (string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
+            var allInvitation = await _context.Friends.Where(f => f.UserId1 == UserId && f.UpdateUser == UserId).Join(_context.Users, f => f.UserId2, u => u.UserId, (f, u) => u).ToListAsync();
 
-            return(string.Empty, allInvitation);
+            return (string.Empty, allInvitation);
+        }
+
+        public async Task<(string, List<User>?)> GetAllRequested(string UserId)
+        {
+            if (string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
+            var sentInvitation = await _context.Friends.Where(f => f.UserId1 == UserId && f.CreateUser == UserId).Join(_context.Users, f => f.UserId2, u => u.UserId, (f,u) => u).ToListAsync();
+
+            return (string.Empty, sentInvitation);
+        }
+
+        public async Task<string> RevokeInvitation(string UserId1, string UserId2)
+        {
+            if (string.IsNullOrEmpty(UserId1)) return "UserId is null";
+            var friend = await _context.Friends.FirstOrDefaultAsync(f => f.UserId1 == UserId1 && f.UserId2 == UserId2);
+            if (friend == null) return "Friend not found";
+            _context.Friends.Remove(friend);
+            await _context.SaveChangesAsync();
+            return "";
         }
     }
 

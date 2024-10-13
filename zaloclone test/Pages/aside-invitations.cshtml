@@ -13,232 +13,82 @@
     <div class="contact">
         <div class="flex-align-center contact-list-title">
             <span>Lời mời đã nhận</span>
-             @if (Model.allInvitation.Count > 0)
+             @if (Model.allInvitation != null)
              {
                  <span>&nbsp;(@Model.allInvitation.Count)</span>
              } 
              else
              {
-                 <span>&nbsp;(Error)</span>
+                 <span>&nbsp;(0)</span>
              }
         </div>
 
         <div class="flex contact-invitation-list">
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Từ số điện thoại</span>
+            @if (Model.allInvitation != null)
+            {
+                @foreach (var invite in Model.allInvitation)
+                {
+                    <div class="flex-column invitation-item">
+                        <div class="flex-align-center invitation-user">
+                            <button>
+                                <img class="avatar-img" src="@invite.Avatar" alt="">
+                            </button>
+                            <div class="flex-column invitation-info">
+                                <span class="invitation-name">@invite.Username</span>
+                                <span class="invitation-time">@invite.UpdateAt - Từ số điện thoại</span>
+                            </div>
+                        </div>
+                        <div class="flex-justify-between invitation-action">
+                            <button class="btn small btn-neutral">Từ chối</button>
+                            <button class="btn small btn-secondary">Đồng ý</button>
+                        </div>
+                        <button class="invitation-chat">
+                            <i class="fa-regular fa-comments"></i>
+                        </button>
                     </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn small btn-neutral">Từ chối</button>
-                    <button class="btn small btn-secondary">Đồng ý</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Từ số điện thoại</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn small btn-neutral">Từ chối</button>
-                    <button class="btn small btn-secondary">Đồng ý</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Từ số điện thoại</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn small btn-neutral">Từ chối</button>
-                    <button class="btn small btn-secondary">Đồng ý</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Từ số điện thoại</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn small btn-neutral">Từ chối</button>
-                    <button class="btn small btn-secondary">Đồng ý</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
+                }
+            }
         </div>
 
         <div class="flex-align-center contact-list-title">
             <span>Lời mời đã gửi</span>
-            <span>&nbsp;(18)</span>
+            @if(Model.sentInvitation != null)
+            {
+                <span>&nbsp;(@Model.sentInvitation.Count)</span>
+
+            }
+            else
+            {
+                <span>&nbsp;(0)</span>
+            }
         </div>
         <div class="flex contact-invitation-list">
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
+            @if(Model.sentInvitation != null)
+            {
+                @foreach (var request in Model.sentInvitation)
+                {
+                    <div class="flex-column invitation-item">
+                        <div class="flex-align-center invitation-user">
+                            <button>
+                                <img class="avatar-img" src="@request.Avatar" alt="">
+                            </button>
+                            <div class="flex-column invitation-info">
+                                <span class="invitation-name">@request.Username</span>
+                                <span class="invitation-time">@request.CreateAt - Bạn đã gửi lời mời</span>
+                            </div>
+                        </div>
+                        <div class="flex-justify-between invitation-action">
+                            <form method="post">
+                                <input type="hidden" name="id" value="@request.UserId">
+                                <button class="btn large btn-neutral">Thu hồi lời mời</button>
+                            </form>
+                        </div>
+                        <button class="invitation-chat">
+                            <i class="fa-regular fa-comments"></i>
+                        </button>
                     </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
-            <div class="flex-column invitation-item">
-                <div class="flex-align-center invitation-user">
-                    <button>
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                    </button>
-                    <div class="flex-column invitation-info">
-                        <span class="invitation-name">Park Chaeyoung</span>
-                        <span class="invitation-time">25/07 - Bạn đã gửi lời mời</span>
-                    </div>
-                </div>
-                <div class="flex-justify-between invitation-action">
-                    <button class="btn large btn-neutral">Thu hồi lời mời</button>
-                </div>
-                <button class="invitation-chat">
-                    <i class="fa-regular fa-comments"></i>
-                </button>
-            </div>
+                }
+            }
         </div>
 
     </div>

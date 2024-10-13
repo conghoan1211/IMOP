@@ -13,11 +13,12 @@ namespace Server.Pages
         {
             _inviteService = inviteService;
         }
-        public string UserID { get; set; }
 
-        public IList<Friend> allInvitation { get; set; }
+        public IList<User> allInvitation { get; set; }
+        public IList<User> sentInvitation { get; set; }
+        public string MessageError { get; set; }
 
-        public async Task<IActionResult> OnGetInvitationAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.Claims;
@@ -25,13 +26,43 @@ namespace Server.Pages
             if(!string.IsNullOrEmpty(UserId))
             {
                 var (message, allUser) = await _inviteService.GetAllInvitation(UserId);
-                if(message.Length == 0 && allUser != null)
+                var (sentmessage, sentUser) = await _inviteService.GetAllRequested(UserId);
+
+                if (message.Length > 0)
+                {
+                    MessageError = message;
+                    return Page();
+                }
+                else if (message.Length == 0 && allUser != null)
                 {
                     allInvitation = allUser;
                 }
+                if (sentmessage.Length > 0)
+                {
+                    MessageError = sentmessage;
+                    return Page();
+                }
+                else if (sentmessage.Length == 0 && sentUser != null)
+                {
+                    sentInvitation = sentUser;
+                }
             }
 
-            return RedirectToPage("/aside-invitations");
+            return Page();
+        }
+
+        [BindProperty]
+        public string UserId { get; set; }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            string UserId1 = claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            if (!string.IsNullOrEmpty(UserId1))
+            {
+                var message = await _inviteService.RevokeInvitation(UserId1, UserId);
+            }
+            return Page();
         }
     }
 }
