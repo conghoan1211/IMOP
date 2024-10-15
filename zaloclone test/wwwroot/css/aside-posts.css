@@ -1,0 +1,77 @@
+﻿.aspost-cmt__box {
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    background-color: var(--layer-background);
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.aspost-cmt-icon {
+    width: 40px;
+    i
+
+{
+    font-size: 2rem;
+}
+
+}
+
+.aspost-cmt-send {
+    min-width: 60px;
+    height: 100%;
+    button
+
+{
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--button-secondary-pressed);
+}
+
+.active {
+    color: var(--button-primary-normal);
+}
+
+}
+
+.aspost-cmt-input {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    min-width: calc(100% - 100px);
+    max-width: 100%;
+    cursor: text;
+    height: 100%;
+    textarea
+
+{
+    width: 100%;
+    height: 26px;
+    max-height: 140px;
+    -webkit-box-align: center;
+    align-items: center;
+    color: var(--text-primary);
+    caret-color: var(--pblue-rimary);
+    background-color: transparent;
+    border: none;
+    box-sizing: border-box;
+    font-size: 1.55rem;
+    font-weight: 400;
+    line-height: 22px;
+    outline: none;
+    user-select: text;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    overflow: auto;
+    resize: none;
+    &::placeholder
+
+{
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    user-select: none;
+}
+
+}
+}

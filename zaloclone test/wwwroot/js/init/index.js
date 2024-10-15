@@ -1,4 +1,4 @@
-const htmlCache = {
+﻿const htmlCache = {
     header: null,
     sidebar: {},
     aside: {}
@@ -51,41 +51,159 @@ function initHeaderSwitcher() {
                     initIfExists(initChatReact);
                     initIfExists(initProfileOtherDialog);
                 });
-            } else if (target.querySelector('.fa-address-book')) {
+            }
+            else if (target.querySelector('.fa-address-book')) {
                 loadHTMLWithCache('sidebar', 'sidebar-contact', 'sidebarContact', function () {
                     initIfExists(initContactMenuSwitcher);
                     initIfExists(initSearchBar);
+                    initIfExists(initSidebarSwitch);
                 });
-            } else if (target.querySelector('.fa-square-check')) {
-                loadHTMLWithCache('sidebar', 'sidebar-tasks', 'sidebarTasks');
+                loadHTMLWithCache(
+                    "aside",
+                    "aside-contact",
+                    "aside-contact",
+                    function () {
+                        console.log("contact list loaded");
+                        if (typeof openFriendOptions === "function") openFriendOptions();
+                        if (typeof initSearchBar === "function") initSearchBar();
+                    }
+                );
+            } else if (target.querySelector(".fa-house")) {
+                loadHTMLWithCache(
+                    "sidebar",
+                    "sidebar",
+                    "sidebar-list",
+                    function () {
+                        initIfExists(initSearchBar);
+                        initIfExists(initSettingModal);
+                        initIfExists(initMessageListSwitcher);
+                        initIfExists(initSidebarSwitch);
+                    }
+                );
+                loadHTMLWithCache(
+                    "aside",
+                    "aside-posts",
+                    "aside-posts",
+                    function () {
+                        initIfExists(initSidebarSwitch);
+                        initIfExists(initPostMoreModal);
+                        initIfExists(initAddPost);
+                        initIfExists(initPostImageZoom);
+                        initIfExists(initImageScroll);
+                        initIfExists(initPostReaction);
+                    }
+                );
+            } else if (target.querySelector(".fa-user")) {
+                loadHTMLWithCache(
+                    "sidebar",
+                    "sidebar",
+                    "sidebar-list",
+                    function () {
+                        initIfExists(initSearchBar);
+                        initIfExists(initSettingModal);
+                        initIfExists(initMessageListSwitcher);
+                        initIfExists(initSidebarSwitch);
+                    }
+                );
+                loadHTMLWithCache(
+                    "aside",
+                    "aside-profiles",
+                    "aside-profiles",
+                    function () {
+                        initIfExists(initPostMoreModal);
+                        initIfExists(initProfileDialog);
+                        initIfExists(initProfileImageZoom);
+                        initIfExists(initAddPost);
+                        initIfExists(initSidebarSwitch);
+                        initIfExists(initPostImageZoom);
+                        initIfExists(initImageScroll);
+                        initIfExists(initMessageDialog);
+                        initIfExists(initPostReaction);
+                    }
+                );
             }
         }
     });
 }
-
-
 // Initialize the sidebar switching logic
 function initSidebarSwitch() {
-    const searchInput = document.querySelector('.search-input');
+    const searchInput = document.querySelector(".search-input");
+    const postCommentButtons = document.querySelectorAll(".post-comment-btn");
+
     if (searchInput) {
-        searchInput.addEventListener('click', function () {
-            loadHTMLWithCache('sidebar', 'sidebar-search', 'sidebar-search', function () {
-                initIfExists(initSearchBar);
-            });
-        });
-        document.addEventListener('click', function (event) {
-            const isCloseBtn = event.target.classList.contains('btn-search-close');
-            if (isCloseBtn) {
-                loadHTMLWithCache('sidebar', 'sidebar', 'sidebar-list', function () {
-                    initIfExists(initSidebarSwitch);
+        searchInput.addEventListener("click", function () {
+            loadHTMLWithCache(
+                "sidebar",
+                "sidebar-search",
+                "sidebar-search",
+                function () {
                     initIfExists(initSearchBar);
-                    initIfExists(initMessageListSwitcher);
-                    initIfExists(initSettingModal);
-                });
+                }
+            );
+        });
+        document.addEventListener("click", function (event) {
+            const isCloseBtn = event.target.classList.contains("btn-search-close");
+            if (isCloseBtn) {
+                loadHTMLWithCache(
+                    "sidebar",
+                    "sidebar",
+                    "sidebar-list",
+                    function () {
+                        initIfExists(initSidebarSwitch);
+                        initIfExists(initSearchBar);
+                        initIfExists(initMessageListSwitcher);
+                        initIfExists(initSettingModal);
+                    }
+                );
             }
         });
     } else {
-        console.error('Search input not found!');
+        console.error("Search input not found!");
+    }
+
+    if (postCommentButtons.length > 0) {
+        postCommentButtons.forEach((btn) => {
+            btn.addEventListener("click", function () {
+                loadHTMLWithCache(
+                    "aside",
+                    "aside-posts-comments",
+                    "aside-posts-comments",
+                    function () {
+                        initIfExists(initPostMoreModal);
+                        initIfExists(initSidebarSwitch);
+                        initIfExists(initAddPost);
+                        initIfExists(initMessageDialog);
+                        initIfExists(initPostReaction);
+                        initIfExists(initImageScroll);
+                    }
+                );
+            });
+        });
+
+        document.addEventListener("click", function (event) {
+            const isReturnPost = event.target.classList.contains(
+                "aside-profile-return"
+            );
+            if (isReturnPost) {
+                loadHTMLWithCache(
+                    "aside",
+                    "aside-profiles",
+                    "aside-profiles",
+                    function () {
+                        initIfExists(initPostMoreModal);
+                        initIfExists(initProfileDialog);
+                        initIfExists(initProfileImageZoom);
+                        initIfExists(initAddPost);
+                        initIfExists(initSidebarSwitch);
+                        initIfExists(initPostImageZoom);
+                        initIfExists(initImageScroll);
+                        initIfExists(initPostReaction);
+                    }
+                );
+            }
+        });
+    } else {
+        console.error("postCommentButtons not found!");
     }
 }
 
@@ -134,46 +252,55 @@ function initContactMenuSwitcher() {
 }
 
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
     Promise.allSettled([
-        loadHTMLPromise('header', 'header'),
-        loadHTMLPromise('sidebar', 'sidebar'),
-        loadHTMLPromise('aside', 'aside'),
-    ]).then(() => {
-        initIfExists(initProfileDialog);
-        initIfExists(initSidebarSwitch);
-        initIfExists(initHeaderSwitcher);
-        initIfExists(initSearchBar);
-        initIfExists(initSettingModal);
-        initIfExists(initMessageListSwitcher);
-        initIfExists(initMessageDialog);
-        initIfExists(initFileUpload);
-        initIfExists(addMessageToChat);
-        initIfExists(getCurrentTime);
-        initIfExists(initChatReact);
-        initIfExists(initProfileOtherDialog);
-
-    }).catch(error => console.error(error));
+        loadHTMLPromise("header", "header"),
+        loadHTMLPromise("sidebar", "sidebar"),
+        loadHTMLPromise("aside", "aside-posts"),
+    ])
+        .then(() => {
+            initIfExists(initProfileDialog);
+            initIfExists(initSidebarSwitch);
+            initIfExists(initHeaderSwitcher);
+            initIfExists(initSearchBar);
+            initIfExists(initSettingModal);
+            initIfExists(initProfileOtherDialog);
+            initIfExists(initMessageListSwitcher);
+            initIfExists(initMessageDialog);
+            initIfExists(initFileUpload);
+            initIfExists(addMessageToChat);
+            initIfExists(getCurrentTime);
+            initIfExists(initChatReact);
+            initIfExists(initProfileDialog);
+        })
+        .catch((error) => console.error(error));
 });
 
+// document.addEventListener("DOMContentLoaded", async function () {
+//   try {
+//     // Load each section sequentially
+//     await loadHTMLAsync("header", "header");
+//     initHeaderSwitcher(); // Initialize after header is loaded
 
-
-// document.addEventListener('DOMContentLoaded', async function () {
-//     try {
-//         // Load each section sequentially
-//         await loadHTMLAsync('header', 'header.cshtml');
-//         initHeaderSwitcher(); // Initialize after header is loaded
-
-//         await loadHTMLAsync('sidebar', 'sidebar.cshtml');
-//         if (typeof initMessageListSwitcher === 'function') initMessageListSwitcher();
-//         console.log("init search 1");
-//         await loadHTMLAsync('aside', 'aside.cshtml');
-//         if (typeof initMessageDialog === 'function') initMessageDialog();
-//         if (typeof initFileUpload === 'function') initFileUpload();
-//         if (typeof addMessageToChat === 'function') addMessageToChat();
-//         if (typeof getCurrentTime === 'function') getCurrentTime();
-//         if (typeof initChatReact === 'function') initChatReact();
-//     } catch (error) {
-//         console.error(error);
-//     }
+//     await loadHTMLAsync("sidebar", "sidebar");
+//     if (typeof initMessageListSwitcher === "function")
+//       initMessageListSwitcher();
+//     console.log("init search 1");
+//     await loadHTMLAsync("aside", "aside-posts-comments");
+//     initIfExists(initProfileDialog);
+//     initIfExists(initSidebarSwitch);
+//     initIfExists(initHeaderSwitcher);
+//     initIfExists(initSearchBar);
+//     initIfExists(initSettingModal);
+//     initIfExists(initProfileOtherDialog);
+//     initIfExists(initMessageListSwitcher);
+//     initIfExists(initMessageDialog);
+//     initIfExists(initFileUpload);
+//     initIfExists(addMessageToChat);
+//     initIfExists(getCurrentTime);
+//     initIfExists(initChatReact);
+//     initIfExists(initProfileDialog);
+//   } catch (error) {
+//     console.error(error);
+//   }
 // });

@@ -1,0 +1,218 @@
+﻿@page
+@model zaloclone_test.Pages.aside_profilesModel
+@{
+}
+<aside class="flex-column aside-container-msg">
+    <header class="cont-msg-header aside-profile-header">
+        <div class="flex-align-center-between aside-profile-head">
+            <div class="flex-align-justify-center aside-profile-return">
+                <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            <div class="flex-justify-center aside-profile-head__title">
+                Trang cá nhân
+            </div>
+            <div class="flex-justify-end"></div>
+        </div>
+        <div class="aprofile-border-bottom"></div>
+        <div class="aprofile-border-bottom-left"></div>
+        <div class="aprofile-border-bottom-right"></div>
+    </header>
+
+    <div class="aside-profile flex-align-justify-center">
+        <div class="flex-column aprofile-container">
+            <div class="flex-column aprofile-header">
+                <div class="flex-align-center aprofile-header-infor">
+                    <div class="flex-column aprofile-infor-name">
+                        <div>ROSÉ</div>
+                        <span class="aprofile-infor-gender"><i class="fa-solid fa-venus"></i></span>
+                    </div>
+                    <img id="avatar-img" class="avatar-img aprofile-avt" src="assests/img/avt.jpeg" alt="" />
+                    <!-- Modal zoom image -->
+                    <div id="imageModal" class="modal">
+                        <span class="modal-close" id="imgProfileZoomClose">&times;</span>
+                        <div class="flex-align-justify-center aprofile-avt-zoom">
+                            <img class="avatar-img aprofile-avt-zoom__img" id="imageModalImg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="aprofile-bio">☆Not impersonating anyone!</div>
+                <div class="flex-align-center-between aprofile-friends">
+                    <div class="aprofile-friends-count">
+                        <span>5.5M</span>
+                        <span>followers</span>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-friends-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal profile other more action  -->
+                        <div class=" aprofile-other__modal" id="modalProfileAction" style="display: none;">
+                            <button class="flex-justify-between" id="openOtherProfileDialog">
+                                <div class="aprofile-post-more__title">
+                                    About this profile
+                                </div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-circle-info"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Report</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-flag"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Block</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-ban"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Unfriend</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-user-large-slash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-default large aprofile-btn-edit openProfileDialog">Edit profile</button>
+                <div class="aprofile-btn__other-action">
+                    <button class="btn btn-secondary small">Add friend</button>
+                    <button class="btn btn-neutral small">Message</button>
+                </div>
+            </div>
+            <!-- add post  -->
+            <div class="aprofile-post">
+                <div class="flex-align-center aprofile-box">
+                    <img class="avatar-img aprofile-post-avt" src="assests/img/avt.jpeg" alt="">
+                    <div class="flex-justify-between width-100pt openAddPost">
+                        <span class="aprofile-box__title">What's new?</span>
+                        <button class="btn aprofile-btn">Post</button>
+                    </div>
+                </div>
+            </div>
+            <div class="aprofile-list-posts">
+                <!-- list post  -->
+                <div class="flex-justify-between aprofile-post-item">
+                    <img class="avatar-img aprofile-post-avt" src="assests/img/avt.jpeg" alt="">
+                    <div class="flex-column aprofile-post-wrapper">
+                        <div class="flex-align-center aprofile-post_name-time">
+                            <div class="aprofile-post-name">roses_are_rosie</div>
+                            <div class="aprofile-post-time">08/20/2023 &bull;</div>
+                            <div class="aprofile-post-time"><i class="fa-solid fa-earth-asia"></i></div>
+                        </div>
+                        <div class="aprofile-post-content">pics that couldn’t make the horizontal post</div>
+                        <div class="flex-align-center aprofile-post-action">
+                            <div class="aprofile-post-action__btn post-react-heart">
+                                <i class="fa-regular fa-heart"></i>
+                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn post-comment-btn">
+                                <div><i class="fa-regular fa-comment"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-solid fa-repeat"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-paper-plane"></i></div>
+                                <span>656</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-post-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal post more action  -->
+                        <div class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Pin to top</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit post</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit privacy</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-gear"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Delete</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- end post item -->
+
+                <div class="flex-justify-between aprofile-post-item">
+                    <img class="avatar-img aprofile-post-avt" src="assests/img/avt.jpeg" alt="">
+                    <div class="flex-column aprofile-post-wrapper">
+                        <div class="flex-align-center aprofile-post_name-time">
+                            <div class="aprofile-post-name">roses_are_rosie</div>
+                            <div class="aprofile-post-time">08/20/2023 &bull;</div>
+                            <div class="aprofile-post-time"><i class="fa-solid fa-earth-asia"></i></div>
+                        </div>
+                        <div class="aprofile-post-content">pics that couldn’t make the horizontal post</div>
+                        <div class="flex-align-center aprofile-post__list-img">
+                            <img class="aprofile-post__item-img" src="assests/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="assests/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="assests/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="assests/img/lía.jpg" alt="">
+                        </div>
+                        <!-- Modal zoom image -->
+                        <div id="openImgPostZoom" class="modal">
+                            <span class="modal-close" id="imagePostZoomClose">&times;</span>
+                            <div class="flex-align-justify-center post-img-zoom">
+                                <img class="post-img-zoom__img" src="assests/img/lía.jpg" id="imagePostImg" alt="">
+                            </div>
+                        </div>
+                        <div class="flex-align-center aprofile-post-action">
+                            <div class="aprofile-post-action__btn post-react-heart">
+                                <i class="fa-regular fa-heart"></i>
+                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn post-comment-btn">
+                                <div><i class="fa-regular fa-comment"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-solid fa-repeat"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-paper-plane"></i></div>
+                                <span>656</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-post-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal post more action  -->
+                        <div class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Pin to top</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit post</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit privacy</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-gear"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Delete</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- end post item -->
+            </div>
+        </div>
+    </div>
+</aside>
+

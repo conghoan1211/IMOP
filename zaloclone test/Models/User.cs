@@ -7,6 +7,8 @@ namespace zaloclone_test.Models
     {
         public User()
         {
+            CommentLikes = new HashSet<CommentLike>();
+            Comments = new HashSet<Comment>();
             FriendUserId1Navigations = new HashSet<Friend>();
             FriendUserId2Navigations = new HashSet<Friend>();
             GroupMembers = new HashSet<GroupMember>();
@@ -14,6 +16,8 @@ namespace zaloclone_test.Models
             MessageRecieveds = new HashSet<Message>();
             MessageSenders = new HashSet<Message>();
             MessageStatuses = new HashSet<MessageStatus>();
+            PostLikes = new HashSet<PostLike>();
+            Posts = new HashSet<Post>();
             SearchHistorySearchedUsers = new HashSet<SearchHistory>();
             SearchHistoryUsers = new HashSet<SearchHistory>();
         }
@@ -27,7 +31,7 @@ namespace zaloclone_test.Models
         public int? RoleId { get; set; }
         public int? Sex { get; set; }
         public DateTime? Dob { get; set; }
-        public string? Bio { get; set; } = string.Empty;
+        public string? Bio { get; set; }
         public bool? IsDisable { get; set; }
         public bool? IsActive { get; set; }
         public DateTime? CreateAt { get; set; }
@@ -37,6 +41,8 @@ namespace zaloclone_test.Models
         public int? Status { get; set; }
         public bool? IsVerified { get; set; }
 
+        public virtual ICollection<CommentLike> CommentLikes { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Friend> FriendUserId1Navigations { get; set; }
         public virtual ICollection<Friend> FriendUserId2Navigations { get; set; }
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
@@ -44,6 +50,8 @@ namespace zaloclone_test.Models
         public virtual ICollection<Message> MessageRecieveds { get; set; }
         public virtual ICollection<Message> MessageSenders { get; set; }
         public virtual ICollection<MessageStatus> MessageStatuses { get; set; }
+        public virtual ICollection<PostLike> PostLikes { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<SearchHistory> SearchHistorySearchedUsers { get; set; }
         public virtual ICollection<SearchHistory> SearchHistoryUsers { get; set; }
     }

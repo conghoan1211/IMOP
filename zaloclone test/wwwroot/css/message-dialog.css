@@ -31,9 +31,9 @@
 
 /* chat list*/
 .avt-their {
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
+   width: 40px;
+   height: 40px;
+   cursor: pointer;
 }
 
 .aside-cont-list-chat {
@@ -362,9 +362,6 @@
 @media screen and (max-width: 770px) {
    .aside-container-msg {
       margin-left: var(--layer-header-width);
-   }
-
-   .aside-container-msg {
       inset: 0 0 0 0px;
    }
 }

@@ -1,5 +1,5 @@
 :root {
-    --white-color: #fff;
+    --white-color: #ffffff;
     --black-color: #000;
     --icon-on-color: #fff;
     --layer-background: #fff;
@@ -9,6 +9,7 @@
     --blue-message: #e5efff;
     --text-primary: #081c36;
     --text-secondary: #7589a3;
+    --text-tertiary: #999999;
     --text-placeholder: #7589a3;
     --text-disabled: #b6bec9;
     --BA10: rgba(0, 0, 0, 0.1);
@@ -18,7 +19,7 @@
     --border: #d6dbe1;
     --border-025: rgba(0, 0, 0, .25);
     --text-nav-disable: #7a8ca5;
-    --text-errors: #d91b1b;
+    --text-errors: #ff3040;
     --text-success: #37b361;
     --text-warning: #e0ac00;
     --text-information: #005ae0;
@@ -61,6 +62,7 @@
     --icon-disabled: #b6bec9;
     --layer-header-width: 64px;
     --layer-sidebar-width: 344px;
+    --layer-aside-profile-width: 800px;
     --header-search-height: calc(var(--header-height) - var(--navbar-height));
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .08);
     --box-shadow-025: 0 0 4px rgba(0, 0, 0, .25);
@@ -156,6 +158,17 @@ html ::-webkit-scrollbar-thumb {
     display: flex;
     justify-content: center;
 }
+
+.flex-justify-start {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.flex-justify-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
 
 .flex-justify-between {
     display: flex;
