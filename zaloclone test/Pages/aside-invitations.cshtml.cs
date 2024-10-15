@@ -51,10 +51,10 @@ namespace Server.Pages
             return Page();
         }
 
-        [BindProperty]
         public string UserId { get; set; }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostInvoke()
         {
+            UserId = Request.Form["Id"];
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.Claims;
             string UserId1 = claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
@@ -62,7 +62,20 @@ namespace Server.Pages
             {
                 var message = await _inviteService.RevokeInvitation(UserId1, UserId);
             }
-            return Page();
+            return RedirectToPage("/home");
+        }
+
+        public async Task<IActionResult> OnPostDeleteInvitation()
+        {
+            UserId = Request.Form["UserId"];
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            string UserId1 = claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            if (!string.IsNullOrEmpty(UserId1))
+            {
+                var message = await _inviteService.RevokeInvitation(UserId1, UserId);
+            }
+            return RedirectToPage("/home");
         }
     }
 }

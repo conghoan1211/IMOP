@@ -39,8 +39,12 @@
                             </div>
                         </div>
                         <div class="flex-justify-between invitation-action">
-                            <button class="btn small btn-neutral">Từ chối</button>
-                            <button class="btn small btn-secondary">Đồng ý</button>
+                            <form method="post" asp-page-handler="DeleteInvitation">
+                                <input type="hidden" name="UserId" value="@invite.UserId" />
+                                <button class="btn small btn-neutral">Từ chối</button>
+                            </form>
+                                <button class="btn small btn-secondary">Đồng ý</button>
+                            
                         </div>
                         <button class="invitation-chat">
                             <i class="fa-regular fa-comments"></i>
@@ -78,9 +82,9 @@
                             </div>
                         </div>
                         <div class="flex-justify-between invitation-action">
-                            <form method="post">
-                                <input type="hidden" name="id" value="@request.UserId">
-                                <button class="btn large btn-neutral">Thu hồi lời mời</button>
+                            <form method="post" asp-page-handler="Invoke">
+                                <input type="hidden" name="Id" value="@request.UserId">
+                                <button type="submit" class="btn large btn-neutral">Thu hồi lời mời</button>
                             </form>
                         </div>
                         <button class="invitation-chat">
