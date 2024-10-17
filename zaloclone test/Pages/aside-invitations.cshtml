@@ -43,7 +43,10 @@
                                 <input type="hidden" name="UserId" value="@invite.UserId" />
                                 <button class="btn small btn-neutral">Từ chối</button>
                             </form>
+                            <form method="post" asp-page-handler="AcceptInvitation">
+                                <input type="hidden" name="UserId" value="@invite.UserId" />
                                 <button class="btn small btn-secondary">Đồng ý</button>
+                            </form>
                             
                         </div>
                         <button class="invitation-chat">

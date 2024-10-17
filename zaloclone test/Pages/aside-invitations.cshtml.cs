@@ -77,5 +77,18 @@ namespace Server.Pages
             }
             return RedirectToPage("/home");
         }
+
+        public async Task<IActionResult> OnPostAcceptInvitation()
+        {
+            UserId = Request.Form["UserId"];
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            string UserId1 = claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            if (!string.IsNullOrEmpty(UserId1))
+            {
+                var message = await _inviteService.AcceptInvitation(UserId1, UserId);
+            }
+            return RedirectToPage("/home");
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace zaloclone_test.Services
         public Task<(string, List<User>)> GetAllInvitation(string UserId);
         public Task<(string, List<User>)> GetAllRequested(string UserId);
         public Task<string> RevokeInvitation(string UserId1, string UserId2);
+        public Task<string> AcceptInvitation(string UserId1, string UserId2);
 
     }
 
@@ -23,7 +24,7 @@ namespace zaloclone_test.Services
         public async Task<(string, List<User>?)> GetAllInvitation(string UserId)
         {
             if (string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
-            var allInvitation = await _context.Friends.Where(f => f.UserId1 == UserId && f.UpdateUser == UserId).Join(_context.Users, f => f.UserId2, u => u.UserId, (f, u) => u).ToListAsync();
+            var allInvitation = await _context.Friends.Where(f => f.UserId1 == UserId && f.UpdateUser == UserId && f.Status == 0).Join(_context.Users, f => f.UserId2, u => u.UserId, (f, u) => u).ToListAsync();
 
             return (string.Empty, allInvitation);
         }
@@ -31,7 +32,7 @@ namespace zaloclone_test.Services
         public async Task<(string, List<User>?)> GetAllRequested(string UserId)
         {
             if (string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
-            var sentInvitation = await _context.Friends.Where(f => f.UserId1 == UserId && f.CreateUser == UserId).Join(_context.Users, f => f.UserId2, u => u.UserId, (f,u) => u).ToListAsync();
+            var sentInvitation = await _context.Friends.Where(f => f.UserId1 == UserId && f.CreateUser == UserId && f.Status == 0).Join(_context.Users, f => f.UserId2, u => u.UserId, (f,u) => u).ToListAsync();
 
             return (string.Empty, sentInvitation);
         }
@@ -45,6 +46,19 @@ namespace zaloclone_test.Services
             await _context.SaveChangesAsync();
             return "";
         }
+
+        public async Task<string> AcceptInvitation(string UserId1, string UserId2)
+        {
+            if (string.IsNullOrEmpty(UserId1)) return "UserId is null";
+            var friend = await _context.Friends.FirstOrDefaultAsync(f => f.UserId1 == UserId1 && f.UserId2 == UserId2);
+            if (friend == null) return "Friend not found";
+            friend.Status = 1;
+            friend.UpdateAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return "";
+        }
+
+
     }
 
     
