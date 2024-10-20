@@ -1,4 +1,5 @@
 ﻿using AppGlobal.Common;
+using System.Linq;
 using System.Text.RegularExpressions;
 using zaloclone_test.Models;
 
@@ -53,6 +54,43 @@ namespace zaloclone_test.Helper
             return "";
         }
 
-        // add more 
+        public static async Task<(string, List<string>?)> GetUrlImages(IFormFile[] files )
+        {
+            List<string> fileNames = new List<string>();
+            var allowedExtensions = Constant.IMAGE_EXTENDS; // Định dạng file được phép
+
+            foreach (var file in files)
+            {
+                if (file.Length > 1048576) // Giới hạn kích thước 1MB
+                {
+                    return ("The file is too large.", null);
+                }
+
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    return ("Invalid file format.", null);
+                }
+
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), Constant.UrlImagePath);
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                var uniqueFileName = Guid.NewGuid().ToString() + extension; // Tạo tên file duy nhất
+                var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                fileNames.Add(uniqueFileName);
+            }
+
+            return (string.Empty, fileNames);
+        }
+
     }
 }

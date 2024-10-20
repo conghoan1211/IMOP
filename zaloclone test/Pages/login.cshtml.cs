@@ -8,6 +8,7 @@ using zaloclone_test.Models;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
+using zaloclone_test.ViewModels.Token;
 
 namespace Server.Pages
 {
@@ -58,7 +59,7 @@ namespace Server.Pages
                 return await Task.FromResult(Page());
             }
 
-            return RedirectToPage("./home");
+            return RedirectToPage("./post");
         }
 
         public async Task<IActionResult> OnPostResetPass()
@@ -79,7 +80,16 @@ namespace Server.Pages
             MessageSuccess = "Mật khẩu mới đã được gửi về Email của bạn.";
             return await Task.FromResult(Page());
         }
+        public async Task<IActionResult> OnPostLogoutAsync()
+        {
+            string phone = User.Claims.FirstOrDefault(c => c.Type == "Phone")?.Value;
 
-     
+            if (!string.IsNullOrEmpty(phone))
+            {
+                var message = await _authenService.DoLogout(HttpContext, phone);
+                TempData["MsLogout"] = message;
+            }
+            return RedirectToPage("/login");
+        }
     }
 }

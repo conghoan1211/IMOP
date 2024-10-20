@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using zaloclone_test.Configurations;
+using zaloclone_test.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddDbContext<Zalo_CloneContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyDB")));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -81,7 +85,7 @@ app.MapGet("/", async (HttpContext context) =>
     {
         return Results.Redirect("/login");
     }
-    return Results.Redirect("/home");
+    return Results.Redirect("/post");
 });
 
 
