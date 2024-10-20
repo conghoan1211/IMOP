@@ -16,6 +16,7 @@
     position: fixed;
     top: 0;
     bottom: 0;
+    z-index: 1;
 }
 
 .nav-btn {
@@ -138,4 +139,12 @@
         border-top: 1px solid var(--border);
         padding-top: 10px;
     }
+}
+
+.register-input-error {
+    font-size: 1.1rem;
+    color: var(--text-errors);
+    font-weight: 400;
+    padding: 0 4px;
+    margin-top: 4px;
 }

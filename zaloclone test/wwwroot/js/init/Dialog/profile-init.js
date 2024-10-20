@@ -1,66 +1,80 @@
 function initProfileDialog() {
-    const viewProfile = document.getElementById('view-profile');
-    const editProfile = document.getElementById('edit-profile');
-    const editButton = document.querySelector('.profile-edit-btn'); // Button to switch to edit mode
-    const cancelButton = document.querySelector('.profile-btn-cancel'); // Cancel button in edit mode
-    const returnButton = document.querySelector('.return-btn'); // Return button in edit mode
+    const viewProfile = document.getElementById("view-profile");
+    const editProfile = document.getElementById("edit-profile");
+    const editButton = document.querySelector(".profile-edit-btn"); // Button to switch to edit mode
+    const cancelButton = document.querySelector(".profile-btn-cancel"); // Cancel button in edit mode
+    const returnButton = document.querySelector(".return-btn"); // Return button in edit mode
 
-    const profileChangeAvatarButton = document.querySelector('.profile-change-avatar');
-    const fileInput = document.getElementById('fileInput');
-    const profileAvatar = document.getElementById('profileAvatar');
+    const profileChangeAvatarButton = document.querySelector(
+        ".profile-change-avatar"
+    );
+    const fileInput = document.getElementById("fileInput");
+    const profileAvatar = document.getElementById("profileAvatar");
 
-    document.querySelector('.avatar.nav-btn').addEventListener('click', function () {
-        const dialog = document.getElementById('profileDialog');
-        dialog.style.display = 'flex';  // Hiển thị dialog
+    const openProfileButtons = document.querySelectorAll(".openProfileDialog");
+    const dialog = document.getElementById("profileDialog");
+
+    // Lặp qua tất cả các nút có class openProfileDialog
+    openProfileButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            dialog.style.display = "flex"; // Hiển thị dialog
+            console.log("Profile dialog opened");
+        });
     });
-
-    const closeButton = document.querySelector('.close-btn');
+    const closeButton = document.querySelector("#close-profile-btn");
     if (closeButton) {
-        closeButton.addEventListener('click', function () {
-            const dialog = document.getElementById('profileDialog');
-            dialog.style.display = 'none';
+        closeButton.addEventListener("click", function () {
+            const dialog = document.getElementById("profileDialog");
+            dialog.style.display = "none";
         });
     } else {
-        console.error('Close button not found');
+        console.error("Close button not found");
     }
 
-    document.querySelector('#profileDialog').addEventListener('click', function (event) {
-        if (event.target === this) {
-            const dialog = document.getElementById('profileDialog');
-            dialog.style.display = 'none';  // Ẩn dialog
-        }
-    });
+    document
+        .querySelector("#profileDialog")
+        .addEventListener("click", function (event) {
+            if (event.target === this) {
+                const dialog = document.getElementById("profileDialog");
+                dialog.style.display = "none"; // Ẩn dialog
+            }
+        });
 
     // Ensure all elements are available
-    if (viewProfile && editProfile && editButton && cancelButton && returnButton) {
+    if (
+        viewProfile &&
+        editProfile &&
+        editButton &&
+        cancelButton &&
+        returnButton
+    ) {
         // Function to switch to Edit Profile
-        editButton.addEventListener('click', function () {
-            viewProfile.style.display = 'none';
-            editProfile.style.display = 'block';
+        editButton.addEventListener("click", function () {
+            viewProfile.style.display = "none";
+            editProfile.style.display = "block";
         });
 
         // Function to switch back to View Profile (on Cancel or Return)
-        cancelButton.addEventListener('click', function () {
-            editProfile.style.display = 'none';
-            viewProfile.style.display = 'block';
-            console.log("clicjk cancel");
+        cancelButton.addEventListener("click", function () {
+            editProfile.style.display = "none";
+            viewProfile.style.display = "block";
         });
 
-        returnButton.addEventListener('click', function () {
-            editProfile.style.display = 'none';
-            viewProfile.style.display = 'block';
+        returnButton.addEventListener("click", function () {
+            editProfile.style.display = "none";
+            viewProfile.style.display = "block";
         });
     } else {
-        console.error('Profile switch elements not found!');
+        console.error("Profile switch elements not found!");
     }
 
     // Open file input when the button is clicked
-    profileChangeAvatarButton.addEventListener('click', function () {
+    profileChangeAvatarButton.addEventListener("click", function () {
         fileInput.click();
     });
 
     // Handle file selection
-    fileInput.addEventListener('change', function () {
+    fileInput.addEventListener("change", function () {
         const file = fileInput.files[0];
         if (file) {
             const reader = new FileReader();
@@ -70,27 +84,6 @@ function initProfileDialog() {
             reader.readAsDataURL(file); // Read the file as a data URL
         }
     });
-
-
-    // const settingButton = document.querySelector('.nav-setting');
-    // const settingModal = document.querySelector('.setting-modal');
-
-    // // Ensure both elements are available
-    // if (settingButton && settingModal) {
-    //     settingButton.addEventListener('click', function () {
-    //         settingModal.classList.toggle('active');
-    //     });
-
-    //     // Optional: Close the modal when clicking outside of it
-    //     document.addEventListener('click', function (event) {
-    //         if (!settingModal.contains(event.target) && !settingButton.contains(event.target)) {
-    //             settingModal.classList.remove('active');
-    //         }
-    //     });
-    // } else {
-    //     console.error('Setting button or modal not found!');
-    // }
-
 }
 // Đảm bảo load dialog đúng cách trước khi hiển thị
 // function openProfileDialog(profileData) {
@@ -151,9 +144,9 @@ function initProfileDialog() {
 // }
 
 // Export or attach to global object if not using modules
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
     module.exports = {
-        initProfileDialog
+        initProfileDialog,
         // , openProfileDialog, loadProfileDialog, showProfileDialog
     };
 } else {
@@ -161,5 +154,4 @@ if (typeof module !== 'undefined' && module.exports) {
     // window.openProfileDialog = openProfileDialog;
     // window.loadProfileDialog = loadProfileDialog;
     // window.showProfileDialog = showProfileDialog;
-
 }

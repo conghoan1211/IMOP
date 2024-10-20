@@ -1,92 +1,73 @@
 :root {
-    --white-color: #fff;
+    --white-color: #ffffff;
     --black-color: #000;
-
     --icon-on-color: #fff;
     --layer-background: #fff;
     --layer-background-hover: #f3f5f6;
-    
-    --layer-bg-login:  rgb(192, 223, 248);
-
+    --layer-bg-login: linear-gradient(135deg, rgb(192, 223, 248), rgb(137, 196, 244), rgb(110, 173, 244));
     --white-message: #fff;
     --blue-message: #e5efff;
-
     --text-primary: #081c36;
     --text-secondary: #7589a3;
+    --text-tertiary: #999999;
     --text-placeholder: #7589a3;
     --text-disabled: #b6bec9;
-
     --BA10: rgba(0, 0, 0, 0.1);
     --BA20: rgba(0, 0, 0, 0.2);
     --BA30: rgba(0, 0, 0, 0.3);
-
     --chat-time: #476285;
     --border: #d6dbe1;
     --border-025: rgba(0, 0, 0, .25);
-
     --text-nav-disable: #7a8ca5;
-    --text-errors: #d91b1b;
+    --text-errors: #ff3040;
     --text-success: #37b361;
     --text-warning: #e0ac00;
     --text-information: #005ae0;
     --icon-count-noti-bg: #c31818;
-
     --layer-bg-list-chat: #eef0f1;
     --layer-bg-contact: #f7f7f8;
-
     --layer-msg-bg-subtle: #f9fafb;
     --layer-msg-bg-hover: #f3f5f6;
     --layer-msg-bg-disabled: #d8dbdf;
     --layer-msg-bg-selected: #e5efff;
-
     --layer-background-leftmenu: #0091ff;
     --layer-background-leftmenu-hover: #0080e2;
     --layer-background-leftmenu-selected: #006edc;
-
     --white-quote-selected: #abcdff;
     --button-primary-normal: #0068ff;
     --button-primary-hover: #004bb9;
     --button-primary-pressed: #00378a;
     --button-primary-disabled: #0190f3;
     --button-primary-text: #fff;
-   
     --button-secondary-normal: #e5efff;
     --button-secondary-hover: #c7e0ff;
     --button-secondary-pressed: #abcdff;
     --button-secondary-disabled: #e5efff;
     --button-secondary-text: #005ae0;
     --button-secondary-text-disabled: #abcdff;
-
     --button-neutral-normal: #eaedf0;
     --button-neutral-hover: #dfe2e7;
     --button-neutral-pressed: #d6dbe1;
     --button-neutral-disabled: #eaedf0;
     --button-neutral-text: #081c36;
     --button-neutral-text-disabled: #b6bec9;
-
     --button-tertiary-neutral-hover: #dfe2e7;
-
     --search-bg-filled: #eaedf0;
     --search-bg-filled-hover: #d6dbe1;
     --search-bg-outline: #fff;
     --search-bg-outline-hover: #f9fafb;
-
     --input-placeholder-gr: #2e486b;
-
     --icon-primary: #081c36;
     --icon-secondary: #7589a3;
     --icon-disabled: #b6bec9;
-
     --layer-header-width: 64px;
     --layer-sidebar-width: 344px;
-
+    --layer-aside-profile-width: 800px;
     --header-search-height: calc(var(--header-height) - var(--navbar-height));
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .08);
     --box-shadow-025: 0 0 4px rgba(0, 0, 0, .25);
-
     --font-roboto: 'Roboto', sans-serif;
     --font-poppins: 'Poppins', sans-serif;
-
 }
 
 
@@ -119,6 +100,7 @@ input {
     background-color: transparent;
     cursor: pointer;
     font-family: inherit;
+    padding:0;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -129,6 +111,10 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+a {
+    text-decoration: none;
 }
 
 /*scroll css*/
@@ -177,6 +163,17 @@ html ::-webkit-scrollbar-thumb {
     display: flex;
     justify-content: center;
 }
+
+.flex-justify-start {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.flex-justify-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
 
 .flex-justify-between {
     display: flex;

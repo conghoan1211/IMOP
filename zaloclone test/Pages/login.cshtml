@@ -33,21 +33,33 @@
 <body>
     <div class="login">
         <header class="flex-column login-head">
-            <img src="https://stc-zaloid.zdn.vn/zaloid/client/images/zlogo.png" class="login-logo" />
-            <div class="login-describe">Đăng nhập tài khoản Zalo </div>
-            <div class="login-describe">để kết nối với ứng dụng Zalo Web</div>
+            <div class="login-logo">ChitChat</div>
+            <div class="login-describe">Chào mừng trở lại với ChitChat >.< </div>
+            <div class="login-describe">Đăng nhập ngay người thương đang chờ bạn đó!!</div>
         </header>
         <div class="login-body" id="form-login">
-            <form class="flex-column login-form">
-                <div class="flex-align-center login-info">
-                    <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
-                    <span class="login-number-country">(+84)</span>
-                    <input required type="text" minlength="10" maxlength="10" class="login-input"
-                           placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+            <form class="flex-column login-form" method="post" asp-page-handler="Login">
+                <div>
+                    <div class="flex-align-center login-info">
+                        <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                        <span class="login-number-country">(+84)</span>
+                        <input asp-for="Input.Phone" required type="text" minlength="10" maxlength="10" class="login-input"
+                               placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                    </div>
+                    @if (ViewData.ModelState["Input.Phone"]?.Errors.Count > 0)
+                    {
+                        <span asp-validation-for="Input.Phone" class="register-input-error"></span>
+                    }
                 </div>
-                <div class="flex-align-center login-info">
-                    <span class="login-icon"><i class="fa-solid fa-lock"></i></span>
-                    <input required type="password" class="login-input" placeholder="Mật khẩu" />
+                <div>
+                    <div class="flex-align-center login-info">
+                        <span class="login-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input asp-for="Input.Password" required type="password" class="login-input" placeholder="Mật khẩu" />
+                    </div>
+                    @if (ViewData.ModelState["Input.Password"]?.Errors.Count > 0)
+                    {
+                        <span asp-validation-for="Input.Password" class="register-input-error"></span>
+                    }
                 </div>
                 <div class="flex-align-center-between login-btn-more">
                     <div class="login-btn-remember">
@@ -55,7 +67,25 @@
                         <label for="remember"> Nhớ mật khẩu?</label>
                     </div>
                 </div>
-                <button type="submit" class="btn login-btn disabled" disabled>Đăng nhập với mật khẩu</button>
+                <button type="submit" class="btn login-btn">Đăng nhập với mật khẩu</button>
+                @if (!string.IsNullOrEmpty(Model.MessageError))
+                {
+                    <div class="register-errors-text">
+                        Error: @Model.MessageError
+                    </div>
+                }
+                @if (ViewData["MsLogout"] != null)
+                {
+                    <div class="register-errors-text" style="margin-top: 10px">
+                        @ViewData["MsLogout"]
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(Model.MessageSuccess))
+                {
+                    <div class="register-success-text" style="margin-top: 10px">
+                        @Model.MessageSuccess
+                    </div>
+                }
                 <div class="login-btn-forgot">
                     <a href="">Quên mật khẩu?</a>
                 </div>
@@ -66,37 +96,41 @@
                 <button type="button" class="flex-align-justify-center login-tab-item" id="email-tab">Email</button>
                 <button type="button" class="flex-align-justify-center login-tab-item active" id="phone-tab">Số điện thoại</button>
             </div>
-            <div class="flex-column login-forgot-form">
+            <form method="post" class="flex-column login-forgot-form" asp-page-handler="ResetPass">
                 <div class="flex-align-center login-info" id="phone-input">
                     <span class="login-icon phone"><i class="fa-solid fa-mobile-screen-button"></i></span>
                     <span class="login-number-country">(+84)</span>
-                    <input type="text" minlength="10" maxlength="10" class="login-input" placeholder="Số điện thoại" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                    <input type="text" minlength="10" maxlength="10" class="login-input" placeholder="Số điện thoại"
+                           name="phone" id="login-phone-input" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                     <button class="flex-align-center clear-icon">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
                 </div>
                 <div class="flex-align-center login-info" id="email-input" style="display: none;">
                     <span class="login-icon phone"><i class="fa-regular fa-envelope"></i></span>
-                    <input type="email" class="login-input" placeholder="Nhập email" />
+                    <input asp-for="Forgot.Email" type="email" name="email" class="login-input" id="login-email-input" placeholder="Nhập email" />
                     <button class="flex-align-center clear-icon">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
                 </div>
-                <button class="btn login-btn">Send OTP</button>
-
-                <div class="flex-align-center login-otp-form">
-                    <div class=" flex-align-center login-info">
-                        <span class="login-icon verify"><i class="bx bxs-check-shield"></i></span>
-                        <input type="text" maxlength="6" class="login-input" placeholder="OTP here"
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                <button type="submit" class="btn login-btn">Send OTP</button>
+                @if (!string.IsNullOrEmpty(Model.MessageError))
+                {
+                    <div class="register-errors-text">
+                        Error: @Model.MessageError
                     </div>
-                    <button class="btn login-otp-btn">Verify</button>
-                </div>
+                }
+                @if (!string.IsNullOrEmpty(Model.MessageSuccess))
+                {
+                    <div class="register-success-text" style="margin-top: 10px">
+                        @Model.MessageSuccess
+                    </div>
+                }
                 <button type="button" class="flex-align-center btn-return">
                     <i class="fa-solid fa-angles-left"></i>&nbsp;
                     Quay lại
                 </button>
-            </div>
+            </form>
         </div>
         <footer class="login-footer">
             <span class="login-footer-title">Bạn chưa có tài khoản?</span>

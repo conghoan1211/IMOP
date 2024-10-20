@@ -7,7 +7,7 @@ function addMessageToChat(text) {
     // Tạo nội dung cho tin nhắn
     newMessage.innerHTML = `
         <div class="avatar-chat-msg">
-            <img class="avatar-img avt-their" src="~/img/avt.jpeg" alt="">
+            <img class="avatar-img avt-their" src="/img/avt.jpeg" alt="">
         </div>
         <div class="chat-content me">
             <div class="chat-message">
