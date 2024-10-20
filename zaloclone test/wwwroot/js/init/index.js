@@ -255,8 +255,8 @@ function initContactMenuSwitcher() {
 document.addEventListener("DOMContentLoaded", function () {
     Promise.allSettled([
         loadHTMLPromise("header", "header"),
-        loadHTMLPromise("sidebar", "sidebar"),
-        loadHTMLPromise("aside", "aside-posts"),
+        loadHTMLPromise("sidebar", "sidebar-contact"),
+        loadHTMLPromise("aside", "aside-contact"),
     ])
         .then(() => {
             initIfExists(initProfileDialog);

@@ -365,3 +365,25 @@
       inset: 0 0 0 0px;
    }
 }
+
+.img-msg {
+    border-radius: 8px;
+    flex-wrap: nowrap;
+    max-width: 550px;
+    overflow: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    img
+
+{
+    border-radius: 8px;
+    height: 250px;
+    width: auto;
+    object-fit: contain;
+    margin-right: 4px;
+}
+
+&.me {
+    flex-flow: row-reverse nowrap;
+}
+}

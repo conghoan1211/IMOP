@@ -12,7 +12,7 @@ namespace zaloclone_test.Services
     {
         public Task<string> DoLogin(UserLogin userLogin, HttpContext httpContext);
         public Task<string> DoRegister(UserRegister userRegister);
-        public Task<string> DoLogout(HttpContext httpContext, string email);
+        public Task<string> DoLogout(HttpContext httpContext, string phone);
         public Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext);
         public Task<string> DoVerifyOTP(string otp, HttpContext httpContext);
         public Task<string> DoResetPassword(ResetPassword input);
@@ -85,23 +85,22 @@ namespace zaloclone_test.Services
             return "";
         }
 
-        public async Task<string> DoLogout(HttpContext httpContext, string? email)
+        public async Task<string> DoLogout(HttpContext httpContext, string? phone)
         {
-            httpContext.Response.Cookies.Delete("JwtToken");
-            httpContext.Session.Clear();
-
-            var (msg, user) = await DoSearchByEmail(email);
+            var (msg, user) = await DoSearchByPhone(phone);
             if (msg.Length > 0) return msg;
             else if (user != null)
             {
                 user.Status = (int)UserStatus.Inactive;
                 user.UpdateAt = DateTime.Now;
-
+                _context.Users.Update(user);
                 await _context.SaveChangesAsync();
             }
+
+            httpContext.Response.Cookies.Delete("JwtToken");
+            httpContext.Session.Clear();
             return "";
         }
-
 
         public async Task<string> DoRegister(UserRegister input)
         {
@@ -134,7 +133,7 @@ namespace zaloclone_test.Services
                 CreateUser = userid,
             };
 
-            _context.Users.Add(user);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return "";
         }

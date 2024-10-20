@@ -1,23 +1,29 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zalo - user</title>
+    <title>Zalo - Clone</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <!-- css -->
-    <link rel="stylesheet" href="./assests/css/base.css">
-    <link rel="stylesheet" href="./assests/css/common.css">
-    <link rel="stylesheet" href="./assests/css/nav-header.css">
-    <link rel="stylesheet" href="./assests/css/message-sidebar.css">
-    <link rel="stylesheet" href="./assests/css/message-dialog.css">
-    <link rel="stylesheet" href="./assests/css/contact-sidebar.css">
-    <link rel="stylesheet" href="./assests/css/aside-contact.css">
-    <link rel="stylesheet" href="./assests/css/aside-invitation.css">
-    <link rel="stylesheet" href="./assests/css/profile-dialog.css">
-    <link rel="stylesheet" href="./assests/css/sidebar-search.css">
+    <link rel="stylesheet" href="~/css/base.css">
+    <link rel="stylesheet" href="~/css/common.css">
+    <link rel="stylesheet" href="~/css/nav-header.css">
+
+    <link rel="stylesheet" href="~/css/message-sidebar.css">
+    <link rel="stylesheet" href="~/css/message-dialog.css">
+    <link rel="stylesheet" href="~/css/sidebar-search.css">
+    <link rel="stylesheet" href="~/css/contact-sidebar.css">
+    <link rel="stylesheet" href="~/css/aside-contact.css">
+    <link rel="stylesheet" href="~/css/aside-invitation.css">
+
+    <link rel="stylesheet" href="~/css/aside-profile.css">
+    <link rel="stylesheet" href="~/css/profile-dialog.css">
+    <link rel="stylesheet" href="~/css/aside-post-cmt.css">
+    <link rel="stylesheet" href="~/css/aside-posts.css">
+    <link rel="stylesheet" href="~/css/profile-page.css">
+
 
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,14 +32,231 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
     <!-- icon title -->
-    <link rel="icon" type="image/x-icon" href="./assests/img/Designer.png">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="~/img/Designer.png">
 </head>
-<body>
 
-    <main role="main" class="flex">
-        @RenderBody()
-    </main>
+<body>
+    <header class="sidebar-head">
+        <div class="nav-top">
+            <button class="avatar nav-btn openProfileDialog">
+                @{
+                    string avatar = User.Claims.FirstOrDefault(c => c.Type == "Avatar")?.Value;
+                }
+                <img src="/img/@avatar"
+                     class="avatar-img" alt="avatar">
+            </button>
+            <div class="flex nav-btn">
+                <a asp-page="/post" class="flex-align-justify-center width-100pt height-100pt">
+                    <i class="fa-solid fa-house nav-btn-icon"></i>
+                </a>
+            </div>
+            <div class="flex nav-btn">
+                <a asp-page="message" class="flex-align-justify-center width-100pt height-100pt">
+                    <i class="fa-regular fa-comment nav-btn-icon"></i>
+                </a>
+            </div>
+            <div class="flex nav-btn">
+                <a asp-page="aside-contact" class="flex-align-justify-center width-100pt height-100pt">
+                    <i class="fa-regular fa-address-book nav-btn-icon"></i>
+                </a>
+            </div>
+            <div>
+                <button class="nav-btn">
+                    <i class="fa-regular fa-heart nav-btn-icon"></i>
+                </button>
+            </div>
+            <div class="flex nav-btn">
+                <a href="/profile" class="flex-align-justify-center width-100pt height-100pt">
+                    <i class="fa-regular fa-user nav-btn-icon"></i>
+                </a>
+            </div>
+        </div>
+        <div class="nav-bottom">
+            <div>
+                <button class="nav-btn">
+                    <i class="fa-solid fa-cloud nav-btn-img"></i>
+                </button>
+            </div>
+            <div>
+                <button class="nav-btn">
+                    <i class="fa-solid fa-briefcase nav-btn-img"></i>
+                </button>
+            </div>
+            <div>
+                <button class="nav-btn nav-setting">
+                    <i class="fa-solid fa-gear nav-btn-img"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="setting-modal">
+        <div class="flex-column">
+            <button class="setting-btn"> Thông tin tài khoản </button>
+            <button class="setting-btn"> Đổi mật khẩu</button>
+            <button class="setting-btn"> Cài đặt</button>
+            <form method="post" asp-page="/login" asp-page-handler="Logout" class="" onsubmit="clearLocalStorage()">
+                <button class="setting-btn btn-red width-100pt" type="submit">Đăng xuất</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- change password  -->
+    <div id="changePassDialog" class="dialog-overlay" style="display: none;">
+        <div class="dialog-content">
+            <div class="flex-align-center-between profile-head">
+                <div class="profile-title">Thay đổi mật khẩu</div>
+                <span class="flex-align-justify-center close-btn">
+                    <i class="fa-solid fa-xmark "></i>
+                </span>
+            </div>
+            <div class="changepass-wrapper">
+                <div class="flex-column profile-edit">
+                    @{
+                        string username = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                    }
+                    <span class="profile-edit-text changepass-name">Mật khẩu hiện tại</span>
+                    <input class="profile-edit-name" type="password" name="" id="" maxlength="50" value="@username">
+
+                    <div class="register-input-error">Tên hiển thị  @username </div>
+                </div>
+                <div class="flex-column profile-edit">
+                    <span class="profile-edit-text changepass-name">Mật khẩu mới</span>
+                    <input class="profile-edit-name" type="password" name="" id="" maxlength="50">
+                    <div class="register-input-error">Tên hiển thị ko được để trống </div>
+                </div>
+                <div class="flex-column profile-edit">
+                    <span class="profile-edit-text changepass-name">Nhập lại mật khẩu</span>
+                    <input class="profile-edit-name" type="password" name="" id="" maxlength="50">
+                    <div class="register-input-error">Tên hiển thị ko được để trống </div>
+                </div>
+                <div class="edit-profile-footer">
+                    <button class="btn btn-neutral changepass-cancel">Hủy</button>
+                    <button class="btn btn-primary profile-btn-update">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- profile dialog -->
+    <div id="profileDialog" class="dialog-overlay" style="display: none;">
+        <div class="dialog-content">
+            <div id="view-profile">
+                <div class="flex-align-center-between profile-head">
+                    <div class="profile-title">Thông tin tài khoản</div>
+                    <span class="flex-align-justify-center close-btn" id="close-profile-btn">
+                        <i class="fa-solid fa-xmark "></i>
+                    </span>
+                </div>
+                <div class="flex-align-center profile-info">
+                    <img src="https://s120-ava-talk.zadn.vn/f/4/0/3/5/120/d4b18e254c63eb8d920ef756817e0442.jpg"
+                         class="avatar-img profile-avatar" alt="avatar" id="profileAvatar">
+                    <div class="profile-name">Phạm Hoan</div>
+                    <button class="profile-edit"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="flex-align-justify-center profile-change-avatar">
+                        <i class="fa-solid fa-camera"></i>
+                    </button>
+                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
+                </div>
+                <div class="profile-title">Thông tin cá nhân</div>
+                <div class="profile-detail">
+                    <div class="profile-detail-list">
+                        <div class="profile-detail-item">
+                            <span class="profile-detail-title">Bio</span>
+                            <span>-.-</span>
+                        </div>
+                        <div class="profile-detail-item">
+                            <span class="profile-detail-title">Giới tính</span>
+                            <span>Nam</span>
+                        </div>
+                        <div class="profile-detail-item">
+                            <span class="profile-detail-title">Ngày sinh</span>
+                            <span>12 tháng 11, 2003</span>
+                        </div>
+                        <div class="profile-detail-item">
+                            <span class="profile-detail-title">Điện thoại</span>
+                            <span>0326644740</span>
+                        </div>
+                        <div class="profile-note">Chỉ bạn bè đã chấp nhận kết bạn mới xem được số điện thoại này</div>
+                    </div>
+                    <button class="profile-edit-btn">
+                        <i class="fa-solid fa-pencil"></i>
+                        <span>&nbsp;Cập nhật</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="edit-profile" style="display: none ;">
+                <div class="flex-align-center-between profile-head">
+                    <div class="flex-align-center profile-title">
+                        <span class="flex-align-justify-center return-btn">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </span>
+                        <span>Cập nhật thông tin tài khoản</span>
+                    </div>
+                </div>
+                <div class="profile-edit-cont">
+                    <div>
+                        <div class="flex-column profile-edit">
+                            <span class="profile-edit-text">Tên hiển thị</span>
+                            <input class="profile-edit-name" type="text" name="" id="" maxlength="50">
+                        </div>
+                        <div class="register-input-error">Tên hiển thị ko được để trống </div>
+                    </div>
+                    <div class="edit-profile-title">Thông tin cá nhân</div>
+                    <div class="flex-align-center edit-profile-gender">
+                        <div class="flex-align-center">
+                            <input required name="gender" id="male" type="radio" class="edit-profile-gender_btn">
+                            <label for="male" class="profile-edit-gender_text">Nam</label>
+                        </div>
+                        <div class="flex-align-center">
+                            <input name="gender" id="female" type="radio" class="edit-profile-gender_btn">
+                            <label for="female" class="profile-edit-gender_text">Nữ</label>
+                        </div>
+                        <div class="flex-align-center">
+                            <input name="gender" id="other" type="radio" class="edit-profile-gender_btn">
+                            <label for="other" class="profile-edit-gender_text">Khác</label>
+                        </div>
+                    </div>
+                    <div class="flex-column">
+                        <span class="profile-edit-text">Ngày sinh</span>
+                        <input class="profile-edit-date" type="date" name="" id="">
+                        <div class="register-input-error">Tên hiển thị ko được để trống </div>
+                    </div>
+                    <div class="flex-column profile-edit-bio_wrapper">
+                        <span class="profile-edit-text">Bio</span>
+                        <textarea class="profile-edit-bio" name="" id="" maxlength="60"></textarea>
+                        <div class="register-input-error">Tên hiển thị ko được để trống </div>
+                    </div>
+                </div>
+                <div class="edit-profile-footer">
+                    <button class="btn btn-neutral profile-btn-cancel">Hủy</button>
+                    <button class="btn btn-primary profile-btn-update">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @RenderBody()
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script type="module" src="~/js/profile/setting-nav-init.js"></script>
+    <script type="module" src="~/js/profile/profile-init.js"></script>
+    <script type="module" src="~/js/profile/profile-other-init.js"></script>
+
+    <script type="module" src="~/js/profile/post-more-action.js"></script>
+    <script type="module" src="~/js/profile/react-post.js"></script>
+    <script type="module" src="~/js/profile/add-post-input.js"></script>
+
+
+    <script>
+        function clearLocalStorage() {
+            localStorage.clear();
+        }
+    </script>
+
 </body>
 </html>

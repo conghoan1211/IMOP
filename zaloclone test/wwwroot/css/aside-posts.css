@@ -75,3 +75,17 @@
 
 }
 }
+
+
+.apost-post-pinned {
+    color: var(--text-tertiary);
+    font-family: system-ui;
+    padding-left: 45px;
+    padding-bottom: 8px;
+    font-size: 1.2rem;
+    span
+
+{
+    padding-left: 4px;
+}
+}

@@ -1,12 +1,16 @@
 ﻿@page
-@model zaloclone_test.Pages.aside_posts_commentsModel
-
-<aside class="flex-column aside-container-msg">
+@model zaloclone_test.Pages.post_commentModel
+@{
+    Layout = "_Layout";
+} 
+<aside class="flex-column aside-container-msg profile-page">
     <header class="cont-msg-header aside-profile-header">
         <div class="flex-align-center-between aside-profile-head">
             <div class="flex-align-justify-center aside-profile-return">
                 <i class="fa-solid fa-arrow-left"></i>
             </div>
+            <button onclick="history.back()">Go Back</button>
+
             <div class="flex-justify-center aside-profile-head__title">
                 Post
             </div>
@@ -17,6 +21,7 @@
     <div class="aside-profile flex-align-justify-center">
         <div class="flex-column flex-justify-between aprofile-container">
             <div class="aprofile-list-posts">
+                <!-- Main post -->
                 <div class="flex-justify-between aprofile-post-item">
                     <img class="avatar-img aprofile-post-avt" src="~/img/avt.jpeg" alt="">
                     <div class="flex-column aprofile-post-wrapper">
@@ -31,6 +36,13 @@
                             <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
                             <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
                             <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                        </div>
+                        <!-- Modal zoom image -->
+                        <div id="openImgPostZoom" class="modal">
+                            <span class="modal-close" id="imagePostZoomClose">&times;</span>
+                            <div class="flex-align-justify-center post-img-zoom">
+                                <img class="post-img-zoom__img" src="~/img/lía.jpg" id="imagePostImg" alt="">
+                            </div>
                         </div>
                         <div class="flex-align-center aprofile-post-action">
                             <div class="aprofile-post-action__btn post-react-heart">

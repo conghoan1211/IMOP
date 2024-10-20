@@ -36,7 +36,7 @@ namespace zaloclone_test.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server =localhost; database =Zalo_Clone;uid=sa;pwd=hoancute;TrustServerCertificate=true;Integrated Security = true;");
+                optionsBuilder.UseSqlServer("server =localhost; database = Zalo_Clone;uid=sa;pwd=hoancute;TrustServerCertificate=true");
             }
         }
 
@@ -347,7 +347,11 @@ namespace zaloclone_test.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.IsComment).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Likes).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.PinTop).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Privacy).HasDefaultValueSql("((1))");
 
@@ -364,6 +368,8 @@ namespace zaloclone_test.Models
                 entity.Property(e => e.VideoUrl)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Views).HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Posts)
@@ -477,7 +483,7 @@ namespace zaloclone_test.Models
 
                 entity.Property(e => e.Avatar).HasMaxLength(255);
 
-                entity.Property(e => e.Bio).HasMaxLength(40);
+                entity.Property(e => e.Bio).HasMaxLength(150);
 
                 entity.Property(e => e.CreateAt)
                     .HasColumnType("datetime")

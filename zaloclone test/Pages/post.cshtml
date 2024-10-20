@@ -1,0 +1,348 @@
+﻿@page 
+@model zaloclone_test.Pages.postModel
+@{
+    Layout = "_Layout";
+}
+<aside class="flex-column aside-container-msg profile-page">
+    <header class="cont-msg-header aside-profile-header">
+        <div class="flex-align-center-between aside-profile-head">
+            <div class="flex-align-justify-center aside-profile-return">
+                <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            <div class="flex-justify-center aside-profile-head__title">
+                For you
+            </div>
+            <div class="flex-justify-end"></div>
+        </div>
+    </header>
+
+    <div class="aside-profile flex-align-justify-center">
+        <div class="flex-column aprofile-container">
+            <!-- add post  -->
+            <div class="aprofile-post">
+                <div class="flex-align-center aprofile-box">
+                    <img class="avatar-img aprofile-post-avt" src="~/img/@Model.UserToken.Avatar" alt="">
+                    <div class="flex-justify-between width-100pt openAddPost">
+                        <span class="aprofile-box__title">What's new?</span>
+                        <button class="btn aprofile-btn">Post</button>
+                    </div>
+                </div>
+            </div>
+            <div class="aprofile-list-posts">
+                <!-- list post  -->
+                @foreach (var item in Model.listPost ?? new())
+                {
+                    <div class="flex-justify-between aprofile-post-item">
+                        <a asp-page="/profile" asp-route-id="@item.UserID">
+                            <img class="avatar-img aprofile-post-avt" src="~/img/@item.AvatarUrl" alt="">
+                        </a>
+                        <div class="flex-column aprofile-post-wrapper">
+                            <div class="flex-align-center aprofile-post_name-time">
+                                <div class="aprofile-post-name">@item.Username</div>
+                                <div class="aprofile-post-time format-time" data-time="@item.CreateAt">@item.CreateAt </div>
+                                <!--     <div class="aprofile-post-time">
+                                    &bull;
+                                @{
+                                    var privacyIcon = item.Privacy == 0
+                                    ? "<i class='fa-solid fa-earth-asia'></i>"
+                                    : item.Privacy == 1
+                                    ? "<i class='fa-solid fa-user-group' style='font-size: 1.1rem'></i>"
+                                    : "<i class='fa-solid fa-lock'></i>";
+                                }
+                                @Html.Raw(privacyIcon)
+                                </div> -->
+                            </div>
+                            <div class="aprofile-post-content">@item.Content</div>
+                            @if (!string.IsNullOrEmpty(item.Images))
+                            {
+                                <div class="flex-align-center aprofile-post__list-img">
+                                    @{
+                                        var imgFiles = item.Images.Split(";");
+                                        foreach (var img in imgFiles)
+                                        {
+                                            if (!string.IsNullOrEmpty(img))
+                                            {
+                                                var filePath = "/img/" + img.Trim();
+                                                <img class="aprofile-post__item-img" src="@filePath" alt="">
+                                            }
+                                        }
+                                    }
+                                </div>
+                            }
+                            <div class="flex-align-center aprofile-post-action">
+                                <div class="aprofile-post-action__btn post-react-heart">
+                                    <i class="fa-regular fa-heart"></i>
+                                    <i class="fa-solid fa-heart" style="display:none;"></i>
+                                    <span>@item.Likes</span>
+                                </div>
+                                <div class="aprofile-post-action__btn post-comment-btn">
+                                    @if (item.IsComment == true)
+                                    {
+                                        <div><i class="fa-regular fa-comment"></i></div>
+                                    }
+                                    else
+                                    {
+                                        <div><i class="fa-solid fa-comment-slash"></i></div>
+                                    }
+                                    <span>@item.Comments</span>
+                                </div>
+                                <div class="aprofile-post-action__btn">
+                                    <div><i class="fa-solid fa-repeat"></i></div>
+                                    <span>@item.Shares</span>
+                                </div>
+                                <div class="aprofile-post-action__btn">
+                                    <div><i class="fa-regular fa-paper-plane"></i></div>
+                                    <span>166</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="position: relative;">
+                            <div class="flex-align-justify-center aprofile-post-more">
+                                <i class="fa-solid fa-ellipsis"></i>
+                            </div>
+                            <!-- modal post more action -->
+                            <form method="post" class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                                @if (item.UserID == Model.UserToken.UserID.ToString())
+                                {
+                                    <input type="hidden" name="postId" value="@item.PostID" />
+                                    @if (item.PinToTop == false)
+                                    {
+                                        <button formaction="?handler=PinTop" type="submit" class="flex-justify-between">
+                                            <div class="aprofile-post-more__title">Pin to top</div>
+                                            <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button formaction="?handler=PinTop" type="submit" class="flex-justify-between">
+                                            <div class="aprofile-post-more__title">Unpin to top</div>
+                                            <div class="aprofile-post-more__icon"><i class="fa-solid fa-link-slash"></i></div>
+                                        </button>
+                                    }
+                                    <button type="button" class="flex-justify-between openEditPost"
+                                            onclick="openEditPost('@item.PostID', '@item.Username', '@item.Content', '@item.Privacy', '/img/@Model.UserToken.Avatar')">
+                                        <div class="aprofile-post-more__title">Edit post</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                                    </button>
+                                    @if (item.IsComment == true)
+                                    {
+                                        <button formaction="?handler=AllowComment" type="submit" class="flex-justify-between">
+                                            <div class="aprofile-post-more__title">Unallow comments</div>
+                                            <div class="aprofile-post-more__icon"><i class="fa-solid fa-comment-slash"></i></div>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button formaction="?handler=AllowComment" type="submit" class="flex-justify-between">
+                                            <div class="aprofile-post-more__title">Allow comments</div>
+                                            <div class="aprofile-post-more__icon"><i class="fa-solid fa-comment"></i></div>
+                                        </button>
+                                    }
+                                    <span class="aprofile-border-top"></span>
+                                    <button formaction="?handler=DeletePost" type="submit" class="flex-justify-between btn-red">
+                                        <div class="aprofile-post-more__title ">Delete</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="postId" value="@item.PostID" />
+                                    <button type="button" class="flex-justify-between">
+                                        <div class="aprofile-post-more__title">Save</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-regular fa-bookmark"></i></div>
+                                    </button>
+                                    <button type="button" class="flex-justify-between">
+                                        <div class="aprofile-post-more__title">Not interested</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-regular fa-eye-slash"></i></div>
+                                    </button>
+                                    <span class="aprofile-border-top"></span>
+                                    <button type="button" class="flex-justify-between">
+                                        <div class="aprofile-post-more__title">Unfriend</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-solid fa-user-minus"></i></div>
+                                    </button>
+                                    <button type="button" class="flex-justify-between btn-red">
+                                        <div class="aprofile-post-more__title">Block</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-solid fa-user-slash"></i></div>
+                                    </button>
+                                    <button type="button" class="flex-justify-between btn-red">
+                                        <div class="aprofile-post-more__title ">Report</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-regular fa-flag"></i></div>
+                                    </button>
+                                    <span class="aprofile-border-top"></span>
+                                    <button formaction="?handler=AllowComment" type="submit" class="flex-justify-between">
+                                        <div class="aprofile-post-more__title">Copy link</div>
+                                        <div class="aprofile-post-more__icon"><i class="fa-solid fa-link"></i></div>
+                                    </button>
+                                }
+                            </form>
+                        </div>
+                    </div>    <!-- end post item -->
+                }
+
+                <div class="flex-justify-between aprofile-post-item">
+                    <img class="avatar-img aprofile-post-avt" src="~/img/avt.jpeg" alt="">
+                    <div class="flex-column aprofile-post-wrapper">
+                        <div class="flex-align-center aprofile-post_name-time">
+                            <div class="aprofile-post-name">roses_are_rosie</div>
+                            <div class="aprofile-post-time">08/20/2023 &bull;</div>
+                            <div class="aprofile-post-time"><i class="fa-solid fa-earth-asia"></i></div>
+                        </div>
+                        <div class="aprofile-post-content">pics that couldn’t make the horizontal post</div>
+                        <div class="flex-align-center aprofile-post__list-img">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                        </div>
+                        <!-- Modal zoom image -->
+                        <div id="openImgPostZoom" class="modal">
+                            <span class="modal-close" id="imagePostZoomClose">&times;</span>
+                            <div class="flex-align-justify-center post-img-zoom">
+                                <img class="post-img-zoom__img" src="~/img/lía.jpg" id="imagePostImg" alt="">
+                            </div>
+                        </div>
+                        <div class="flex-align-center aprofile-post-action">
+                            <div class="aprofile-post-action__btn post-react-heart">
+                                <i class="fa-regular fa-heart"></i>
+                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn post-comment-btn">
+                                <div><i class="fa-regular fa-comment"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-solid fa-repeat"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-paper-plane"></i></div>
+                                <span>656</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-post-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal post more action  -->
+                        <div class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Pin to top</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit post</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit privacy</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-gear"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Delete</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- end post item -->
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- modal add post  -->
+<div class="flex-align-justify-center modal-addpost modalAddPost" style="display: none;">
+    <div class="flex-column modal-addpost__wrapper">
+        <div style="position: relative;">
+            <div class="flex-align-justify-center modal-addpost__title">New post</div>
+            <div class="modal-addpost__close">
+                &times;</span>
+            </div>
+            <form class="flex modal-addpost__content" asp-page-handler="Profile" method="post" enctype="multipart/form-data">
+                <img class="avatar-img aprofile-post-avt" src="~/img/@Model.UserToken.Avatar" alt="">
+                <div class="flex-column modal-addpost__container">
+                    <div class="modal-addpost__name">@Model.UserToken.UserName</div>
+                    <select asp-for="@Model.Input.Privacy" class="modal-addpost__privacy">
+                        <option value="0">Public</option>
+                        <option value="1">Friends</option>
+                        <option value="2">Only me</option>
+                    </select>
+                    <div class="modal-addpost__input">
+                        <textarea asp-for="@Model.Input.Content" required class="modal-addpost__input-text" maxlength="500"
+                                  placeholder="What's new?"></textarea>
+                    </div>
+                    <div class="flex-align-center modal-addpost__list-img">
+                    </div>
+                    <div class="flex-justify-between modal-addpost__footer">
+                        <div class="modal-addpost__more-icon">
+                            <button type="button" id="upload-image-btn">
+                                <i class="fa-regular fa-images"></i>
+                            </button>
+                            <input asp-for="@Model.Input.Images" type="file" id="image-upload-input" multiple accept="image/*"
+                                   style="display: none;">
+                            <button>
+                                <i class="fa-regular fa-file-image"></i>
+                            </button>
+                            <button>
+                                <i class="fa-solid fa-hashtag"></i>
+                            </button>
+                            <button>
+                                <i class="fa-solid fa-location-dot"></i>
+                            </button>
+                        </div>
+                        <button type="submit" class="btn btn-default modal-addpost__btn"> Post</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- modal edit post -->
+<div class="flex-align-justify-center modal-addpost modalEditPost" id="globalModalEditPost" style="display: none;">
+    <div class="flex-column modal-addpost__wrapper">
+        <div style="position: relative;">
+            <div class="flex-align-justify-center modal-addpost__title">Edit post</div>
+            <div class="modal-addpost__close">
+                &times;
+            </div>
+            <form class="flex modal-addpost__content" asp-page-handler="Profile" method="post" enctype="multipart/form-data">
+                <input asp-for="@Model.Input.PostID" type="hidden" id="editPostId" />
+                <img class="avatar-img aprofile-post-avt" id="editPostAvatar" src="" alt="">
+                <div class="flex-column modal-addpost__container">
+                    <div class="modal-addpost__name" id="editPostUsername"></div>
+                    <select asp-for="@Model.Input.Privacy" id="editPostPrivacy" class="modal-addpost__privacy">
+                        <option value="0">Public</option>
+                        <option value="1">Friends</option>
+                        <option value="2">Only me</option>
+                    </select>
+                    <div class="modal-addpost__input">
+                        <textarea asp-for="@Model.Input.Content" id="editPostContent" required class="modal-addpost__input-text" maxlength="500" placeholder="What's new?"></textarea>
+                    </div>
+                    <div class="flex-justify-between modal-addpost__footer">
+                        <div class="modal-addpost__more-icon"></div>
+                        <button type="submit" class="btn btn-default modal-addpost__btn"> Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Hàm mở modal và cập nhật nội dung
+    function openEditPost(postId, username, content, privacy, avatar) {
+        // Cập nhật các trường trong modal với dữ liệu từ post
+        document.getElementById('editPostId').value = postId;
+        document.getElementById('editPostUsername').textContent = username;
+        document.getElementById('editPostContent').value = content;
+        document.getElementById('editPostPrivacy').value = privacy;
+        document.getElementById('editPostAvatar').src = avatar;
+
+        // Hiển thị modal
+        document.getElementById('globalModalEditPost').style.display = 'block';
+    }
+</script>
+<script type="module" src="~/js/profile/avt-zoom.js"></script>
