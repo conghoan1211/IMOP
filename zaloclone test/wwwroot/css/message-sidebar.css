@@ -6,6 +6,7 @@
     width: var(--layer-sidebar-width);
     border-right: 1px solid var(--border);
     margin-left: var(--layer-header-width);
+    position: fixed;
 }
 
 /*search head*/
@@ -16,7 +17,7 @@
     justify-content: space-evenly;
     height: 64px;
     min-height: 64px;
-    padding: 0 16px;
+    padding: 0 13px;
     background-color: var(--layer-background);
 }
 

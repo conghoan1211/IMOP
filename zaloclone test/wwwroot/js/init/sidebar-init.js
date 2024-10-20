@@ -31,7 +31,6 @@ function initSearchBar() {
             element.style.display = 'inline-flex'; // Hiển thị khi có nội dung
         }
     });
-    
 }
 
 // Export the function if using modules, or attach it to the global object if not

@@ -35,7 +35,7 @@ namespace AppGlobal.Common
 
     public static class GuidHelper
     {
-        public static Guid? ToGuid(this string guid)
+        public static Guid ToGuid(this string guid)
         {
             return string.IsNullOrEmpty(guid) ? Guid.Empty : Guid.Parse(guid);
         }

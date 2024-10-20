@@ -1,9 +1,11 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AppGlobal.Common;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using zaloclone_test.Configurations;
 using zaloclone_test.Models;
+using zaloclone_test.ViewModels.Token;
 
 namespace zaloclone_test.Utilities
 {
@@ -23,6 +25,8 @@ namespace zaloclone_test.Utilities
                     new Claim("Phone", user.Phone.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim("RoleID", user.RoleId.ToString()),
+                    new Claim("Avatar", user.Avatar),
+
                 }),
                 Expires = DateTime.UtcNow.AddHours(1), // Token expiration
                 Issuer = ConfigManager.gI().Issuer,
@@ -33,5 +37,75 @@ namespace zaloclone_test.Utilities
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public string ParseCurrentToken(ClaimsPrincipal user, out UserToken userToken)
+        {
+            userToken = null;
+            if (user.Identity is not ClaimsIdentity claimsIdentity || !user.Identity.IsAuthenticated)
+            {
+                return "User has not authenticated";
+            }
+            var claims = claimsIdentity.Claims;
+            var username = claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            var userID = claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var phone = claims.FirstOrDefault(c => c.Type == "Phone")?.Value;
+            var roleID = claims.FirstOrDefault(c => c.Type == "RoleID")?.Value;
+            var avatar = claims.FirstOrDefault(c => c.Type == "Avatar")?.Value;
+
+
+            userToken = new UserToken
+            {
+                UserName = username,
+                UserID = userID.ToGuid(),
+                Email = email,
+                PhoneNumber = phone,
+                RoleID = roleID,
+                Avatar = avatar
+            };
+            return "";
+        }
+
+        public UserToken ParseJwtToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(ConfigManager.gI().SecretKey); // Your encryption key for token validation
+
+            // Validate the token
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero, // Disable the default 5 min leeway
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+
+            // Extract user information from the token claims
+            var username = jwtToken.Claims.FirstOrDefault(x => x.Type == "Username")?.Value;
+            var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == "UserID")?.Value;
+            var email = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var phone = jwtToken.Claims.FirstOrDefault(x => x.Type == "Phone")?.Value;
+            var roleId = jwtToken.Claims.FirstOrDefault(x => x.Type == "RoleID")?.Value;
+            var avatar = jwtToken.Claims.FirstOrDefault(x => x.Type == "Avatar")?.Value;
+
+
+            // Create a UserToken object with the extracted data
+            var authUser = new UserToken
+            {
+                UserName = username,
+                UserID = userId.ToGuid(),
+                Email = email,
+                PhoneNumber = phone,
+                RoleID = roleId,
+                Avatar = avatar
+            };
+
+            return authUser;
+        }
+
+
     }
 }
