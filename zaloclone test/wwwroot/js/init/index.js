@@ -46,7 +46,7 @@ function initHeaderSwitcher() {
                     initIfExists(initSidebarSwitch);
                     initIfExists(initMessageDialog);
                     initIfExists(initFileUpload);
-                    initIfExists(addMessageToChat);
+                    initIfExists(sendMessage);
                     initIfExists(getCurrentTime);
                     initIfExists(initChatReact);
                     initIfExists(initProfileOtherDialog);
@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
             initIfExists(initMessageListSwitcher);
             initIfExists(initMessageDialog);
             initIfExists(initFileUpload);
-            initIfExists(addMessageToChat);
+            initIfExists(sendMessage);
             initIfExists(getCurrentTime);
             initIfExists(initChatReact);
             initIfExists(initProfileDialog);
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //     initIfExists(initMessageListSwitcher);
 //     initIfExists(initMessageDialog);
 //     initIfExists(initFileUpload);
-//     initIfExists(addMessageToChat);
+//     initIfExists(sendMessage);
 //     initIfExists(getCurrentTime);
 //     initIfExists(initChatReact);
 //     initIfExists(initProfileDialog);
