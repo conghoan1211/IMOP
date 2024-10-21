@@ -8,6 +8,7 @@ namespace zaloclone_test.Models
         public Groupchat()
         {
             GroupMembers = new HashSet<GroupMember>();
+            Messages = new HashSet<Message>();
         }
 
         public string GroupId { get; set; } = null!;
@@ -20,5 +21,6 @@ namespace zaloclone_test.Models
         public string? UpdateUser { get; set; }
 
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

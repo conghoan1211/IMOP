@@ -20,11 +20,11 @@ namespace zaloclone_test.Models
         public int? Likes { get; set; }
         public int? Comments { get; set; }
         public int? Shares { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
         public int? Views { get; set; }
         public bool? IsComment { get; set; }
         public bool? PinTop { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         public virtual User User { get; set; } = null!;
         public virtual ICollection<Comment> CommentsNavigation { get; set; }
