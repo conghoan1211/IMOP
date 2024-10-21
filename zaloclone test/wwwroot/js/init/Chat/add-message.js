@@ -35,7 +35,7 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = addMessageToChat;
 
 } else {
-    window.addMessageToChat = addMessageToChat;
+    window.sendMessage = addMessageToChat;
 }
 
 
