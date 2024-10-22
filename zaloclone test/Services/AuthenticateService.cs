@@ -16,7 +16,7 @@ namespace zaloclone_test.Services
         public Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext);
         public Task<string> DoVerifyOTP(string otp, HttpContext httpContext);
         public Task<string> DoResetPassword(ResetPassword input);
-        public Task<string> DoChangePassword(string username, ChangePassword input);
+        public Task<string> DoChangePassword(string id, ChangePassword input);
         public Task<(string message, User? user)> DoSearchByEmail(string? email);
         public Task<(string message, User? user)> DoSearchByPhone(string? phone);
     }
@@ -31,7 +31,7 @@ namespace zaloclone_test.Services
             _jwtAuthen = jwtAuthen;
         }
 
-        public Task<string> DoChangePassword(string username, ChangePassword input)
+        public Task<string> DoChangePassword(string id, ChangePassword input)
         {
             throw new NotImplementedException();
         }

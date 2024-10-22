@@ -82,6 +82,8 @@ namespace zaloclone_test.ViewModels
 
     public class ChangePassword
     {
+        public string? UserId { get; set; }
+
         [Required(ErrorMessage = "Mật khẩu cũ không được bỏ trống")]
         public string ExPassword { get; set; }
 
