@@ -31,9 +31,30 @@ namespace zaloclone_test.Services
             _jwtAuthen = jwtAuthen;
         }
 
-        public Task<string> DoChangePassword(string id, ChangePassword input)
+        public async Task<string> DoChangePassword(string id, ChangePassword input)
         {
-            throw new NotImplementedException();
+            // Tìm người dùng bằng UserId
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return "Người dùng không tồn tại";
+
+            // Kiểm tra mật khẩu hiện tại
+            string msg = Converter.StringToMD5(input.ExPassword, out string exPasswordMd5);
+            if (msg.Length > 0) return $"Error convert to MD5: {msg}";
+            if (!user.Password.ToUpper().Equals(exPasswordMd5.ToUpper())) return "Mật khẩu hiện tại không đúng";
+
+            // Mã hóa mật khẩu mới
+            msg = Converter.StringToMD5(input.Password, out string newPasswordMd5);
+            if (msg.Length > 0) return $"Error convert to MD5: {msg}";
+
+            // Cập nhật mật khẩu
+            user.Password = newPasswordMd5;
+            user.UpdateAt = DateTime.Now;
+            user.UpdateUser = user.UserId;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return "Mật khẩu đã thay đổi thành công";
         }
 
         public async Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext)
