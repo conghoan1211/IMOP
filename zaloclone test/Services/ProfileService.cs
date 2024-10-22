@@ -1,70 +1,52 @@
-﻿using zaloclone_test.ViewModels;
+﻿using Microsoft.EntityFrameworkCore;
+using zaloclone_test.Helper;
 using zaloclone_test.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
+using zaloclone_test.Utilities;
+using zaloclone_test.ViewModels;
+
 namespace zaloclone_test.Services
 {
-    public interface IProfile
+    public interface IProfileService
     {
-       public Task<ProfileViewModels> ViewProfile(string userId); // Trả về ProfileViewModels theo UserId
-       public Task<(bool Success, string Message)> UpdateProfile(UpdateProfileModels updateProfile); // Sửa tên thành UpdateProfilModels
+        public Task<(string msg, ProfileVM? result)> GetProfile(string userID);
+
     }
-    public class ProfileService : IProfile
+    public class ProfileService : IProfileService
     {
         private readonly Zalo_CloneContext _context;
         public ProfileService(Zalo_CloneContext context)
         {
             _context = context;
         }
-        public async Task<ProfileViewModels> ViewProfile(string userId)
+        public async Task<(string msg, ProfileVM? result)> GetProfile(string userID)
         {
-            // Lấy dữ liệu người dùng từ cơ sở dữ liệu
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
-            {
-                return null; // Người dùng không tồn tại
-            }
-            // Trả về thông tin người dùng trong ProfileViewModels
-            return new ProfileViewModels
-            {
-                UserId = user.UserId,
-                Username = user.Username,
-                Sex = (int)user.Sex,
-                Dob = (DateTime)user.Dob,
-                Bio = user.Bio,
-                AvatarUrl = user.Avatar,
-                // Thêm các thuộc tính khác nếu cần
-            };
-        }
-        public async Task<(bool Success, string Message)> UpdateProfile(UpdateProfileModels updateProfile)
-        {
-            // Kiểm tra dữ liệu đầu vào
-            if (updateProfile == null)
-            {
-                return (false, "Dữ liệu không hợp lệ!");
-            }
-            // Lấy người dùng từ cơ sở dữ liệu
-            var user = await _context.Users.FindAsync(updateProfile.UserId);
-            if (user == null)
-            {
-                return (false, "Người dùng không tồn tại!");
-            }
-            // Cập nhật dữ liệu từ form
-            user.Username = updateProfile.UserName;
-            user.Sex = updateProfile.Sex;
-            user.Dob = updateProfile.Dob;
-            user.Bio = updateProfile.Bio;
-            // Lưu thay đổi vào cơ sở dữ liệu
-            var saveResult = await _context.SaveChangesAsync();
-            // Kiểm tra xem có thay đổi nào được lưu không
-            if (saveResult > 0)
-            {
-                return (true, "Thông tin cá nhân đã được cập nhật thành công!");
-            }
-            else
-            {
-                return (false, "Không có thay đổi nào được thực hiện.");
-            }
+            var user = await _context.Users.Where(x => x.UserId == userID)
+                .Select(u => new ProfileVM
+                {
+                    UserID = u.UserId,
+                    UserName = u.Username,
+                    Phone = u.Phone,
+                    Email = u.Email,
+                    Avatar = u.Avatar,
+                    Bio = u.Bio,
+                    Dob = u.Dob,
+                    Sex = u.Sex,
+                    RoleID = u.RoleId,
+                    IsDisable = u.IsDisable,
+                    IsActive = u.IsActive ?? false,
+                    IsVerified = u.IsVerified ?? false,
+                    CreateAt = u.CreateAt,
+                    CreateUser = u.CreateUser,
+                    UpdateAt = u.UpdateAt,
+                    UpdateUser = u.UpdateUser,
+                    Status = u.Status,
+                }).FirstOrDefaultAsync();
+            if (user == null) return ("User not found", null);
+
+            var friendCount = await _context.Friends.Where(f => f.Status == (int)FriendStatus.Accepted && (f.UserId1 == userID || f.UserId2 == userID)).CountAsync();
+            if (friendCount > 0) user.NumberOfFriends = friendCount;
+
+            return (string.Empty, user);
         }
     }
 }

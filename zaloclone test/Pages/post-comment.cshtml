@@ -1,0 +1,401 @@
+﻿@page
+@model zaloclone_test.Pages.post_commentModel
+@{
+    Layout = "_Layout";
+} 
+<aside class="flex-column aside-container-msg profile-page">
+    <header class="cont-msg-header aside-profile-header">
+        <div class="flex-align-center-between aside-profile-head">
+            <div class="flex-align-justify-center aside-profile-return">
+                <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            <button onclick="history.back()">Go Back</button>
+
+            <div class="flex-justify-center aside-profile-head__title">
+                Post
+            </div>
+            <div class="flex-justify-end"></div>
+        </div>
+    </header>
+
+    <div class="aside-profile flex-align-justify-center">
+        <div class="flex-column flex-justify-between aprofile-container">
+            <div class="aprofile-list-posts">
+                <!-- Main post -->
+                <div class="flex-justify-between aprofile-post-item">
+                    <img class="avatar-img aprofile-post-avt" src="~/img/avt.jpeg" alt="">
+                    <div class="flex-column aprofile-post-wrapper">
+                        <div class="flex-align-center aprofile-post_name-time">
+                            <div class="aprofile-post-name">roses_are_rosie</div>
+                            <div class="aprofile-post-time">08/20/2023 &bull;</div>
+                            <div class="aprofile-post-time"><i class="fa-solid fa-earth-asia"></i></div>
+                        </div>
+                        <div class="aprofile-post-content">pics that couldn’t make the horizontal post</div>
+                        <div class="flex-align-center aprofile-post__list-img">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                            <img class="aprofile-post__item-img" src="~/img/lía.jpg" alt="">
+                        </div>
+                        <!-- Modal zoom image -->
+                        <div id="openImgPostZoom" class="modal">
+                            <span class="modal-close" id="imagePostZoomClose">&times;</span>
+                            <div class="flex-align-justify-center post-img-zoom">
+                                <img class="post-img-zoom__img" src="~/img/lía.jpg" id="imagePostImg" alt="">
+                            </div>
+                        </div>
+                        <div class="flex-align-center aprofile-post-action">
+                            <div class="aprofile-post-action__btn post-react-heart">
+                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                <i class="fa-regular fa-heart"></i>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-comment"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-solid fa-repeat"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-paper-plane"></i></div>
+                                <span>656</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- post more action -->
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-post-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal post more action  -->
+                        <div class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Pin to top</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit post</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit privacy</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-gear"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Delete</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- end main post -->
+
+                <div class="flex-align-center-between post-cmt-view_activity">
+                    <span>Replies</span>
+                    <div>View activity &gt;</div>
+                </div>
+                <div class="flex-justify-between aprofile-post-item">
+                    <img class="avatar-img aprofile-post-avt" src="~/img/avt.jpeg" alt="">
+                    <div class="flex-column aprofile-post-wrapper">
+                        <div class="flex-align-center aprofile-post_name-time">
+                            <div class="aprofile-post-name">roses_are_rosie</div>
+                        </div>
+                        <div class="aprofile-post-content">pics that couldn’t make the horizontal post</div>
+
+                        <div class="flex-align-center aprofile-post-action">
+                            <div class="aprofile-post-action__btn post-react-heart">
+                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                <i class="fa-regular fa-heart"></i>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-comment"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-solid fa-repeat"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-paper-plane"></i></div>
+                                <span>656</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- comment more action -->
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-post-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal comment more action  -->
+                        <div class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Pin to top</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit post</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit privacy</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-gear"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Delete</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- end comment post -->
+                <div class="flex-justify-between aprofile-post-item">
+                    <img class="avatar-img aprofile-post-avt" src="~/img/avt.jpeg" alt="">
+                    <div class="flex-column aprofile-post-wrapper">
+                        <div class="flex-align-center aprofile-post_name-time">
+                            <div class="aprofile-post-name">roses_are_rosie</div>
+                        </div>
+                        <div class="aprofile-post-content">pics that couldn’t make the horizontal post</div>
+
+                        <div class="flex-align-center aprofile-post-action">
+                            <div class="aprofile-post-action__btn post-react-heart">
+                                <i class="fa-regular fa-heart"></i>
+                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-comment"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-solid fa-repeat"></i></div>
+                                <span>656</span>
+                            </div>
+                            <div class="aprofile-post-action__btn">
+                                <div><i class="fa-regular fa-paper-plane"></i></div>
+                                <span>656</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- comment more action -->
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-post-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal comment more action  -->
+                        <div class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Pin to top</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit post</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Edit privacy</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-gear"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Delete</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- end comment post -->
+            </div>
+            <!-- input comment post  -->
+            <div class="flex-align-center-between aside-chat-cont-input aspost-cmt__box">
+                <div class="aside-chat-input">
+                    <textarea class="aside-chat-input_text" type="text" placeholder="Add a comment"></textarea>
+                </div>
+                <div class="flex aside-chat-icon-with-send">
+                    <button class="aside-chat-bar-btn emoji-btn">
+                        <img class="aside-chat-bar-btn_img" src="~/img/smile icon.png" alt="" />
+                    </button>
+                    <div class="emoji-picker" style="display: none">
+                        <div class="emoji-list">
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🙂</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😖</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😍</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😂</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😎</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😢</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😀</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🥳</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😡</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😇</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🤔</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🥺</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😊</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😇</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🙃</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😉</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😌</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🥰</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😘</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😗</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😙</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😚</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😋</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😛</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😝</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😜</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🤪</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🤨</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🧐</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😎</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🤓</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🥸</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🤩</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🥳</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🙂‍↕️</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😏</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🙂‍↔️</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😞</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😔</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😟</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😟</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😟</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😣</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😫</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😩</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😭</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">😮‍💨</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🙌</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">👍</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">👎</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🔥</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">💯</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">❤️</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🎉</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">👏</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🤝</span>
+                            </div>
+                            <div class="flex-align-justify-center emoji-icon-btn">
+                                <span class="emoji-item-icon">🙈</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="aside-chat-bar-btn_send">
+                        <i class="fa-solid fa-paper-plane aside-chat-bar-btn_icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
