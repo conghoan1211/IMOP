@@ -7,10 +7,11 @@ namespace zaloclone_test.Services
 {
     public interface IInvitationService
     {
-        public Task<(string, List<User>)> GetAllInvitation(string UserId);
-        public Task<(string, List<User>)> GetAllRequested(string UserId);
+        public Task<(string, List<User>?)> GetAllInvitation(string UserId);
+        public Task<(string, List<User>?)> GetAllRequested(string UserId);
         public Task<string> RevokeInvitation(string UserId1, string UserId2);
         public Task<string> AcceptInvitation(string UserId1, string UserId2);
+        public Task<string> SendRequest(string UserId1, string UserOtherId);
 
     }
 
@@ -58,7 +59,26 @@ namespace zaloclone_test.Services
             return "";
         }
 
+        public async Task<string> SendRequest(string UserId, string UserOtherId)
+        {
+            if (string.IsNullOrEmpty(UserId)) return "UserId is null";
+            var checkExist = await _context.Friends.FirstOrDefaultAsync(f => f.UserId1 == UserId && f.UserId2 == UserOtherId);
+            if (checkExist != null) return "";      // check if they are friend, return  
 
+            var newFriend = new Friend
+            {
+                FriendId = Guid.NewGuid().ToString(),
+                UserId1 = UserId,
+                UserId2 = UserOtherId,
+                Status = 0,
+                CreateAt = DateTime.Now,
+                CreateUser = UserId,
+            };
+            await _context.Friends.AddAsync(newFriend);    
+            await _context.SaveChangesAsync();
+
+            return "";
+        }
     }
 
     

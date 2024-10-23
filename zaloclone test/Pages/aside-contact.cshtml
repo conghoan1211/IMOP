@@ -48,13 +48,15 @@
                     foreach (var friend in Model.Friends)
                     {
                         <div class="flex-align-center contact-item" data-friend-id="@friend.UserId">
-                            <img class="avatar-img friend-avatar" src="/img/@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
-                            <div class="flex-align-center-between friend-info">
-                                <span class="friend-name">@friend.Username</span>
+                            <div style="position: relative;">
+                                <img class="avatar-img friend-avatar" src="/img/@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
                                 @if (friend.IsOnline)
                                 {
-                                    <span class="friend-status online">Online</span>
+                                    <div class="friend-online"><i class="fa-solid fa-circle"></i></div>
                                 }
+                            </div>
+                            <div class="flex-align-center-between friend-info">
+                                <span class="friend-name">@friend.Username</span>
                                 <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
                                     <i class="fa-solid fa-ellipsis friend-more-icon"></i>
                                 </button>
@@ -97,7 +99,7 @@
     </div>
 </div>
 
-@section Scripts {
+@* @section Scripts {
     <script>
         let currentFriendId = null;
 
@@ -238,20 +240,20 @@
             const content = document.getElementById('profileContent');
             // Create and populate profile content
             content.innerHTML = `
-                        <div class="profile-header">
-                            <img src="${profile.avatar || '/img/default-avatar.png'}" alt="${profile.username}">
-                            <h2>${profile.username}</h2>
-                            ${profile.isVerified ? '<span class="verified-badge">✓</span>' : ''}
-                        </div>
-                        <div class="profile-info">
-                            <p><strong>Bio:</strong> ${profile.bio || 'Không có'}</p>
-                            <p><strong>Email:</strong> ${profile.email}</p>
-                            <p><strong>Số điện thoại:</strong> ${profile.phone}</p>
-                            <p><strong>Ngày sinh:</strong> ${new Date(profile.dob).toLocaleDateString()}</p>
-                            <p><strong>Bạn bè từ:</strong> ${new Date(profile.friendsSince).toLocaleDateString()}</p>
-                            <p><strong>Bạn chung:</strong> ${profile.mutualFriends}</p>
-                        </div>
-                    `;
+                                <div class="profile-header">
+                                    <img src="/img/${profile.avatar || '/img/default-avatar.png'}" alt="${profile.username}">
+                                    <h2>${profile.username}</h2>
+                                    ${profile.isVerified ? '<span class="verified-badge">✓</span>' : ''}
+                                </div>
+                                <div class="profile-info">
+                                    <p><strong>Bio:</strong> ${profile.bio || 'Không có'}</p>
+                                    <p><strong>Email:</strong> ${profile.email}</p>
+                                    <p><strong>Số điện thoại:</strong> ${profile.phone}</p>
+                                    <p><strong>Ngày sinh:</strong> ${new Date(profile.dob).toLocaleDateString()}</p>
+                                    <p><strong>Bạn bè từ:</strong> ${new Date(profile.friendsSince).toLocaleDateString()}</p>
+                                    <p><strong>Bạn chung:</strong> ${profile.mutualFriends}</p>
+                                </div>
+                            `;
             document.getElementById('friendProfileModal').style.display = 'block';
         }
 
@@ -301,10 +303,12 @@
             const avatar = friend.avatar || '/img/default-avatar.png';
 
             div.innerHTML = `
-                <img class="avatar-img friend-avatar" src="${avatar}" alt="">
+                 <div style="position: relative;">
+                     <img class="avatar-img friend-avatar" src="/img/${avatar}" alt="">
+                     ${friend.IsOnline != null ? '<div class="friend-online"><i class="fa-solid fa-circle"></i></div>' : ''}
+                 </div>
                 <div class="flex-align-center-between friend-info">
                     <span class="friend-name">${friend.username}</span>
-                    ${friend.isOnline ? '<span class="friend-status online">Online</span>' : ''}
                     <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
                         <i class="fa-solid fa-ellipsis friend-more-icon"></i>
                     </button>
@@ -316,7 +320,7 @@
                         </ul>
                     </div>
                 </div>
-            `;
+                    `;
 
             return div;
         }
@@ -368,4 +372,4 @@
             filterFriends();
         });
     </script>
-}
+} *@

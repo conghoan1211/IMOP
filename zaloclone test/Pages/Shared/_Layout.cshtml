@@ -42,9 +42,9 @@
             <button class="avatar nav-btn openProfileDialog">
                 @{
                     string avatar = User.Claims.FirstOrDefault(c => c.Type == "Avatar")?.Value;
+                    if (string.IsNullOrEmpty(avatar)) avatar = "default-avatar.png";
                 }
-                <img src="/img/@avatar"
-                     class="avatar-img" alt="avatar">
+                <img src="/img/@avatar" class="avatar-img" alt="avatar">
             </button>
             <div class="flex nav-btn">
                 <a asp-page="/post" class="flex-align-justify-center width-100pt height-100pt">

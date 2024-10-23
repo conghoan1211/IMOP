@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -11,17 +12,20 @@ using zaloclone_test.ViewModels.Token;
 
 namespace zaloclone_test.Pages
 {
+    [Authorize]
     public class profileModel : PageModel
     {
-        private readonly IPostService _postService;
         private readonly JwtAuthentication _jwtAuthen;
+        private readonly IPostService _postService;
         private readonly IProfileService _profileService;
+        private readonly IInvitationService _inviteService;
 
-        public profileModel(IPostService postService, JwtAuthentication jwtAuthen, IProfileService profileService)
+        public profileModel(IPostService postService, JwtAuthentication jwtAuthen, IProfileService profileService, IInvitationService inviteService)
         {
             _postService = postService;
             _jwtAuthen = jwtAuthen;
             _profileService = profileService;
+            _inviteService = inviteService;
         }
         public string Message { get; set; } = string.Empty;
         public List<PostVM>? listPost { get; set; } = new();
@@ -36,13 +40,11 @@ namespace zaloclone_test.Pages
             if (!ModelState.IsValid)
             {
                 Message = "Please correct the Model state.";
-                return;
             }
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
                 Message = msg;
-                return;
             }
             UserToken = userToken;
 
@@ -50,20 +52,10 @@ namespace zaloclone_test.Pages
             if (!string.IsNullOrEmpty(id) && id != userToken.UserID.ToString())
             {
                 (msg, listPost) = await _postService.GetPostsProfile(null, id);
-                if (msg.Length > 0)
-                {
-                    Message = msg;
-                    return;
-                }
             }
             else
             {
                 (msg, listPost) = await _postService.GetPostsProfile(userToken.UserID.ToString(), null);
-                if (msg.Length > 0)
-                {
-                    Message = msg;
-                    return;
-                }
             }
             var profile = new ProfileVM();
             (msg, profile) = await _profileService.GetProfile(userid);
@@ -72,6 +64,7 @@ namespace zaloclone_test.Pages
             Profile = profile;
         }
 
+        #region Area User's post
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -150,5 +143,37 @@ namespace zaloclone_test.Pages
             }
             return RedirectToPage();
         }
+        #endregion
+
+        #region Area Profile crud
+
+        #endregion
+
+        #region Area add user
+        public async Task<IActionResult> OnPostSendRequest(string otherUserId)
+        {
+            if (string.IsNullOrEmpty(otherUserId))
+            {
+                Message = "User request Id không hợp lệ.";
+                return RedirectToPage();
+            }
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+            UserToken = userToken;
+            msg = await _inviteService.SendRequest(userToken.UserID.ToString(), otherUserId);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+            return RedirectToPage();
+
+        }
+        #endregion
+
     }
 }

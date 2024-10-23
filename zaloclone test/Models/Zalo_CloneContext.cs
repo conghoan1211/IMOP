@@ -144,10 +144,10 @@ namespace zaloclone_test.Models
 
             modelBuilder.Entity<Friend>(entity =>
             {
-                entity.HasKey(e => e.Friend1)
+                entity.HasKey(e => e.FriendId)
                     .HasName("PK__Friends__DEE0643E2A69B3A0");
 
-                entity.Property(e => e.Friend1)
+                entity.Property(e => e.FriendId)
                     .HasMaxLength(36)
                     .HasColumnName("Friend");
 
