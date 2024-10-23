@@ -6,6 +6,8 @@ using zaloclone_test.Models;
 using Microsoft.AspNetCore.SignalR;
 using zaloclone_test.MyHub;
 using Microsoft.AspNetCore.Authorization;
+using zaloclone_test.ViewModels;
+using zaloclone_test.ViewModels.Token;
 
 namespace zaloclone_test.Pages
 {

@@ -43,9 +43,9 @@ namespace zaloclone_test.ViewModels
         public string? UserName { get; set; }
         [Required(ErrorMessage = "Giới tính không được để trống")]
         [Range(0, 2, ErrorMessage = "Giới tính không hợp lệ. Vui lòng chọn: 0 (Nam), 1 (Nữ), hoặc 2 (Khác)")]
-        public int Sex { get; set; }
+        public int? Sex { get; set; }
         [Required(ErrorMessage = "Ngày sinh không được để trống")]
-        [BirthYearValidation(1890)]
+        //[BirthYearValidation(1890)]
         [AssertThat("Dob <= Now()", ErrorMessage = "Ngày sinh không vượt quá ngày hiện tại!")]
         public DateTime? Dob { get; set; }
         [StringLength(60, ErrorMessage = "Bio không được vượt quá 60 ký tự")]
