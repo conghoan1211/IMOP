@@ -14,14 +14,14 @@
     <div class="contact">
         <div class="flex-align-center contact-list-title">
             <span>Lời mời đã nhận</span>
-             @if (Model.allInvitation != null)
-             {
-                 <span>&nbsp;(@Model.allInvitation.Count)</span>
-             } 
-             else
-             {
-                 <span>&nbsp;(0)</span>
-             }
+            @if (Model.allInvitation != null)
+            {
+                <span>&nbsp;(@Model.allInvitation.Count)</span>
+            }
+            else
+            {
+                <span>&nbsp;(0)</span>
+            }
         </div>
 
         <div class="flex contact-invitation-list">
@@ -32,24 +32,23 @@
                     <div class="flex-column invitation-item">
                         <div class="flex-align-center invitation-user">
                             <button>
-                                <img class="avatar-img" src="@invite.Avatar" alt="">
+                                <img class="avatar-img" src="/img/@invite.Avatar" alt="">
                             </button>
                             <div class="flex-column invitation-info">
                                 <span class="invitation-name">@invite.Username</span>
                                 <span class="invitation-time">@invite.UpdateAt - Từ số điện thoại</span>
                             </div>
                         </div>
-                        <div class="flex-justify-between invitation-action">
-                            <form method="post" asp-page-handler="DeleteInvitation">
+                        <form method="post"  class="flex-justify-between invitation-action">
+                            @* <form method="post" asp-page-handler="DeleteInvitation"> *@
                                 <input type="hidden" name="UserId" value="@invite.UserId" />
-                                <button class="btn small btn-neutral">Từ chối</button>
-                            </form>
-                            <form method="post" asp-page-handler="AcceptInvitation">
-                                <input type="hidden" name="UserId" value="@invite.UserId" />
-                                <button class="btn small btn-secondary">Đồng ý</button>
-                            </form>
-                            
-                        </div>
+                            <button formaction="?handler=DeleteInvitation" type="submit" class="btn small btn-neutral">Từ chối</button>
+                    @*         </form>
+                            <form method="post" asp-page-handler="AcceptInvitation"> *@
+                                @* <input type="hidden" name="UserId" value="@invite.UserId" /> *@
+                            <button formaction="?handler=DeleteInvitation" class="btn small btn-secondary">Đồng ý</button>
+                            @* </form> *@
+                        </form>
                         <button class="invitation-chat">
                             <i class="fa-regular fa-comments"></i>
                         </button>
@@ -60,7 +59,7 @@
 
         <div class="flex-align-center contact-list-title">
             <span>Lời mời đã gửi</span>
-            @if(Model.sentInvitation != null)
+            @if (Model.sentInvitation != null)
             {
                 <span>&nbsp;(@Model.sentInvitation.Count)</span>
 
@@ -71,26 +70,26 @@
             }
         </div>
         <div class="flex contact-invitation-list">
-            @if(Model.sentInvitation != null)
+            @if (Model.sentInvitation != null)
             {
                 @foreach (var request in Model.sentInvitation)
                 {
                     <div class="flex-column invitation-item">
                         <div class="flex-align-center invitation-user">
                             <button>
-                                <img class="avatar-img" src="@request.Avatar" alt="">
+                                <img class="avatar-img" src="/img/@request.Avatar" alt="">
                             </button>
                             <div class="flex-column invitation-info">
                                 <span class="invitation-name">@request.Username</span>
                                 <span class="invitation-time">@request.CreateAt - Bạn đã gửi lời mời</span>
                             </div>
                         </div>
-                        <div class="flex-justify-between invitation-action">
-                            <form method="post" asp-page-handler="Invoke">
+                        <form method="post" asp-page-handler="Invoke">
+                            <div class="flex-justify-between invitation-action">
                                 <input type="hidden" name="Id" value="@request.UserId">
                                 <button type="submit" class="btn large btn-neutral">Thu hồi lời mời</button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                         <button class="invitation-chat">
                             <i class="fa-regular fa-comments"></i>
                         </button>
