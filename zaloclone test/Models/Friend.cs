@@ -2,7 +2,7 @@
 {
     public partial class Friend
     {
-        public string Friend1 { get; set; } = null!;
+        public string FriendId { get; set; } = null!;
         public string? UserId1 { get; set; }
         public string? UserId2 { get; set; }
         public int? Status { get; set; }

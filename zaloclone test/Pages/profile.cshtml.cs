@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using zaloclone_test.Models;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
@@ -7,84 +12,79 @@ using zaloclone_test.ViewModels.Token;
 
 namespace zaloclone_test.Pages
 {
+    [Authorize]
     public class profileModel : PageModel
     {
-        private readonly IPostService _postService;
         private readonly JwtAuthentication _jwtAuthen;
+        private readonly IPostService _postService;
         private readonly IProfileService _profileService;
+        private readonly IInvitationService _inviteService;
 
-        public profileModel(IPostService postService, JwtAuthentication jwtAuthen, IProfileService profileService)
+        public profileModel(IPostService postService, JwtAuthentication jwtAuthen, IProfileService profileService, IInvitationService inviteService)
         {
             _postService = postService;
             _jwtAuthen = jwtAuthen;
             _profileService = profileService;
+            _inviteService = inviteService;
         }
-        public string Message { get; set; } = string.Empty;
-        public List<PostVM>? listPost { get; set; } = new();
+        public string? Message { get; set; } = string.Empty;
+        public List<PostVM>? ListPost { get; set; } = new();
         public ProfileVM? Profile { get; set; } = new();
-
+        public UserToken? UserToken { get; set; }
         [BindProperty]
-        public InsertUpdatePostVM Input { get; set; }
-        public UserToken UserToken { get; set; }
-
-
+        public InsertUpdatePostVM? Input { get; set; }
         [BindProperty]
-        public UpdateProfileModels InputUpdate { get; set; }
-       
-
-        public async Task OnGet(string? id = null)
+        public UpdateProfileModels? UpdateProfile { get; set; }
+        [BindProperty]
+        public UpdateAvatarVM UpdateAvatarVM { get; set; }
+        public async Task<IActionResult> OnGet(string? id = null)
         {
             if (!ModelState.IsValid)
             {
                 Message = "Please correct the Model state.";
-                return;
             }
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
                 Message = msg;
-                return;
             }
-            UserToken = userToken;
+            if (UserToken == null) UserToken = userToken;
 
             string userid = string.IsNullOrEmpty(id) ? userToken.UserID.ToString() : id;
             if (!string.IsNullOrEmpty(id) && id != userToken.UserID.ToString())
             {
-                (msg, listPost) = await _postService.GetPostsProfile(null, id);
-                if (msg.Length > 0)
-                {
-                    Message = msg;
-                    return;
-                }
+                (msg, ListPost) = await _postService.GetPostsProfile(null, id);
             }
             else
             {
-                (msg, listPost) = await _postService.GetPostsProfile(userToken.UserID.ToString(), null);
-                if (msg.Length > 0)
-                {
-                    Message = msg;
-                    return;
-                }
+                (msg, ListPost) = await _postService.GetPostsProfile(userToken.UserID.ToString(), null);
             }
+
             var profile = new ProfileVM();
             (msg, profile) = await _profileService.GetProfile(userid);
             if (msg.Length > 0) Message = msg;
             if (profile == null) Message = "Không tìm thấy thông tin người dùng.";
             Profile = profile;
+
+            (msg, UpdateProfile) = await _profileService.GetProfileUpdate(userid);
+            if (msg.Length > 0) Message = msg;
+
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        #region Area User's post
+        public async Task<IActionResult> OnPostAddPost()
         {
             if (!ModelState.IsValid)
             {
                 Message = "Please correct the Model state.";
-                return Page();
+                await OnGet();
             }
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
                 Message = msg;
-                return Page();
+                await OnGet();
             }
             UserToken = userToken;
 
@@ -92,7 +92,7 @@ namespace zaloclone_test.Pages
             if (msg.Length > 0)
             {
                 Message = msg;
-                return Page();
+                await OnGet();
             }
             return RedirectToPage();
         }
@@ -142,7 +142,7 @@ namespace zaloclone_test.Pages
                 Message = msg;
                 return Page();
             }
-            UserToken = userToken;
+            if (UserToken == null) UserToken = userToken;
             msg = await _postService.DoPinTopPost(postId, UserToken.UserID.ToString());
             if (msg.Length > 0)
             {
@@ -152,9 +152,80 @@ namespace zaloclone_test.Pages
             return RedirectToPage();
         }
 
+        private string GetUserToken()
+        {
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return msg;
+            }
+            UserToken = userToken;
+            return "";
+        }
+        #endregion
+
+        #region Area Profile crud
+
         public async Task<IActionResult> OnPostUpdateProfile()
         {
-            // Xác thực token của người dùng
+            ModelState.Remove(nameof(Input.Content));
+            if (!ModelState.IsValid)
+            {
+                Message = "Please correct the Model state.";
+                await OnGet();
+            }
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+            }
+            UserToken = userToken;
+
+            msg = await _profileService.UpdateProfile(UserToken.UserID.ToString(), UpdateProfile);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostChangeAvatar(string userid)
+        {
+            ModelState.Remove(nameof(Input));
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+            }
+            UserToken = userToken;
+            if (!ModelState.IsValid)
+            {
+                Message = "Please correct the Model state.";
+                await OnGet();
+                return RedirectToPage();
+            }
+
+            msg = await _profileService.DoChangeAvatar(userid, UpdateAvatarVM);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                await OnGet();
+            }
+            return RedirectToPage();
+        }
+
+        #endregion
+
+        #region Area add user
+        public async Task<IActionResult> OnPostSendRequest(string otherUserId)
+        {
+            if (string.IsNullOrEmpty(otherUserId))
+            {
+                Message = "User request Id không hợp lệ.";
+                return RedirectToPage();
+            }
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
@@ -162,58 +233,16 @@ namespace zaloclone_test.Pages
                 return Page();
             }
             UserToken = userToken;
-
-            // Kiểm tra tính hợp lệ của Model
-            if (!ModelState.IsValid)
+            msg = await _inviteService.SendRequest(userToken.UserID.ToString(), otherUserId);
+            if (msg.Length > 0)
             {
-                // Nếu xác thực không thành công, quay lại trang với dữ liệu hiện tại để hiển thị lỗi
+                Message = msg;
                 return Page();
             }
-
-            // Ánh xạ từ UpdateProfileModels sang ProfileVM
-            var updatedProfile = new ProfileVM
-            {
-                UserID = InputUpdate.UserId,
-                UserName = InputUpdate.UserName,
-                Dob = InputUpdate.Dob,
-                Bio = InputUpdate.Bio,
-                Sex = InputUpdate.Sex
-            };
-
-            // Gọi phương thức UpdateProfile từ service để cập nhật thông tin
-            var result = await _profileService.UpdateProfile(InputUpdate.UserId, updatedProfile);
-
-            // Kiểm tra xem có lỗi xảy ra trong quá trình cập nhật không
-            if (!string.IsNullOrEmpty(result))
-            {
-                // Xử lý lỗi nếu cập nhật thất bại
-                ModelState.AddModelError(string.Empty, result);
-                return Page();
-            }
-
-            // Chuyển hướng hoặc thông báo cho người dùng khi cập nhật thành công
             return RedirectToPage();
         }
 
-        private async Task LoadProfileAndPosts(string userId)
-        {
-            string msg;
-            (msg, listPost) = await _postService.GetPostsProfile(UserToken.UserID.ToString(), null);
-            if (!string.IsNullOrEmpty(msg))
-            {
-                Message = msg;
-                return;
-            }
+        #endregion
 
-            (msg, Profile) = await _profileService.GetProfile(userId);
-            if (!string.IsNullOrEmpty(msg))
-            {
-                Message = msg;
-            }
-            else if (Profile == null)
-            {
-                Message = "Không tìm thấy thông tin người dùng.";
-            }
-        }
     }
 }

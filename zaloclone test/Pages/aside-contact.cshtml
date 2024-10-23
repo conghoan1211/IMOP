@@ -13,7 +13,7 @@
     <div class="contact">
         <div class="flex-align-center contact-list-title">
             <span>Bạn bè</span>
-            <span>&nbsp;(@Model.Friends?.Count ?? 0)</span>
+            <span>&nbsp;(@(Model.Friends?.Count ?? 0))</span>
         </div>
 
         <div class="cont-contact">
@@ -48,13 +48,15 @@
                     foreach (var friend in Model.Friends)
                     {
                         <div class="flex-align-center contact-item" data-friend-id="@friend.UserId">
-                            <img class="avatar-img friend-avatar" src="/img/@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
-                            <div class="flex-align-center-between friend-info">
-                                <span class="friend-name">@friend.Username</span>
+                            <div style="position: relative;">
+                                <img class="avatar-img friend-avatar" src="/img/@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
                                 @if (friend.IsOnline)
                                 {
-                                    <span class="friend-status online">Online</span>
+                                    <div class="friend-online"><i class="fa-solid fa-circle"></i></div>
                                 }
+                            </div>
+                            <div class="flex-align-center-between friend-info">
+                                <span class="friend-name">@friend.Username</span>
                                 <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
                                     <i class="fa-solid fa-ellipsis friend-more-icon"></i>
                                 </button>
@@ -97,7 +99,7 @@
     </div>
 </div>
 
-@section Scripts {
+@* @section Scripts {
     <script>
         let currentFriendId = null;
 
@@ -121,13 +123,25 @@
                 },
                 body: JSON.stringify(filter)
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(result => {
                     if (result.success) {
                         updateFriendsList(result.data);
+                    } else {
+                        showToast(result.message || 'Có lỗi xảy ra khi lọc danh sách bạn bè');
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Có lỗi xảy ra khi lọc danh sách bạn bè');
                 });
         }
+
 
         // View friend profile
         function viewFriendProfile(friendId) {
@@ -181,54 +195,65 @@
                         'Content-Type': 'application/json',
                         'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                     },
-                    body: JSON.stringify(friendId)
+                    body: JSON.stringify({ friendId: friendId })
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(result => {
                         if (result.success) {
                             filterFriends(); // Refresh the list
                         }
                         showToast(result.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showToast('Có lỗi xảy ra khi xóa bạn bè');
                     });
             }
         }
 
         // Helper functions
         function updateFriendsList(friends) {
+            if (!Array.isArray(friends)) {
+                console.error('Expected friends to be an array, got:', friends);
+                return;
+            }
+
             const container = document.getElementById('friendsList');
             container.innerHTML = ''; // Clear current list
 
             friends.forEach(friend => {
-                // Create friend item HTML structure
-                const friendElement = createFriendElement(friend);
-                container.appendChild(friendElement);
+                try {
+                    const friendElement = createFriendElement(friend);
+                    container.appendChild(friendElement);
+                } catch (error) {
+                    console.error('Error creating friend element:', error);
+                }
             });
-        }
-
-        function createFriendElement(friend) {
-            // Create friend item DOM element
-            // Similar to the existing friend item structure in the view
-            // Return the created element
         }
 
         function displayProfile(profile) {
             const content = document.getElementById('profileContent');
             // Create and populate profile content
             content.innerHTML = `
-                        <div class="profile-header">
-                            <img src="${profile.avatar || '/img/default-avatar.png'}" alt="${profile.username}">
-                            <h2>${profile.username}</h2>
-                            ${profile.isVerified ? '<span class="verified-badge">✓</span>' : ''}
-                        </div>
-                        <div class="profile-info">
-                            <p><strong>Bio:</strong> ${profile.bio || 'Không có'}</p>
-                            <p><strong>Email:</strong> ${profile.email}</p>
-                            <p><strong>Số điện thoại:</strong> ${profile.phone}</p>
-                            <p><strong>Ngày sinh:</strong> ${new Date(profile.dob).toLocaleDateString()}</p>
-                            <p><strong>Bạn bè từ:</strong> ${new Date(profile.friendsSince).toLocaleDateString()}</p>
-                            <p><strong>Bạn chung:</strong> ${profile.mutualFriends}</p>
-                        </div>
-                    `;
+                                <div class="profile-header">
+                                    <img src="/img/${profile.avatar || '/img/default-avatar.png'}" alt="${profile.username}">
+                                    <h2>${profile.username}</h2>
+                                    ${profile.isVerified ? '<span class="verified-badge">✓</span>' : ''}
+                                </div>
+                                <div class="profile-info">
+                                    <p><strong>Bio:</strong> ${profile.bio || 'Không có'}</p>
+                                    <p><strong>Email:</strong> ${profile.email}</p>
+                                    <p><strong>Số điện thoại:</strong> ${profile.phone}</p>
+                                    <p><strong>Ngày sinh:</strong> ${new Date(profile.dob).toLocaleDateString()}</p>
+                                    <p><strong>Bạn bè từ:</strong> ${new Date(profile.friendsSince).toLocaleDateString()}</p>
+                                    <p><strong>Bạn chung:</strong> ${profile.mutualFriends}</p>
+                                </div>
+                            `;
             document.getElementById('friendProfileModal').style.display = 'block';
         }
 
@@ -268,5 +293,83 @@
                 }, 3000);
             }, 100);
         }
+
+        // Helper function to create friend element
+        function createFriendElement(friend) {
+            const div = document.createElement('div');
+            div.className = 'flex-align-center contact-item';
+            div.setAttribute('data-friend-id', friend.userId);
+
+            const avatar = friend.avatar || '/img/default-avatar.png';
+
+            div.innerHTML = `
+                 <div style="position: relative;">
+                     <img class="avatar-img friend-avatar" src="/img/${avatar}" alt="">
+                     ${friend.IsOnline != null ? '<div class="friend-online"><i class="fa-solid fa-circle"></i></div>' : ''}
+                 </div>
+                <div class="flex-align-center-between friend-info">
+                    <span class="friend-name">${friend.username}</span>
+                    <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
+                        <i class="fa-solid fa-ellipsis friend-more-icon"></i>
+                    </button>
+                    <div class="friend-options" style="display: none;">
+                        <ul>
+                            <li onclick="viewFriendProfile('${friend.userId}')">Xem thông tin</li>
+                            <li onclick="blockFriend('${friend.userId}')">Chặn</li>
+                            <li onclick="deleteFriend('${friend.userId}')" class="danger">Xóa bạn</li>
+                        </ul>
+                    </div>
+                </div>
+                    `;
+
+            return div;
+        }
+
+        // Function to handle opening friend options menu
+        function openFriendOptions(button) {
+            // Close all other open menus first
+            document.querySelectorAll('.friend-options').forEach(menu => {
+                if (menu !== button.nextElementSibling) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            // Toggle the clicked menu
+            const optionsMenu = button.nextElementSibling;
+            optionsMenu.style.display = optionsMenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Close friend options menu when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.friend-more')) {
+                document.querySelectorAll('.friend-options').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            }
+        });
+
+        // Add debounce function for search input
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Update search input to use debounce
+        document.getElementById('searchInput').addEventListener('input',
+            debounce(() => filterFriends(), 300)
+        );
+
+        // Initialize friend list
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial filter to load friends
+            filterFriends();
+        });
     </script>
-}
+} *@

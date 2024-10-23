@@ -8,7 +8,7 @@ namespace zaloclone_test.Services
 {
     public interface IPostService
     {
-        public Task<string> InsertUpdatePost(InsertUpdatePostVM input, string userId);
+        public Task<string> InsertUpdatePost(InsertUpdatePostVM? input, string userId);
         public Task<(string msg, List<PostVM>? result)> GetListPosts(string? userId = null);
         //public Task<(string msg, List<PostVM>? result)> GetPostsProfile(string? userId = null);
         public Task<(string msg, List<PostVM>? result)> GetPostsProfile(string? userid = null, string? otherUserId = null);
@@ -189,7 +189,7 @@ namespace zaloclone_test.Services
             return (string.Empty, result);
         }
 
-        public async Task<string> InsertUpdatePost(InsertUpdatePostVM input, string userId)
+        public async Task<string> InsertUpdatePost(InsertUpdatePostVM? input, string userId)
         {
             string msg = "";
             var files = input.Images;

@@ -65,7 +65,12 @@ namespace Server.Pages
             }
         }
 
-        public async Task<IActionResult> OnPostDeleteFriendAsync([FromBody] string friendId)
+        public class DeleteFriendModel
+        {
+            public string FriendId { get; set; }
+        }
+
+        public async Task<IActionResult> OnPostDeleteFriendAsync([FromBody] DeleteFriendModel model)
         {
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
@@ -76,7 +81,7 @@ namespace Server.Pages
 
             try
             {
-                var result = await _asideContactService.DeleteFriend(UserToken.UserID.ToString(), friendId);
+                var result = await _asideContactService.DeleteFriend(UserToken.UserID.ToString(), model.FriendId);
                 return new JsonResult(result);
             }
             catch (Exception ex)
