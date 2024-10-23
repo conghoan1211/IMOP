@@ -53,6 +53,16 @@ namespace zaloclone_test.Helper
 
             return "";
         }
+        public static async Task<(string, string?)> GetUrlImage(IFormFile file)
+        {
+            var (error , fileNames) = await GetUrlImages(new[] { file });
+            if (!string.IsNullOrEmpty(error))
+            {
+                return (error, null);
+            }
+
+            return (string.Empty, fileNames?.FirstOrDefault());
+        }
 
         public static async Task<(string, List<string>?)> GetUrlImages(IFormFile[] files )
         {

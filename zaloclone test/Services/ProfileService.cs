@@ -9,7 +9,10 @@ namespace zaloclone_test.Services
     public interface IProfileService
     {
         public Task<(string msg, ProfileVM? result)> GetProfile(string userID);
+        public Task<(string, UpdateProfileModels)> GetProfileUpdate(string userID);
+        public Task<string> DoChangeAvatar(string userid, UpdateAvatarVM input);
 
+        public Task<string> UpdateProfile(string userID, UpdateProfileModels? updatedProfile);
     }
     public class ProfileService : IProfileService
     {
@@ -50,31 +53,17 @@ namespace zaloclone_test.Services
         }
 
 
-        public async Task<(string msg, bool success)> UpdateProfile(string userID, ProfileVM updatedProfile)
+        public async Task<string> UpdateProfile(string userID, UpdateProfileModels? updatedProfile)
         {
-            // Tìm người dùng theo userID
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userID);
+            if (user == null) return "User not found";
 
-            // Kiểm tra xem người dùng có tồn tại không
-            if (user == null)
-            {
-                return ("User not found", false);
-            }
-
-            // Cập nhật các thông tin từ updatedProfile vào user
             user.Username = updatedProfile.UserName ?? user.Username;
-            user.Phone = updatedProfile.Phone ?? user.Phone;
-            user.Email = updatedProfile.Email ?? user.Email;
-            user.Avatar = updatedProfile.Avatar ?? user.Avatar;
             user.Bio = updatedProfile.Bio ?? user.Bio;
             user.Dob = updatedProfile.Dob ?? user.Dob;
             user.Sex = updatedProfile.Sex ?? user.Sex;
-            user.IsActive = updatedProfile.IsActive;
-            user.IsVerified = updatedProfile.IsVerified;
-            user.UpdateAt = DateTime.UtcNow; // Cập nhật thời gian chỉnh sửa
-            user.UpdateUser = updatedProfile.UpdateUser ?? user.UpdateUser; // Giữ nguyên người chỉnh sửa nếu không có dữ liệu mới
+            user.UpdateAt = DateTime.Now; // Cập nhật thời gian chỉnh sửa
 
-            // Lưu thay đổi vào database
             try
             {
                 _context.Users.Update(user);
@@ -82,11 +71,42 @@ namespace zaloclone_test.Services
             }
             catch (Exception ex)
             {
-                // Log lỗi (nếu cần) và trả về thông báo lỗi
-                return ($"An error occurred: {ex.Message}", false);
+                return $"An error occurred: {ex.Message}";
             }
 
-            return ("Profile updated successfully", true);
+            return "";
+        }
+
+        public async Task<(string, UpdateProfileModels)> GetProfileUpdate(string userID)
+        {
+            var user = await _context.Users.Where(x => x.UserId == userID)
+                .Select(u => new UpdateProfileModels
+                {
+                    UserName = u.Username,
+                    Bio = u.Bio,
+                    Dob = u.Dob,
+                    Sex = u.Sex,
+                }).FirstOrDefaultAsync();
+            if (user == null) return ("User not found", null);
+            return ("", user);
+        }
+
+        public async Task<string> DoChangeAvatar(string userid, UpdateAvatarVM input)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userid);
+            if (user == null) return "User not found";
+
+            var files = input.Image;
+            if (files == null) return "";
+
+            var (msg, fileName) = await Common.GetUrlImage(files);
+            if (msg.Length > 0) return msg;
+
+            user.Avatar = fileName;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return "";
         }
     }
 }
