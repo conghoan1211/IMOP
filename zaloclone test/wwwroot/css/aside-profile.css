@@ -299,7 +299,8 @@
 
 span {
     font-size: 1.2rem;
-    margin-left: 6px
+    margin-left: 6px;
+    margin-top: 2px;
 }
 
 &:hover {

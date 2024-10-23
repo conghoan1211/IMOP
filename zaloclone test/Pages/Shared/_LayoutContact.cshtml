@@ -76,7 +76,9 @@
     <div>
         @RenderBody()
     </div>
-    <script type="module" src="~/js/contact/menu-sidebar-contact.js"></script>
 
+    @RenderSection("Scripts", required: false)
+
+    <script type="module" src="~/js/contact/menu-sidebar-contact.js"></script>
 </body>
 </html>

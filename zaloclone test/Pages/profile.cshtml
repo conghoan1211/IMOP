@@ -92,7 +92,7 @@
             </div>
             @if (Model.Message.Length > 0)
             {
-                <h2>@Model.Message</h2>
+                <h2 class="flex-align-justify-center" style="color: red">@Model.Message</h2>
             }
             <!-- add post  -->
             @if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
