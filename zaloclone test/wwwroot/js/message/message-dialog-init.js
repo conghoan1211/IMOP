@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (messageText.length > 0) {
                 // Tạo và thêm tin nhắn mới vào giao diện
-                sendMessage(messageText);
+                addMessage(messageText, 'me');
 
                 // Xóa nội dung sau khi gửi tin nhắn
                 textarea.value = '';
@@ -145,137 +145,129 @@ function checkDateTimeSendYear(sendDateTime, checkPointDateTime, minYear) {
 }
 
 function sendMessage(text) {
-    // Tạo cấu trúc HTML cho tin nhắn mới
+    // Create the new message structure
+    const newMessageDiv = createElementWithClasses('div', ['flex', 'chat-item', 'me']);
+    const newMessageContentDiv = createElementWithClasses('div', ['chat-content', 'me']);
+    const newChatMessageDiv = createElementWithClasses('div', ['chat-message']);
+    const newChatTextTimeDiv = createElementWithClasses('div', ['chat-text-time', 'me']);
+    const newTextMessageDiv = createElementWithClasses('div', ['text-msg']);
+    const newChatTimeSpan = createElementWithClasses('span', ['chat-time']);
+    const reactionDiv = createElementWithClasses('div', ['flex-align-justify-center', 'chat-react'], '<i class="fa-solid fa-heart"></i>');
 
-    const newMessageDiv = document.createElement('div');
+    // Add content to the new elements
+    newTextMessageDiv.innerText = text;
+    newChatTimeSpan.innerText = getCurrentTime();
 
-    const newMessageContentDiv = document.createElement('div');
-
-    const newChatMessageDiv = document.createElement('div');
-    newChatMessageDiv.classList.add('chat-message');
-
-    const newChatTextTimeDiv = document.createElement('div');
-
-    const newTextMessageDiv = document.createElement('div');
-    newTextMessageDiv.classList.add('text-msg');
-
-    const newChatTimeSpan = document.createElement('span');
-    newChatTimeSpan.classList.add('chat-time');
-
-    const reactionDiv = document.createElement('div');
-    reactionDiv.classList.add('flex-align-justify-center', 'chat-react');
-    reactionDiv.innerHTML = '<i class="fa-solid fa-heart"></i>';
-
-    newMessageDiv.classList.add('flex', 'chat-item', 'me');
-    newMessageContentDiv.classList.add('chat-content', 'me');
-    newChatTextTimeDiv.classList.add('chat-text-time', 'me');
-
-    const avatarDiv = document.createElement('div');
-    avatarDiv.classList.add('avatar-chat-msg');
-    const avatar = document.createElement('img');
-    avatar.classList.add('avatar-img', 'avt-their');
-    avatarDiv.appendChild(avatar);
-    newMessageDiv.appendChild(avatarDiv);
-    if (lastSender != 'me') {
+    // Handle avatar logic
+    if (shouldShowAvatar) {
+        const avatarDiv = createElementWithClasses('div', ['avatar-chat-msg']);
+        const avatar = createElementWithClasses('img', ['avatar-img', 'avt-their']);
         avatar.src = '/img/avt.jpeg';
+        avatarDiv.appendChild(avatar);
+        newMessageDiv.appendChild(avatarDiv);
     }
+
+    // Build the message structure
     newMessageDiv.appendChild(newMessageContentDiv);
-
     newMessageContentDiv.appendChild(newChatMessageDiv);
-
     newChatMessageDiv.appendChild(newChatTextTimeDiv);
     newChatMessageDiv.appendChild(reactionDiv);
-
     newChatTextTimeDiv.appendChild(newTextMessageDiv);
     newChatTextTimeDiv.appendChild(newChatTimeSpan);
 
     lastSender = 'me';
 
-    newTextMessageDiv.innerText = text;
-    newChatTimeSpan.innerText = getCurrentTime();
+    const isDisplayHour = checkDateTimeSendMinute(new Date(), lastDateTimeCheckPoint, MIN_MINUTE_GAP);
+    // Handle block date creation
+    if (!currentBlockDateDiv || isDisplayHour) {
 
-    var isNewBlockDate = checkDateTimeSendMinute(new Date(), lastDateTimeCheckPoint, MIN_MINUTE_GAP);
-    if (currentBlockDateDiv == null || isNewBlockDate) {
-        var isDisplayDay = checkDateTimeSendDay(new Date(), lastDateTimeCheckPoint, MIN_DAY_GAP);
-        var isDisplayYear = checkDateTimeSendYear(new Date(), lastDateTimeCheckPoint, MIN_YEAR_GAP);
-        currentBlockDateDiv = document.createElement('div');
-        currentBlockDateDiv.classList.add('block-date');
-        currentBlockDateDiv.innerHTML = `
+        const isDisplayDay = checkDateTimeSendDay(new Date(), lastDateTimeCheckPoint, MIN_DAY_GAP);
+        const isDisplayYear = checkDateTimeSendYear(new Date(), lastDateTimeCheckPoint, MIN_YEAR_GAP);
+
+        currentBlockDateDiv = createElementWithClasses('div', ['block-date'], `
             <div class="flex-align-justify-center time-seen">
                 <span class="flex-align-justify-center">
-                ${getCurrentTimeFormatted(isNewBlockDate, isDisplayDay, isDisplayYear)}
+                    ${getCurrentTimeFormatted(isDisplayHour, isDisplayDay, isDisplayYear)}
                 </span>
             </div>
-        `;
+        `);
         chatContainer.appendChild(currentBlockDateDiv);
     }
+
+    // Update checkpoint and append the new message
     lastDateTimeCheckPoint = new Date();
     currentBlockDateDiv.appendChild(newMessageDiv);
 
-    // Cuộn xuống cuối cùng để thấy tin nhắn mới
+    // Scroll to the bottom
     chatContainer.scrollTop = chatContainer.scrollHeight;
     initChatReact();
 }
+function shouldShowAvatar(sender) {
+    return lastSender !== sender || !currentBlockDateDiv || checkDateTimeSendMinute(new Date(), lastDateTimeCheckPoint, MIN_MINUTE_GAP);
+}
+// Helper function to create an element with specified classes and innerHTML (optional)
+function createElementWithClasses(tagName, classList, innerHTML = '') {
+    const element = document.createElement(tagName);
+    element.classList.add(...classList);
+    element.innerHTML = innerHTML;
+    return element;
+}
 
-function addMessages(text, sender = null) {
-    // Tạo cấu trúc HTML cho tin nhắn mới
-    const newMessageDiv = document.createElement('div');
+function addMessage(text, sender = null) {
+    // Create the new message structure
+    const newMessageDiv = createElementWithClasses('div', ['flex', 'chat-item', 'me']);
+    const newMessageContentDiv = createElementWithClasses('div', ['chat-content', 'me']);
+    const newChatMessageDiv = createElementWithClasses('div', ['chat-message']);
+    const newChatTextTimeDiv = createElementWithClasses('div', ['chat-text-time', 'me']);
+    const newTextMessageDiv = createElementWithClasses('div', ['text-msg']);
+    const newChatTimeSpan = createElementWithClasses('span', ['chat-time']);
+    const reactionDiv = createElementWithClasses('div', ['flex-align-justify-center', 'chat-react'], '<i class="fa-solid fa-heart"></i>');
 
-    const newMessageContentDiv = document.createElement('div');
-
-    const newChatMessageDiv = document.createElement('div');
-    newChatMessageDiv.classList.add('chat-message');
-
-    const newChatTextTimeDiv = document.createElement('div');
-
-    const newTextMessageDiv = document.createElement('div');
-    newTextMessageDiv.classList.add('text-msg');
-
-    const newChatTimeSpan = document.createElement('span');
-    newChatTimeSpan.classList.add('chat-time');
-
-    const reactionDiv = document.createElement('div');
-    reactionDiv.classList.add('flex-align-justify-center', 'chat-react');
-    reactionDiv.innerHTML = '<i class="fa-solid fa-heart"></i>';
-
-    if (sender == null) {
-        newMessageDiv.classList.add('flex', 'chat-item');
-        newMessageContentDiv.classList.add('chat-content');
-        newChatTextTimeDiv.classList.add('chat-text-time');
-    }
-    else {
-        newMessageDiv.classList.add('flex', 'chat-item', sender);
-        newMessageContentDiv.classList.add('chat-content', sender);
-        newChatTextTimeDiv.classList.add('chat-text-time', sender);
-    }        // Thêm lớp tương tự như tin nhắn của mình
-    const avatarDiv = document.createElement('div');
-    avatarDiv.classList.add('avatar-chat-msg');
-    const avatar = document.createElement('img');
-    avatar.classList.add('avatar-img', 'avt-their');
-    avatarDiv.appendChild(avatar);
-    newMessageDiv.appendChild(avatarDiv);
-    if (lastSender != sender) {
-        avatar.src = '/img/avt.jpeg';
-    }
-    newMessageDiv.appendChild(newMessageContentDiv);
-
-    newMessageContentDiv.appendChild(newChatMessageDiv);
-
-    newChatMessageDiv.appendChild(newChatTextTimeDiv);
-    newChatMessageDiv.appendChild(reactionDiv);
-
-    newChatTextTimeDiv.appendChild(newTextMessageDiv);
-    newChatTextTimeDiv.appendChild(newChatTimeSpan);
-
-    lastSender = sender;
-
+    // Add content to the new elements
     newTextMessageDiv.innerText = text;
     newChatTimeSpan.innerText = getCurrentTime();
 
-    // Thêm tin nhắn mới vào cuối danh sách chat
-    chatContainer.prepend(newMessageDiv);
+    // Handle avatar logic
+    if (shouldShowAvatar) {
+        const avatarDiv = createElementWithClasses('div', ['avatar-chat-msg']);
+        const avatar = createElementWithClasses('img', ['avatar-img', 'avt-their']);
+        avatar.src = '/img/avt.jpeg';
+        avatarDiv.appendChild(avatar);
+        newMessageDiv.appendChild(avatarDiv);
+    }
 
-    // Cuộn xuống cuối cùng để thấy tin nhắn mới
+    // Build the message structure
+    newMessageDiv.appendChild(newMessageContentDiv);
+    newMessageContentDiv.appendChild(newChatMessageDiv);
+    newChatMessageDiv.appendChild(newChatTextTimeDiv);
+    newChatMessageDiv.appendChild(reactionDiv);
+    newChatTextTimeDiv.appendChild(newTextMessageDiv);
+    newChatTextTimeDiv.appendChild(newChatTimeSpan);
+
+    lastSender = 'me';
+
+    const isDisplayHour = checkDateTimeSendMinute(new Date(), lastDateTimeCheckPoint, MIN_MINUTE_GAP);
+    // Handle block date creation
+    if (!currentBlockDateDiv || isDisplayHour) {
+
+        const isDisplayDay = checkDateTimeSendDay(new Date(), lastDateTimeCheckPoint, MIN_DAY_GAP);
+        const isDisplayYear = checkDateTimeSendYear(new Date(), lastDateTimeCheckPoint, MIN_YEAR_GAP);
+
+        currentBlockDateDiv = createElementWithClasses('div', ['block-date'], `
+            <div class="flex-align-justify-center time-seen">
+                <span class="flex-align-justify-center">
+                    ${getCurrentTimeFormatted(isDisplayHour, isDisplayDay, isDisplayYear)}
+                </span>
+            </div>
+        `);
+        chatContainer.prepend(currentBlockDateDiv);
+    }
+
+    // Update checkpoint and append the new message
+    lastDateTimeCheckPoint = new Date();
+    currentBlockDateDiv.appendChild(newMessageDiv);
+
+    // Scroll to the bottom
     chatContainer.scrollTop = chatContainer.scrollHeight;
     initChatReact();
 }
@@ -302,7 +294,7 @@ function getCurrentTime() {
 function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year = true) {
     const now = new Date();
     var result = [];
-    if (houraAndMinute) {
+    if (houraAndMinute == true) {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         result.push(hours);
@@ -310,7 +302,7 @@ function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year
         result.push(minutes);
     }
 
-    if (dayAndMonth) {
+    if (dayAndMonth == true) {
         const day = String(now.getDate()).padStart(2, '0');
         const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         result.push(" ");
@@ -318,11 +310,13 @@ function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year
         result.push("/");
         result.push(month);
     }
-    if (year) {
+    if (year == true) {
         const year = now.getFullYear();
         result.push("/")
         result.push(year);
     }
+
+    console.log(houraAndMinute + " " + dayAndMonth + " " + year);
     // Format the date and time
     return result.join('');
 }
