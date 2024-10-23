@@ -291,5 +291,81 @@
                 }, 3000);
             }, 100);
         }
+
+        // Helper function to create friend element
+        function createFriendElement(friend) {
+            const div = document.createElement('div');
+            div.className = 'flex-align-center contact-item';
+            div.setAttribute('data-friend-id', friend.userId);
+
+            const avatar = friend.avatar || '/img/default-avatar.png';
+
+            div.innerHTML = `
+                <img class="avatar-img friend-avatar" src="${avatar}" alt="">
+                <div class="flex-align-center-between friend-info">
+                    <span class="friend-name">${friend.username}</span>
+                    ${friend.isOnline ? '<span class="friend-status online">Online</span>' : ''}
+                    <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
+                        <i class="fa-solid fa-ellipsis friend-more-icon"></i>
+                    </button>
+                    <div class="friend-options" style="display: none;">
+                        <ul>
+                            <li onclick="viewFriendProfile('${friend.userId}')">Xem thông tin</li>
+                            <li onclick="blockFriend('${friend.userId}')">Chặn</li>
+                            <li onclick="deleteFriend('${friend.userId}')" class="danger">Xóa bạn</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            return div;
+        }
+
+        // Function to handle opening friend options menu
+        function openFriendOptions(button) {
+            // Close all other open menus first
+            document.querySelectorAll('.friend-options').forEach(menu => {
+                if (menu !== button.nextElementSibling) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            // Toggle the clicked menu
+            const optionsMenu = button.nextElementSibling;
+            optionsMenu.style.display = optionsMenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Close friend options menu when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.friend-more')) {
+                document.querySelectorAll('.friend-options').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            }
+        });
+
+        // Add debounce function for search input
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Update search input to use debounce
+        document.getElementById('searchInput').addEventListener('input',
+            debounce(() => filterFriends(), 300)
+        );
+
+        // Initialize friend list
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial filter to load friends
+            filterFriends();
+        });
     </script>
 }
