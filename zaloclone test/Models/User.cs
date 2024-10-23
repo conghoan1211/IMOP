@@ -9,9 +9,9 @@ namespace zaloclone_test.Models
         {
             CommentLikes = new HashSet<CommentLike>();
             Comments = new HashSet<Comment>();
+            ConversationParticipants = new HashSet<ConversationParticipant>();
             FriendUserId1Navigations = new HashSet<Friend>();
             FriendUserId2Navigations = new HashSet<Friend>();
-            GroupMembers = new HashSet<GroupMember>();
             MessageReactions = new HashSet<MessageReaction>();
             MessageStatuses = new HashSet<MessageStatus>();
             Messages = new HashSet<Message>();
@@ -42,9 +42,9 @@ namespace zaloclone_test.Models
 
         public virtual ICollection<CommentLike> CommentLikes { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<ConversationParticipant> ConversationParticipants { get; set; }
         public virtual ICollection<Friend> FriendUserId1Navigations { get; set; }
         public virtual ICollection<Friend> FriendUserId2Navigations { get; set; }
-        public virtual ICollection<GroupMember> GroupMembers { get; set; }
         public virtual ICollection<MessageReaction> MessageReactions { get; set; }
         public virtual ICollection<MessageStatus> MessageStatuses { get; set; }
         public virtual ICollection<Message> Messages { get; set; }

@@ -19,15 +19,17 @@ namespace zaloclone_test.Models
         public virtual DbSet<Comment> Comments { get; set; } = null!;
         public virtual DbSet<CommentImage> CommentImages { get; set; } = null!;
         public virtual DbSet<CommentLike> CommentLikes { get; set; } = null!;
+        public virtual DbSet<Conversation> Conversations { get; set; } = null!;
+        public virtual DbSet<ConversationParticipant> ConversationParticipants { get; set; } = null!;
         public virtual DbSet<Friend> Friends { get; set; } = null!;
-        public virtual DbSet<GroupMember> GroupMembers { get; set; } = null!;
-        public virtual DbSet<Groupchat> Groupchats { get; set; } = null!;
         public virtual DbSet<Message> Messages { get; set; } = null!;
+        public virtual DbSet<MessageBlock> MessageBlocks { get; set; } = null!;
         public virtual DbSet<MessageReaction> MessageReactions { get; set; } = null!;
         public virtual DbSet<MessageStatus> MessageStatuses { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<PostImage> PostImages { get; set; } = null!;
         public virtual DbSet<PostLike> PostLikes { get; set; } = null!;
+        public virtual DbSet<Reaction> Reactions { get; set; } = null!;
         public virtual DbSet<SearchHistory> SearchHistories { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
@@ -72,19 +74,19 @@ namespace zaloclone_test.Models
                     .WithMany(p => p.CommentsNavigation)
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Comments__PostID__7F2BE32F");
+                    .HasConstraintName("FK__Comments__PostID__06CD04F7");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Comments__UserID__00200768");
+                    .HasConstraintName("FK__Comments__UserID__07C12930");
             });
 
             modelBuilder.Entity<CommentImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__CommentI__7516F4ECFB813502");
+                    .HasName("PK__CommentI__7516F4ECEE816050");
 
                 entity.Property(e => e.ImageId)
                     .HasMaxLength(36)
@@ -105,13 +107,13 @@ namespace zaloclone_test.Models
                 entity.HasOne(d => d.Comment)
                     .WithMany(p => p.CommentImages)
                     .HasForeignKey(d => d.CommentId)
-                    .HasConstraintName("FK__CommentIm__Comme__03F0984C");
+                    .HasConstraintName("FK__CommentIm__Comme__0B91BA14");
             });
 
             modelBuilder.Entity<CommentLike>(entity =>
             {
                 entity.HasKey(e => e.LikeId)
-                    .HasName("PK__CommentL__A2922CF4D58CBA15");
+                    .HasName("PK__CommentL__A2922CF4B3C17E5D");
 
                 entity.Property(e => e.LikeId)
                     .HasMaxLength(36)
@@ -133,19 +135,71 @@ namespace zaloclone_test.Models
                     .WithMany(p => p.CommentLikes)
                     .HasForeignKey(d => d.CommentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__CommentLi__Comme__0D7A0286");
+                    .HasConstraintName("FK__CommentLi__Comme__151B244E");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.CommentLikes)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__CommentLi__UserI__0C85DE4D");
+                    .HasConstraintName("FK__CommentLi__UserI__14270015");
+            });
+
+            modelBuilder.Entity<Conversation>(entity =>
+            {
+                entity.ToTable("Conversation");
+
+                entity.Property(e => e.ConversationId)
+                    .HasMaxLength(36)
+                    .HasColumnName("ConversationID");
+
+                entity.Property(e => e.Avatar).HasMaxLength(255);
+
+                entity.Property(e => e.ConversationName).HasMaxLength(50);
+
+                entity.Property(e => e.CreateAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.CreateUser).HasMaxLength(36);
+
+                entity.Property(e => e.UpdateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdateUser).HasMaxLength(36);
+            });
+
+            modelBuilder.Entity<ConversationParticipant>(entity =>
+            {
+                entity.HasKey(e => new { e.ConversationId, e.UserId })
+                    .HasName("PK__Conversa__1128545D4156472A");
+
+                entity.ToTable("ConversationParticipant");
+
+                entity.Property(e => e.ConversationId)
+                    .HasMaxLength(36)
+                    .HasColumnName("ConversationID");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(36)
+                    .HasColumnName("UserID");
+
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.HasOne(d => d.Conversation)
+                    .WithMany(p => p.ConversationParticipants)
+                    .HasForeignKey(d => d.ConversationId)
+                    .HasConstraintName("FK__Conversat__Conve__5629CD9C");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ConversationParticipants)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Conversat__UserI__571DF1D5");
             });
 
             modelBuilder.Entity<Friend>(entity =>
             {
                 entity.HasKey(e => e.Friend1)
-                    .HasName("PK__Friends__DEE0643E6877E43B");
+                    .HasName("PK__Friends__DEE0643E2C9692FE");
 
                 entity.Property(e => e.Friend1)
                     .HasMaxLength(36)
@@ -180,61 +234,6 @@ namespace zaloclone_test.Models
                     .HasConstraintName("FK__Friends__UserID___5070F446");
             });
 
-            modelBuilder.Entity<GroupMember>(entity =>
-            {
-                entity.HasKey(e => new { e.GroupId, e.UserId })
-                    .HasName("PK__GroupMem__C5E27FC01091D496");
-
-                entity.ToTable("GroupMember");
-
-                entity.Property(e => e.GroupId)
-                    .HasMaxLength(36)
-                    .HasColumnName("GroupID");
-
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(36)
-                    .HasColumnName("UserID");
-
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
-
-                entity.HasOne(d => d.Group)
-                    .WithMany(p => p.GroupMembers)
-                    .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK__GroupMemb__Group__5629CD9C");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.GroupMembers)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__GroupMemb__UserI__571DF1D5");
-            });
-
-            modelBuilder.Entity<Groupchat>(entity =>
-            {
-                entity.HasKey(e => e.GroupId)
-                    .HasName("PK__Groupcha__149AF30AB940D21D");
-
-                entity.ToTable("Groupchat");
-
-                entity.Property(e => e.GroupId)
-                    .HasMaxLength(36)
-                    .HasColumnName("GroupID");
-
-                entity.Property(e => e.Avatar).HasMaxLength(255);
-
-                entity.Property(e => e.CreateAt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.CreateUser).HasMaxLength(36);
-
-                entity.Property(e => e.GroupName).HasMaxLength(50);
-
-                entity.Property(e => e.UpdateAt).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdateUser).HasMaxLength(36);
-            });
-
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.ToTable("Message");
@@ -247,9 +246,9 @@ namespace zaloclone_test.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.GroupChatId)
+                entity.Property(e => e.MessageBlockId)
                     .HasMaxLength(36)
-                    .HasColumnName("GroupChatID");
+                    .HasColumnName("MessageBlockID");
 
                 entity.Property(e => e.SenderId)
                     .HasMaxLength(36)
@@ -257,22 +256,44 @@ namespace zaloclone_test.Models
 
                 entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 
-                entity.HasOne(d => d.GroupChat)
+                entity.HasOne(d => d.MessageBlock)
                     .WithMany(p => p.Messages)
-                    .HasForeignKey(d => d.GroupChatId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__Message__GroupCh__5BE2A6F2");
+                    .HasForeignKey(d => d.MessageBlockId)
+                    .HasConstraintName("FK__Message__Message__5FB337D6");
 
                 entity.HasOne(d => d.Sender)
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.SenderId)
-                    .HasConstraintName("FK__Message__SenderI__5AEE82B9");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Message__SenderI__5EBF139D");
+            });
+
+            modelBuilder.Entity<MessageBlock>(entity =>
+            {
+                entity.ToTable("MessageBlock");
+
+                entity.Property(e => e.MessageBlockId)
+                    .HasMaxLength(36)
+                    .HasColumnName("MessageBlockID");
+
+                entity.Property(e => e.ConversationId)
+                    .HasMaxLength(36)
+                    .HasColumnName("ConversationID");
+
+                entity.Property(e => e.FirstSendDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Conversation)
+                    .WithMany(p => p.MessageBlocks)
+                    .HasForeignKey(d => d.ConversationId)
+                    .HasConstraintName("FK__MessageBl__Conve__5AEE82B9");
             });
 
             modelBuilder.Entity<MessageReaction>(entity =>
             {
                 entity.HasKey(e => new { e.MessageId, e.UserId })
-                    .HasName("PK__MessageR__19048FB65DF0C1D7");
+                    .HasName("PK__MessageR__19048FB6B8BBEA69");
 
                 entity.ToTable("MessageReaction");
 
@@ -288,24 +309,30 @@ namespace zaloclone_test.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Reaction).HasMaxLength(255);
+                entity.Property(e => e.ReactionId).HasColumnName("ReactionID");
 
                 entity.HasOne(d => d.Message)
                     .WithMany(p => p.MessageReactions)
                     .HasForeignKey(d => d.MessageId)
-                    .HasConstraintName("FK__MessageRe__Messa__5FB337D6");
+                    .HasConstraintName("FK__MessageRe__Messa__693CA210");
+
+                entity.HasOne(d => d.Reaction)
+                    .WithMany(p => p.MessageReactions)
+                    .HasForeignKey(d => d.ReactionId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK__MessageRe__React__6B24EA82");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.MessageReactions)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MessageRe__UserI__60A75C0F");
+                    .HasConstraintName("FK__MessageRe__UserI__6A30C649");
             });
 
             modelBuilder.Entity<MessageStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__MessageS__C8EE2043B81E3954");
+                    .HasName("PK__MessageS__C8EE204351EFCB9A");
 
                 entity.ToTable("MessageStatus");
 
@@ -325,12 +352,12 @@ namespace zaloclone_test.Models
                     .WithMany(p => p.MessageStatuses)
                     .HasForeignKey(d => d.MessageId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__MessageSt__Messa__6383C8BA");
+                    .HasConstraintName("FK__MessageSt__Messa__628FA481");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.MessageStatuses)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__MessageSt__UserI__6477ECF3");
+                    .HasConstraintName("FK__MessageSt__UserI__6383C8BA");
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -374,13 +401,13 @@ namespace zaloclone_test.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Posts__UserID__74AE54BC");
+                    .HasConstraintName("FK__Posts__UserID__7C4F7684");
             });
 
             modelBuilder.Entity<PostImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__PostImag__7516F4EC768E1AE1");
+                    .HasName("PK__PostImag__7516F4ECE9B6D0AE");
 
                 entity.Property(e => e.ImageId)
                     .HasMaxLength(36)
@@ -401,13 +428,13 @@ namespace zaloclone_test.Models
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.PostImages)
                     .HasForeignKey(d => d.PostId)
-                    .HasConstraintName("FK__PostImage__PostI__787EE5A0");
+                    .HasConstraintName("FK__PostImage__PostI__00200768");
             });
 
             modelBuilder.Entity<PostLike>(entity =>
             {
                 entity.HasKey(e => e.LikeId)
-                    .HasName("PK__PostLike__A2922CF4A00E1909");
+                    .HasName("PK__PostLike__A2922CF488D1B306");
 
                 entity.Property(e => e.LikeId)
                     .HasMaxLength(36)
@@ -429,19 +456,30 @@ namespace zaloclone_test.Models
                     .WithMany(p => p.PostLikes)
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PostLikes__PostI__08B54D69");
+                    .HasConstraintName("FK__PostLikes__PostI__10566F31");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.PostLikes)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PostLikes__UserI__07C12930");
+                    .HasConstraintName("FK__PostLikes__UserI__0F624AF8");
+            });
+
+            modelBuilder.Entity<Reaction>(entity =>
+            {
+                entity.ToTable("Reaction");
+
+                entity.Property(e => e.ReactionId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReactionID");
+
+                entity.Property(e => e.ReactionName).HasMaxLength(36);
             });
 
             modelBuilder.Entity<SearchHistory>(entity =>
             {
                 entity.HasKey(e => e.SearchId)
-                    .HasName("PK__SearchHi__21C53514DB28A378");
+                    .HasName("PK__SearchHi__21C53514622D5138");
 
                 entity.ToTable("SearchHistory");
 
@@ -465,12 +503,12 @@ namespace zaloclone_test.Models
                     .WithMany(p => p.SearchHistorySearchedUsers)
                     .HasForeignKey(d => d.SearchedUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__SearchHis__Searc__693CA210");
+                    .HasConstraintName("FK__SearchHis__Searc__70DDC3D8");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.SearchHistoryUsers)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__SearchHis__UserI__68487DD7");
+                    .HasConstraintName("FK__SearchHis__UserI__6FE99F9F");
             });
 
             modelBuilder.Entity<User>(entity =>

@@ -18,7 +18,6 @@ namespace zaloclone_test.Services
         public async Task<List<Message>> GetLastMessages(string ownerId)
         {
             throw new NotImplementedException();
-            List<Message> messages = await _context.Messages.Where(message => message.SenderId == ownerId).ToListAsync();
         }
     }
 }
