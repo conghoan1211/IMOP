@@ -18,64 +18,166 @@
             <div class="contact-filter">
                 <div class="flex-justify-center search contact-search">
                     <button class="flex-align-center search-icon">
-                        <i class="fa-solid fa-magnifying-glass "></i>
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
-                    <input class="search-input" type="text" placeholder="Tìm bạn">
-                    <button class="flex-align-center clear-icon">
+                    <input class="search-input" type="text" placeholder="Tìm bạn" id="friendSearch">
+                    <button class="flex-align-center clear-icon" onclick="clearSearch()">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
                 </div>
                 <div class="flex-align-center wrapper-filter">
-                    <select name="" id="" class="contact-filter-select">
-                        <option value="">Tên (A-Z)</option>
-                        <option value="">Tên (Z-A)</option>
+                    <select name="" id="sortFilter" class="contact-filter-select" onchange="handleSort(this.value)">
+                        <option value="asc">Tên (A-Z)</option>
+                        <option value="desc">Tên (Z-A)</option>
                     </select>
-                    <select name="" id="" class="contact-filter-select">
-                        <option value="">Tất Cả</option>
-                        <option value="">Mới nhất</option>
-                        <option value="">Cũ nhất</option>
+                    <select name="" id="statusFilter" class="contact-filter-select" onchange="handleStatusFilter(this.value)">
+                        <option value="all">Tất Cả</option>
+                        <option value="active">Đang hoạt động</option>
+                        <option value="blocked">Đã chặn</option>
                     </select>
+                </div>
+                <div class="contact-status-filter">
+                    <span class="contact-status-badge active" onclick="setStatusFilter('all')">Tất cả</span>
+                    <span class="contact-status-badge" onclick="setStatusFilter('active')">Hoạt động</span>
+                    <span class="contact-status-badge" onclick="setStatusFilter('blocked')">Đã chặn</span>
                 </div>
             </div>
 
-            <div class="flex-align-center contact-item">
-                <img class="avatar-img friend-avatar" src="~/img/avt.jpeg" alt="">
-                <div class="flex-align-center-between friend-info">
-                    <span class="friend-name">Dad</span>
-                    <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
-                        <i class="fa-solid fa-ellipsis friend-more-icon"></i>
-                    </button>
-                    <div class="friend-options" style="display: none;">
-                        <ul>
-                            <li onclick="viewInfo('Dad')">Xem thông tin</li>
-                            <li onclick="blockFriend('Dad')">Chặn</li>
-                            <li onclick="deleteFriend('Dad')">Xóa bạn</li>
-                        </ul>
+            <div class="contact-list" id="friendList">
+                <!-- Friend item template -->
+                <div class="flex-align-center contact-item">
+                    <img class="avatar-img friend-avatar" src="~/img/avt.jpeg" alt="">
+                    <div class="flex-align-center-between friend-info">
+                        <div class="flex-align-center">
+                            <span class="friend-name">Dad</span>
+                            <span class="friend-status">Đang hoạt động</span>
+                        </div>
+                        <button type="button" class="btn-search-add friend-more" onclick="toggleFriendOptions(this)">
+                            <i class="fa-solid fa-ellipsis friend-more-icon"></i>
+                        </button>
+                        <div class="friend-options">
+                            <ul>
+                                <li onclick="viewProfile('Dad')">
+                                    <i class="fa-regular fa-user"></i>
+                                    <span>Xem trang cá nhân</span>
+                                </li>
+                                <li onclick="toggleBlock('Dad')">
+                                    <i class="fa-solid fa-ban"></i>
+                                    <span>Chặn</span>
+                                </li>
+                                <li class="danger" onclick="deleteFriend('Dad')">
+                                    <i class="fa-solid fa-user-minus"></i>
+                                    <span>Xóa bạn</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Profile preview -->
+                        <div class="friend-preview">
+                            <div class="preview-header">
+                                <img src="~/img/avt.jpeg" alt="" class="preview-avatar">
+                                <div class="preview-name">Dad</div>
+                            </div>
+                            <div class="preview-info">
+                                <div>Điện thoại: 0123456789</div>
+                                <div>Email: dad@example.com</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Repeat similar structure for other friends -->
             </div>
-
-            <div class="flex-align-center contact-item">
-                <img class="avatar-img friend-avatar" src="~/img/avt.jpeg" alt="">
-                <div class="flex-align-center-between friend-info">
-                    <span class="friend-name">Mom</span>
-                    <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
-                        <i class="fa-solid fa-ellipsis friend-more-icon"></i>
-                    </button>
-                    <div class="friend-options" style="display: none;">
-                        <ul>
-                            <li onclick="viewInfo('Mom')">Xem thông tin</li>
-                            <li onclick="blockFriend('Mom')">Chặn</li>
-                            <li onclick="deleteFriend('Mom')">Xóa bạn</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
         </div>
-
     </div>
 
-    <!-- list friend go here  -->
+    <!-- Toast notification -->
+    <div class="toast-notification" id="toastNotification">
+        <span id="toastMessage"></span>
+    </div>
 </aside>
 
+<!-- Add this script section at the bottom of the file -->
+@section Scripts {
+    <script>
+        // Toggle friend options menu
+        function toggleFriendOptions(button) {
+            const options = button.nextElementSibling;
+            const allOptions = document.querySelectorAll('.friend-options');
+            allOptions.forEach(opt => {
+                if (opt !== options) opt.style.display = 'none';
+            });
+            options.style.display = options.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Handle friend deletion
+        function deleteFriend(name) {
+            if (confirm(`Bạn có chắc chắn muốn xóa ${name} khỏi danh sách bạn bè?`)) {
+                // Add your delete logic here
+                showToast(`Đã xóa ${name} khỏi danh sách bạn bè`);
+            }
+        }
+
+        // Handle blocking/unblocking
+        function toggleBlock(name) {
+            // Add your block/unblock logic here
+            showToast(`Đã chặn ${name}`);
+        }
+
+        // View profile
+        function viewProfile(name) {
+            // Add your profile view logic here
+            window.location.href = `/profile/${name}`;
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('friendSearch');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const friends = document.querySelectorAll('.contact-item');
+            friends.forEach(friend => {
+                const name = friend.querySelector('.friend-name').textContent.toLowerCase();
+                friend.style.display = name.includes(query) ? 'flex' : 'none';
+            });
+        });
+
+        // Clear search
+        function clearSearch() {
+            searchInput.value = '';
+            const friends = document.querySelectorAll('.contact-item');
+            friends.forEach(friend => friend.style.display = 'flex');
+        }
+
+        // Filter by status
+        function handleStatusFilter(status) {
+            const friends = document.querySelectorAll('.contact-item');
+            friends.forEach(friend => {
+                // Add your filter logic here based on status
+                friend.style.display = 'flex';
+            });
+        }
+
+        // Sort friends
+        function handleSort(order) {
+            const friendList = document.getElementById('friendList');
+            const friends = Array.from(friendList.children);
+            friends.sort((a, b) => {
+                const nameA = a.querySelector('.friend-name').textContent;
+                const nameB = b.querySelector('.friend-name').textContent;
+                return order === 'asc' ?
+                    nameA.localeCompare(nameB) :
+                    nameB.localeCompare(nameA);
+            });
+            friends.forEach(friend => friendList.appendChild(friend));
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+}
