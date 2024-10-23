@@ -19,6 +19,7 @@ namespace zaloclone_test.Configurations
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAsideContactService, AsideContactService>();
+            services.AddScoped<IInvitationService, InvitationService>();
 
 
         }

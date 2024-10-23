@@ -13,7 +13,7 @@
     <div class="contact">
         <div class="flex-align-center contact-list-title">
             <span>Bạn bè</span>
-            <span>&nbsp;@(Model.Friends?.Count ?? 0)</span>
+            <span>&nbsp;(@(Model.Friends?.Count ?? 0))</span>
         </div>
 
         <div class="cont-contact">
@@ -48,7 +48,7 @@
                     foreach (var friend in Model.Friends)
                     {
                         <div class="flex-align-center contact-item" data-friend-id="@friend.UserId">
-                            <img class="avatar-img friend-avatar" src="@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
+                            <img class="avatar-img friend-avatar" src="/img/@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
                             <div class="flex-align-center-between friend-info">
                                 <span class="friend-name">@friend.Username</span>
                                 @if (friend.IsOnline)
