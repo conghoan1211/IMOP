@@ -62,7 +62,7 @@ namespace Server.Pages
             {
                 var message = await _inviteService.RevokeInvitation(UserId1, UserId);
             }
-            return RedirectToPage("/home");
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostDeleteInvitation()
@@ -75,7 +75,7 @@ namespace Server.Pages
             {
                 var message = await _inviteService.RevokeInvitation(UserId1, UserId);
             }
-            return RedirectToPage("/home");
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostAcceptInvitation()
@@ -88,7 +88,7 @@ namespace Server.Pages
             {
                 var message = await _inviteService.AcceptInvitation(UserId1, UserId);
             }
-            return RedirectToPage("/home");
+            return RedirectToPage();
         }
     }
 }
