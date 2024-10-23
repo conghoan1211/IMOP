@@ -26,7 +26,6 @@ namespace zaloclone_test.Utilities
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim("RoleID", user.RoleId.ToString()),
                     new Claim("Avatar", user.Avatar == null ? "" : user.Avatar),
-
                 }),
                 Expires = DateTime.UtcNow.AddHours(1), // Token expiration
                 Issuer = ConfigManager.gI().Issuer,

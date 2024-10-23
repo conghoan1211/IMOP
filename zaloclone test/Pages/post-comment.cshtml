@@ -6,11 +6,10 @@
 <aside class="flex-column aside-container-msg profile-page">
     <header class="cont-msg-header aside-profile-header">
         <div class="flex-align-center-between aside-profile-head">
-            <div class="flex-align-justify-center aside-profile-return">
+            <div class="flex-align-justify-center aside-profile-return" onclick="history.back()">
                 <i class="fa-solid fa-arrow-left"></i>
             </div>
-            <button onclick="history.back()">Go Back</button>
-
+            @* <button onclick="history.back()">Go Back</button> *@
             <div class="flex-justify-center aside-profile-head__title">
                 Post
             </div>
@@ -214,7 +213,7 @@
                 </div>
                 <div class="flex aside-chat-icon-with-send">
                     <button class="aside-chat-bar-btn emoji-btn">
-                        <img class="aside-chat-bar-btn_img" src="~/img/smile icon.png" alt="" />
+                        <img class="aside-chat-bar-btn_img" src="~/icon/smile icon.png" alt="" />
                     </button>
                     <div class="emoji-picker" style="display: none">
                         <div class="emoji-list">
@@ -399,3 +398,6 @@
         </div>
     </div>
 </aside>
+
+<script type="module" src="~/js/profile/message-dialog-init.js"></script>
+<script type="module" src="~/js/profile/avt-zoom.js"></script>

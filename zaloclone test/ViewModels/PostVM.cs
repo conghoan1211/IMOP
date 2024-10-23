@@ -16,6 +16,7 @@ namespace zaloclone_test.ViewModels
         public int? Comments { get; set; }
         public bool? IsComment { get; set; } = true;
         public int? Views { get; set; }
+        public bool IsLikePost { get; set; }
         public bool? PinToTop { get; set; } = false;
         public DateTime? CreateAt { get; set; }
         public string? Images { get; set; }

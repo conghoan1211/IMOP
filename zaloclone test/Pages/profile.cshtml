@@ -92,7 +92,7 @@
             </div>
             @if (Model.Message.Length > 0)
             {
-                <h2>@Model.Message</h2>
+                <h2 class="flex-align-justify-center" style="color: red">@Model.Message</h2>
             }
             <!-- add post  -->
             @if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
@@ -377,12 +377,21 @@
                     <div class="profile-detail-item">
                         <span class="profile-detail-title">Ngày sinh</span>
                         @{
-                            string? dob = Model.Profile.Dob.ToString();
-                            DateTime date = DateTime.Parse(dob);
-                            string formattedDate = date.ToString("dd 'tháng' MM, yyyy", new System.Globalization.CultureInfo("vi-VN"));
+                            string? dob = Model.Profile.Dob?.ToString();
+                            string formatteddate = "Chưa cập nhật";
 
+                            if (!string.IsNullOrEmpty(dob))
+                            {
+                                DateTime date;
+                                bool isValidDate = DateTime.TryParse(dob, out date);
+
+                                if (isValidDate)
+                                {
+                                    formatteddate = date.ToString("dd 'tháng' MM, yyyy", new System.Globalization.CultureInfo("vi-vn"));
+                                }
+                            }
                         }
-                        <span>@formattedDate</span>
+                        <span>@formatteddate</span>
                     </div>
                     <div class="profile-detail-item">
                         <span class="profile-detail-title">Điện thoại</span>

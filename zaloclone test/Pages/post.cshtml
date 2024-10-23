@@ -28,6 +28,10 @@
                     </div>
                 </div>
             </div>
+            @if (Model.Message.Length > 0)
+            {
+                <h2 class="flex-align-justify-center" style="color: red">@Model.Message</h2>
+            }
             <div class="aprofile-list-posts">
                 <!-- list post  -->
                 @foreach (var item in Model.listPost ?? new())
@@ -40,7 +44,7 @@
                             <div class="flex-align-center aprofile-post_name-time">
                                 <div class="aprofile-post-name">@item.Username</div>
                                 <div class="aprofile-post-time format-time" data-time="@item.CreateAt">@item.CreateAt </div>
-                                <!--     <div class="aprofile-post-time">
+                                    <div class="aprofile-post-time">
                                     &bull;
                                 @{
                                     var privacyIcon = item.Privacy == 0
@@ -50,7 +54,7 @@
                                     : "<i class='fa-solid fa-lock'></i>";
                                 }
                                 @Html.Raw(privacyIcon)
-                                </div> -->
+                                </div> 
                             </div>
                             <div class="aprofile-post-content">@item.Content</div>
                             @if (!string.IsNullOrEmpty(item.Images))
@@ -69,13 +73,15 @@
                                     }
                                 </div>
                             }
-                            <div class="flex-align-center aprofile-post-action">
-                                <div class="aprofile-post-action__btn post-react-heart">
-                                    <i class="fa-regular fa-heart"></i>
-                                    <i class="fa-solid fa-heart" style="display:none;"></i>
+                            <form class="flex-align-center aprofile-post-action" method="post">
+                                 <input type="hidden" name="postId" value="@item.PostID" />
+                                <button type="submit" formaction="?handler=ToggleLike" class="aprofile-post-action__btn post-react-heart 
+                                @item.IsLikePost ? 'active': ''">
+                                    <i class="fa-regular fa-heart" id="unlike-icon"></i>
+                                    <i class="fa-solid fa-heart" id="like-icon" style="display:none;"></i>
                                     <span>@item.Likes</span>
-                                </div>
-                                <div class="aprofile-post-action__btn post-comment-btn">
+                                </button>
+                                <button class="aprofile-post-action__btn post-comment-btn">
                                     @if (item.IsComment == true)
                                     {
                                         <div><i class="fa-regular fa-comment"></i></div>
@@ -85,16 +91,16 @@
                                         <div><i class="fa-solid fa-comment-slash"></i></div>
                                     }
                                     <span>@item.Comments</span>
-                                </div>
-                                <div class="aprofile-post-action__btn">
+                                </button>
+                                <button class="aprofile-post-action__btn">
                                     <div><i class="fa-solid fa-repeat"></i></div>
                                     <span>@item.Shares</span>
-                                </div>
-                                <div class="aprofile-post-action__btn">
+                                </button>
+                                <button class="aprofile-post-action__btn">
                                     <div><i class="fa-regular fa-paper-plane"></i></div>
                                     <span>166</span>
-                                </div>
-                            </div>
+                                </button>
+                            </form>
                         </div>
                         <div style="position: relative;">
                             <div class="flex-align-justify-center aprofile-post-more">
@@ -203,8 +209,8 @@
                         </div>
                         <div class="flex-align-center aprofile-post-action">
                             <div class="aprofile-post-action__btn post-react-heart">
-                                <i class="fa-regular fa-heart"></i>
-                                <i class="fa-solid fa-heart" style="display:none;"></i>
+                                @* <i class="fa-regular fa-heart"></i> *@
+                                <i class="fa-solid fa-heart"></i>
                                 <span>656</span>
                             </div>
                             <div class="aprofile-post-action__btn post-comment-btn">
@@ -346,3 +352,8 @@
     }
 </script>
 <script type="module" src="~/js/profile/avt-zoom.js"></script>
+
+@* <script rel="preconnect" src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script> *@
+<script>
+
+</script>

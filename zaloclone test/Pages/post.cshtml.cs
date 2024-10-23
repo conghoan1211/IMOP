@@ -5,6 +5,8 @@ using zaloclone_test.ViewModels;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
 using zaloclone_test.Models;
+using Microsoft.AspNetCore.SignalR;
+using zaloclone_test.MyHub;
 
 namespace zaloclone_test.Pages
 {
@@ -22,8 +24,8 @@ namespace zaloclone_test.Pages
         public List<PostVM>? listPost { get; set; } = new();
 
         [BindProperty]
-        public InsertUpdatePostVM Input { get; set; }
-        public UserToken UserToken { get; set; }
+        public InsertUpdatePostVM? Input { get; set; }
+        public UserToken? UserToken { get; set; }
 
         public async Task OnGet()
         {
@@ -120,5 +122,33 @@ namespace zaloclone_test.Pages
             return RedirectToPage();
         }
 
+        public async Task<IActionResult> OnPostToggleLike(string postId)
+        {
+            if (string.IsNullOrEmpty(postId))
+            {
+                Message = "Post ID không hợp lệ.";
+                return Page();
+            }
+
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+
+            int? countLikes = 0;
+            (msg, countLikes) = await _postService.DoLikePost(postId, userToken.UserID.ToString());
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+
+            //var hubContext = HttpContext.RequestServices.GetService<IHubContext<PostHub>>();
+            //await hubContext.Clients.All.SendAsync("ReceiveLikeUpdate", postId, countLikes);
+
+            return RedirectToPage();
+        }
     }
 }
