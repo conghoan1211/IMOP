@@ -121,13 +121,25 @@
                 },
                 body: JSON.stringify(filter)
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(result => {
                     if (result.success) {
                         updateFriendsList(result.data);
+                    } else {
+                        showToast(result.message || 'Có lỗi xảy ra khi lọc danh sách bạn bè');
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Có lỗi xảy ra khi lọc danh sách bạn bè');
                 });
         }
+
 
         // View friend profile
         function viewFriendProfile(friendId) {
@@ -183,52 +195,43 @@
                     },
                     body: JSON.stringify({ friendId: friendId })
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(result => {
                         if (result.success) {
                             filterFriends(); // Refresh the list
                         }
                         showToast(result.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showToast('Có lỗi xảy ra khi xóa bạn bè');
                     });
             }
         }
 
         // Helper functions
         function updateFriendsList(friends) {
+            if (!Array.isArray(friends)) {
+                console.error('Expected friends to be an array, got:', friends);
+                return;
+            }
+
             const container = document.getElementById('friendsList');
             container.innerHTML = ''; // Clear current list
 
             friends.forEach(friend => {
-                // Create friend item HTML structure
-                const friendElement = createFriendElement(friend);
-                container.appendChild(friendElement);
+                try {
+                    const friendElement = createFriendElement(friend);
+                    container.appendChild(friendElement);
+                } catch (error) {
+                    console.error('Error creating friend element:', error);
+                }
             });
-        }
-
-        function createFriendElement(friend) {
-            const friendItem = document.createElement('div');
-            friendItem.className = 'flex-align-center contact-item';
-            friendItem.setAttribute('data-friend-id', friend.UserId);
-
-            friendItem.innerHTML = `
-                        <img class="avatar-img friend-avatar" src="${friend.Avatar || '/img/default-avatar.png'}" alt="">
-                        <div class="flex-align-center-between friend-info">
-                            <span class="friend-name">${friend.Username}</span>
-                            ${friend.IsOnline ? '<span class="friend-status online">Online</span>' : ''}
-                            <button type="button" class="btn-search-add friend-more" onclick="openFriendOptions(this)">
-                                <i class="fa-solid fa-ellipsis friend-more-icon"></i>
-                            </button>
-                            <div class="friend-options" style="display: none;">
-                                <ul>
-                                    <li onclick="viewFriendProfile('${friend.UserId}')">Xem thông tin</li>
-                                    <li onclick="blockFriend('${friend.UserId}')">Chặn</li>
-                                    <li onclick="deleteFriend('${friend.UserId}')" class="danger">Xóa bạn</li>
-                                </ul>
-                            </div>
-                        </div>
-                    `;
-
-            return friendItem;
         }
 
         function displayProfile(profile) {
