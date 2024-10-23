@@ -9,7 +9,7 @@ namespace zaloclone_test.Services
     public interface IProfileService
     {
         public Task<(string msg, ProfileVM? result)> GetProfile(string userID);
-
+        public Task<string> UpdateProfile(string userID,ProfileVM updateProfile);
     }
     public class ProfileService : IProfileService
     {
@@ -50,7 +50,7 @@ namespace zaloclone_test.Services
         }
 
 
-        public async Task<(string msg, bool success)> UpdateProfile(string userID, ProfileVM updatedProfile)
+        public async Task<string> UpdateProfile(string userID, ProfileVM updatedProfile)
         {
             // Tìm người dùng theo userID
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userID);
@@ -58,7 +58,7 @@ namespace zaloclone_test.Services
             // Kiểm tra xem người dùng có tồn tại không
             if (user == null)
             {
-                return ("User not found", false);
+                return ("User not found");
             }
 
             // Cập nhật các thông tin từ updatedProfile vào user
@@ -83,10 +83,10 @@ namespace zaloclone_test.Services
             catch (Exception ex)
             {
                 // Log lỗi (nếu cần) và trả về thông báo lỗi
-                return ($"An error occurred: {ex.Message}", false);
+                return ($"An error occurred: {ex.Message}");
             }
 
-            return ("Profile updated successfully", true);
+            return "";
         }
     }
 }
