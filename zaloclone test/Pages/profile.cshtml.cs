@@ -194,6 +194,7 @@ namespace zaloclone_test.Pages
         public async Task<IActionResult> OnPostChangeAvatar(string userid)
         {
             ModelState.Remove(nameof(Input));
+            ModelState.Remove(nameof(UpdateProfile));
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {

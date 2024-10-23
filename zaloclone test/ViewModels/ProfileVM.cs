@@ -1,5 +1,6 @@
 ﻿using ExpressiveAnnotations.Attributes;
 using System.ComponentModel.DataAnnotations;
+using zaloclone_test.Models;
 
 namespace zaloclone_test.ViewModels
 {
@@ -12,9 +13,9 @@ namespace zaloclone_test.ViewModels
         public string? Email { get; set; }
         public string? Avatar { get; set; } = string.Empty;
         public int? RoleID { get; set; }
-        public string? Bio { get; set; } = string.Empty;
+        public string? Bio {  get; set; } = string.Empty;
         public int? Sex { get; set; }
-        public DateTime? Dob { get; set; }
+        public DateTime? Dob {  get; set; }
         public bool IsVerified { get; set; }
         public bool IsActive { get; set; }              /* Admin choosen*/
         public bool? IsDisable { get; set; }                /*User choosen*/
@@ -36,9 +37,9 @@ namespace zaloclone_test.ViewModels
 
     public class UpdateProfileModels
     {
-        public string UserId { get; set; }
-      
-        [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
+        public string? UserId { get; set; }
+
+        [Required(ErrorMessage = "Tên hiển thị không được để trống")]
         [StringLength(50, ErrorMessage = "Tên đăng nhập không được vượt quá 50 ký tự")]
         public string? UserName { get; set; }
         [Required(ErrorMessage = "Giới tính không được để trống")]
