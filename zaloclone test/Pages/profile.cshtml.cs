@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using zaloclone_test.Models;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
@@ -30,6 +26,11 @@ namespace zaloclone_test.Pages
         [BindProperty]
         public InsertUpdatePostVM Input { get; set; }
         public UserToken UserToken { get; set; }
+
+
+        [BindProperty]
+        public UpdateProfileModels InputUpdate { get; set; }
+       
 
         public async Task OnGet(string? id = null)
         {
@@ -149,6 +150,70 @@ namespace zaloclone_test.Pages
                 return Page();
             }
             return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostUpdateProfile()
+        {
+            // Xác thực token của người dùng
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+            UserToken = userToken;
+
+            // Kiểm tra tính hợp lệ của Model
+            if (!ModelState.IsValid)
+            {
+                // Nếu xác thực không thành công, quay lại trang với dữ liệu hiện tại để hiển thị lỗi
+                return Page();
+            }
+
+            // Ánh xạ từ UpdateProfileModels sang ProfileVM
+            var updatedProfile = new ProfileVM
+            {
+                UserID = InputUpdate.UserId,
+                UserName = InputUpdate.UserName,
+                Dob = InputUpdate.Dob,
+                Bio = InputUpdate.Bio,
+                Sex = InputUpdate.Sex
+            };
+
+            // Gọi phương thức UpdateProfile từ service để cập nhật thông tin
+            var result = await _profileService.UpdateProfile(InputUpdate.UserId, updatedProfile);
+
+            // Kiểm tra xem có lỗi xảy ra trong quá trình cập nhật không
+            if (!string.IsNullOrEmpty(result))
+            {
+                // Xử lý lỗi nếu cập nhật thất bại
+                ModelState.AddModelError(string.Empty, result);
+                return Page();
+            }
+
+            // Chuyển hướng hoặc thông báo cho người dùng khi cập nhật thành công
+            return RedirectToPage();
+        }
+
+        private async Task LoadProfileAndPosts(string userId)
+        {
+            string msg;
+            (msg, listPost) = await _postService.GetPostsProfile(UserToken.UserID.ToString(), null);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                Message = msg;
+                return;
+            }
+
+            (msg, Profile) = await _profileService.GetProfile(userId);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                Message = msg;
+            }
+            else if (Profile == null)
+            {
+                Message = "Không tìm thấy thông tin người dùng.";
+            }
         }
     }
 }

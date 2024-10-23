@@ -47,7 +47,7 @@
     public enum PostPrivacy
     {
         Public = 0,
-        Friend ,
+        Friend,
         Private,
     }
 

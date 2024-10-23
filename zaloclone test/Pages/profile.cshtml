@@ -77,17 +77,26 @@
                         </div>
                     </div>
                 </div>
-                @if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
-                {
-                    <button class="btn btn-default large aprofile-btn-edit openProfileDialog">Edit profile</button>
-                }
-                @if (Model.Profile.UserID != Model.UserToken.UserID.ToString())
-                {
-                    <div class="aprofile-btn__other-action">
-                        <button class="btn btn-secondary small aprofile-post">Add friend</button>
-                        <button class="btn btn-neutral small">Message</button>
-                    </div>
-                }
+                @if (Model.Profile != null && Model.UserToken != null && Model.UserToken.UserID != null)
+{
+    if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
+    {
+        <button class="btn btn-default large aprofile-btn-edit openProfileDialog">Edit profile</button>
+    }
+    else
+    {
+        <div class="aprofile-btn__other-action">
+            <button class="btn btn-secondary small aprofile-post">Add friend</button>
+            <button class="btn btn-neutral small">Message</button>
+        </div>
+    }
+}
+else
+{
+    <!-- Thêm logic hoặc thông báo khi Model.Profile hoặc Model.UserToken bị null -->
+    <p>Thông tin người dùng không khả dụng.</p>
+}
+
 
             </div>
             @if (Model.Message.Length > 0)
@@ -95,6 +104,7 @@
                 <h2 class="flex-align-justify-center" style="color: red">@Model.Message</h2>
             }
             <!-- add post  -->
+            @if (Model.Profile != null && Model.UserToken != null && Model.UserToken.UserID != null)
             @if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
             {
                 <div class="aprofile-post">
@@ -338,6 +348,8 @@
         </div>
     </div>
 </aside>
+
+
 
 
 <!--  other profile dialog  -->

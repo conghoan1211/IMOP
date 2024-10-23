@@ -3,9 +3,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
-using Org.BouncyCastle.Pqc.Crypto.Lms;
 using zaloclone_test.Configurations;
-using zaloclone_test.Models;
 
 namespace zaloclone_test.Utilities
 {
@@ -31,7 +29,7 @@ namespace zaloclone_test.Utilities
                 await smtp.AuthenticateAsync(EmailUsername, EmailPassword);
                 await smtp.SendAsync(email);
             }
-            catch (Exception e) {  return $"{e.Message}: inner: {e.InnerException}"; }
+            catch (Exception e) { return $"{e.Message}: inner: {e.InnerException}"; }
             finally { smtp.Disconnect(true); }
 
             return "";
@@ -43,7 +41,7 @@ namespace zaloclone_test.Utilities
             httpContext.Session.SetString("Otp", otp.ToString()); // Lưu OTP
 
             var emailVerify = httpContext.Session.GetString("email_verify");
-            if  (string.IsNullOrEmpty(emailVerify))
+            if (string.IsNullOrEmpty(emailVerify))
                 httpContext.Session.SetString("email_verify", email); // Lưu email to verify
 
             string msg = await SendEmailAsync(email, "Xác thực Email của bạn", $"Đây là mã xác thực của bạn: {otp}");

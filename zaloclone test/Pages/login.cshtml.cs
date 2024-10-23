@@ -1,14 +1,9 @@
-﻿using AppGlobal.Common;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using zaloclone_test.Helper;
-using zaloclone_test.Models;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
-using zaloclone_test.ViewModels.Token;
 
 namespace Server.Pages
 {
@@ -34,7 +29,7 @@ namespace Server.Pages
                 return Page(); // No need to await
 
             var result = await _authenService.DoLogin(Input, HttpContext);
-         
+
             if (result.Equals(ConstMessage.ACCOUNT_UNVERIFIED))
             {
                 var (msg, user) = await _authenService.DoSearchByPhone(Input.Phone);
@@ -71,7 +66,7 @@ namespace Server.Pages
                 return Page();
 
             string msg = await _authenService.DoForgetPassword(Forgot, HttpContext);
-            if (msg.Length >0)
+            if (msg.Length > 0)
             {
                 MessageError = msg;
                 return await Task.FromResult(Page());

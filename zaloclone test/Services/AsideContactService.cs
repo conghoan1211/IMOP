@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using zaloclone_test.Models;
 using zaloclone_test.ViewModels;
 

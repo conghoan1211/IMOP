@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExpressiveAnnotations.Attributes;
 using System.ComponentModel.DataAnnotations;
-using ExpressiveAnnotations.Attributes;
 
 namespace zaloclone_test.ViewModels
 {

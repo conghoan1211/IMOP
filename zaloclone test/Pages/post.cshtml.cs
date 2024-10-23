@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using zaloclone_test.ViewModels.Token;
-using zaloclone_test.ViewModels;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
-using zaloclone_test.Models;
-using Microsoft.AspNetCore.SignalR;
-using zaloclone_test.MyHub;
+using zaloclone_test.ViewModels;
+using zaloclone_test.ViewModels.Token;
 
 namespace zaloclone_test.Pages
 {
@@ -113,7 +110,7 @@ namespace zaloclone_test.Pages
                 return Page();
             }
             UserToken = userToken;
-             msg = await _postService.DoPinTopPost(postId, UserToken.UserID.ToString());
+            msg = await _postService.DoPinTopPost(postId, UserToken.UserID.ToString());
             if (msg.Length > 0)
             {
                 Message = msg;

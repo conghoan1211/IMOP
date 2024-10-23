@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using zaloclone_test.Models;
+﻿using zaloclone_test.Models;
 using zaloclone_test.ViewModels;
 
 namespace zaloclone_test.Services
@@ -9,7 +8,7 @@ namespace zaloclone_test.Services
         public Task<(string msg, ProfileVM? result)> GetListUsers(string userID);
     }
 
-    
+
     public class SearchService : ISearchService
     {
 
@@ -24,6 +23,6 @@ namespace zaloclone_test.Services
             throw new NotImplementedException();
         }
 
-        
+
     }
 }

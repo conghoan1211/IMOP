@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using zaloclone_test.Helper;
 using zaloclone_test.Models;
-using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
 
 namespace zaloclone_test.Services
@@ -9,7 +8,7 @@ namespace zaloclone_test.Services
     public interface IProfileService
     {
         public Task<(string msg, ProfileVM? result)> GetProfile(string userID);
-        public Task<string> UpdateProfile(string userID,ProfileVM updateProfile);
+        public Task<string> UpdateProfile(string userID, ProfileVM updateProfile);
     }
     public class ProfileService : IProfileService
     {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using zaloclone_test.Configurations;
@@ -84,7 +83,7 @@ app.MapGet("/", async (HttpContext context) =>
 {
     // Sử dụng Authentication scheme đã được thêm vào
     var authenticateResult = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
-    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated ==  false)
+    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated == false)
     {
         return Results.Redirect("/login");
     }
