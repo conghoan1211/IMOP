@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Dynamic;
 using zaloclone_test.Helper;
 using zaloclone_test.Models;
@@ -10,7 +11,7 @@ namespace zaloclone_test.Services
 {
     public interface IPostService
     {
-        public Task<string> InsertUpdatePost(InsertUpdatePostVM input, string userId);
+        public Task<string> InsertUpdatePost(InsertUpdatePostVM? input, string userId);
         public Task<(string msg, List<PostVM>? result)> GetListPosts(string? userId = null);
         //public Task<(string msg, List<PostVM>? result)> GetPostsProfile(string? userId = null);
         public Task<(string msg, List<PostVM>? result)> GetPostsProfile(string? userid = null, string? otherUserId = null);
@@ -19,6 +20,9 @@ namespace zaloclone_test.Services
         public Task<string> DoDeletePost(string postId);
         public Task<string> DoAllowComment(string postId);
         public Task<string> DoPinTopPost(string postId, string userid);
+
+        public Task<(string, int?)> DoLikePost(string postId, string usersid);
+
     }
 
     public class PostService : IPostService
@@ -65,6 +69,46 @@ namespace zaloclone_test.Services
             return "";
         }
 
+        public async Task<(string, int?)> DoLikePost(string postId, string usersid)
+        {
+            //using (var transaction = await _context.Database.BeginTransactionAsync())
+            //{
+            //    try
+            //    {
+            var postCurrent = await _context.Posts.FirstOrDefaultAsync(x => x.PostId == postId);
+            if (postCurrent == null) return ("Không tìm thấy bài viết", 0);
+
+            var postLike = await _context.PostLikes.FirstOrDefaultAsync(x => x.PostId == postId && x.UserId == usersid);
+            if (postLike == null)
+            {
+                var newLike = new PostLike
+                {
+                    LikeId = Guid.NewGuid().ToString(),
+                    UserId = usersid,
+                    PostId = postId,
+                    CreatedAt = DateTime.Now,
+                };
+                postCurrent.Likes++;
+                await _context.PostLikes.AddAsync(newLike);
+            }
+            else
+            {
+                postCurrent.Likes--;
+                _context.PostLikes.Remove(postLike);
+            }
+            _context.Posts.Update(postCurrent);
+            await _context.SaveChangesAsync();
+            //        await transaction.CommitAsync();
+            //    }
+            //    catch
+            //    {
+            //        await transaction.RollbackAsync();
+            //        return ("An error occurred while creating the post.", 0);
+            //    }
+            //}
+            return (string.Empty, postCurrent.Likes);
+        }
+
         public async Task<string> DoPinTopPost(string postId, string userId)
         {
             var postToPin = await _context.Posts.FirstOrDefaultAsync(x => x.PostId == postId);
@@ -92,8 +136,9 @@ namespace zaloclone_test.Services
         {
             var listPost = await _context.Posts.Where(x => (string.IsNullOrEmpty(userId) && x.Privacy != (int)PostPrivacy.Private) || x.UserId == userId)
                 .Include(x => x.PostImages).Include(x => x.User)
-                 .OrderByDescending(x => x.PinTop).ThenByDescending(x => x.CreatedAt)
-                    .ToListAsync();
+                .OrderByDescending(x => x.PinTop).ThenByDescending(x => x.CreatedAt)
+                .ToListAsync();
+
             if (listPost == null || !listPost.Any()) return ("Chưa có bài viết.", null);
 
             var result = listPost.Select(x => new PostVM
@@ -110,7 +155,9 @@ namespace zaloclone_test.Services
                 Shares = x.Shares,
                 CreateAt = x.CreatedAt,
                 PinToTop = x.PinTop,
-                Images = string.Join(";", x.PostImages.Select(img => img.ImageUrl))
+                Images = string.Join(";", x.PostImages.Select(img => img.ImageUrl)),
+                IsLikePost = _context.PostLikes.Any(pl => pl.PostId == x.PostId && pl.UserId == userId),
+
             }).ToList();
             return (string.Empty, result);
         }
@@ -139,12 +186,13 @@ namespace zaloclone_test.Services
                 Shares = x.Shares,
                 CreateAt = x.CreatedAt,
                 PinToTop = x.PinTop,
-                Images = string.Join(";", x.PostImages.Select(img => img.ImageUrl))
+                Images = string.Join(";", x.PostImages.Select(img => img.ImageUrl)),
+                IsLikePost = _context.PostLikes.Any(pl => pl.PostId == x.PostId && pl.UserId == userid),
             }).ToList();
             return (string.Empty, result);
         }
 
-        public async Task<string> InsertUpdatePost(InsertUpdatePostVM input, string userId)
+        public async Task<string> InsertUpdatePost(InsertUpdatePostVM? input, string userId)
         {
             string msg = "";
             var files = input.Images;

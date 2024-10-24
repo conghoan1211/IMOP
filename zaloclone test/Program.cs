@@ -6,8 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using zaloclone_test.Configurations;
 using zaloclone_test.Models;
+using zaloclone_test.MyHub;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -55,8 +58,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-builder.Services.AddAuthorization();
 builder.Services.AddDbContext<Zalo_CloneContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyDB")));
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -77,17 +80,22 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStatusCodePagesWithRedirects("/login");
+
 app.MapGet("/", async (HttpContext context) =>
 {
-    // Sử dụng Authentication scheme đã được thêm vào
     var authenticateResult = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
-    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated ==  false)
+
+    // Redirect to login if the user is not authenticated
+    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated == true)
     {
         return Results.Redirect("/login");
     }
     return Results.Redirect("/post");
 });
 
+// Map SignalR hubs
+app.MapHub<PostHub>("/postHub");
 
 app.MapRazorPages();
 

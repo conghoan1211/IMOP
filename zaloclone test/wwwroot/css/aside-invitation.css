@@ -18,9 +18,15 @@
 
 .invitation-user {
     margin-bottom: 12px;
+    a
+
+{
+    padding: 1px 6px;
 }
 
-.invitation-info {  
+}
+
+.invitation-info {
     margin-left: 4px;
 }
 
@@ -53,10 +59,12 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
+    &:hover
 
-    &:hover {
-        background-color: var(--button-neutral-hover);    
-    }
+{
+    background-color: var(--button-neutral-hover);
+}
+
 }
 
 .invitation-chat i {
@@ -77,14 +85,14 @@
     }
 }
 
-@media (min-width: 1590px) { 
+@media (min-width: 1590px) {
     .contact-invitation-list {
-        grid-template-columns: repeat(4, 1fr); 
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-@media (min-width: 1700px) { 
+@media (min-width: 1700px) {
     .contact-invitation-list {
-        grid-template-columns: repeat(5, 1fr); 
+        grid-template-columns: repeat(5, 1fr);
     }
 }

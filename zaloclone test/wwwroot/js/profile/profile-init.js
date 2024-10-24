@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const cancelButton = document.querySelector(".profile-btn-cancel"); // Cancel button in edit mode
     const returnButton = document.querySelector(".return-btn"); // Return button in edit mode
 
-    const profileChangeAvatarButton = document.querySelector(
-        ".profile-change-avatar"
-    );
+    const changeAvatarBtn = document.getElementById("changeAvatarBtn");
+
     const fileInput = document.getElementById("fileInput");
     const profileAvatar = document.getElementById("profileAvatar");
+    const avatarForm = document.getElementById("avatarForm");
 
     const openProfileButtons = document.querySelectorAll(".openProfileDialog");
     const dialog = document.getElementById("profileDialog");
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Open file input when the button is clicked
-    profileChangeAvatarButton.addEventListener("click", function () {
+    changeAvatarBtn.addEventListener("click", function () {
         fileInput.click();
     });
 
@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 profileAvatar.src = event.target.result; // Set the new image source
             };
             reader.readAsDataURL(file); // Read the file as a data URL
+            avatarForm.submit(); // Automatically submit the form
         }
     });
 });

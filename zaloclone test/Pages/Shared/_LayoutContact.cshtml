@@ -76,7 +76,10 @@
     <div>
         @RenderBody()
     </div>
+
+    @RenderSection("Scripts", required: false)
+
     <script type="module" src="~/js/contact/menu-sidebar-contact.js"></script>
+    <script type="module" src="~/js/helper/format-date.js"></script>
 
 </body>
-</html>
