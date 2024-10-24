@@ -15,9 +15,15 @@ namespace zaloclone_test.Services
         public Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext);
         public Task<string> DoVerifyOTP(string otp, HttpContext httpContext);
         public Task<string> DoResetPassword(ResetPassword input);
-        public Task<string> DoChangePassword(string id, ChangePassword input);
+        public Task<ChangePasswordResult> DoChangePassword(string id, ChangePassword input);
         public Task<(string message, User? user)> DoSearchByEmail(string? email);
         public Task<(string message, User? user)> DoSearchByPhone(string? phone);
+    }
+
+    public class ChangePasswordResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
     }
 
     public class AuthenticateService : IAuthenticateService
@@ -30,31 +36,41 @@ namespace zaloclone_test.Services
             _jwtAuthen = jwtAuthen;
         }
 
-        public async Task<string> DoChangePassword(string id, ChangePassword input)
+        public async Task<ChangePasswordResult> DoChangePassword(string id, ChangePassword input)
         {
             // Tìm người dùng bằng UserId
             var user = await _context.Users.FindAsync(id);
-            if (user == null) return "Người dùng không tồn tại";
+            if (user == null)
+                return new ChangePasswordResult { Success = false, Message = "Người dùng không tồn tại." };
 
             // Kiểm tra mật khẩu hiện tại
             string msg = Converter.StringToMD5(input.ExPassword, out string exPasswordMd5);
-            if (msg.Length > 0) return $"Error convert to MD5: {msg}";
-            if (!user.Password.ToUpper().Equals(exPasswordMd5.ToUpper())) return "Mật khẩu hiện tại không đúng";
+            if (msg.Length > 0)
+                return new ChangePasswordResult { Success = false, Message = $"Lỗi khi mã hóa mật khẩu cũ: {msg}" };
+
+            if (!user.Password.Equals(exPasswordMd5, StringComparison.OrdinalIgnoreCase))
+                return new ChangePasswordResult { Success = false, Message = "Mật khẩu hiện tại không đúng." };
+
+            // Kiểm tra mật khẩu mới không giống mật khẩu cũ
+            if (input.Password.Equals(input.ExPassword, StringComparison.OrdinalIgnoreCase))
+                return new ChangePasswordResult { Success = false, Message = "Mật khẩu mới không được giống mật khẩu cũ." };
 
             // Mã hóa mật khẩu mới
             msg = Converter.StringToMD5(input.Password, out string newPasswordMd5);
-            if (msg.Length > 0) return $"Error convert to MD5: {msg}";
+            if (msg.Length > 0)
+                return new ChangePasswordResult { Success = false, Message = $"Lỗi khi mã hóa mật khẩu mới: {msg}" };
 
             // Cập nhật mật khẩu
             user.Password = newPasswordMd5;
             user.UpdateAt = DateTime.Now;
-            user.UpdateUser = user.UserId;
+            user.UpdateUser = user.UserId; // Có thể cần điều chỉnh để lấy thông tin người dùng đang đăng nhập
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return "Mật khẩu đã thay đổi thành công";
+            return new ChangePasswordResult { Success = true, Message = "Mật khẩu đã thay đổi thành công." };
         }
+
 
         public async Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext)
         {
