@@ -12,7 +12,7 @@ namespace zaloclone_test.Services
         Task<List<AsideContactVM>> FilterFriends(string userId, FriendFilterModel filter);
         Task<FriendOperationResult> DeleteFriend(string userId, string friendId);
         Task<FriendOperationResult> BlockFriend(string userId, BlockFriendModel model);
-        Task<FriendProfileModel> GetFriendProfile(string userId, string friendId);
+      //  Task<FriendProfileModel> GetFriendProfile(string userId, string friendId);
 
         public Task<bool> IsFriend(string userId, string friendId);
 
