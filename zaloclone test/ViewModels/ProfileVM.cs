@@ -27,22 +27,50 @@ namespace zaloclone_test.ViewModels
         public int? NumberOfFriends { get; set; } = 0;
     }
 
+    public class UpdateAvatarVM
+    {
+        [AssertThat("Image.Length <= MaxFileSize", ErrorMessage = "File size must not exceed {MaxFileSize} bytes")]
+        public IFormFile? Image { get; set; }
+        public long MaxFileSize => 1048576;
+
+    }
+
     public class UpdateProfileModels
     {
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
-        [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
+        [Required(ErrorMessage = "Tên hiển thị không được để trống")]
         [StringLength(50, ErrorMessage = "Tên đăng nhập không được vượt quá 50 ký tự")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         [Required(ErrorMessage = "Giới tính không được để trống")]
-        [Range(1, 3, ErrorMessage = "Giới tính không hợp lệ. Vui lòng chọn: 1 (Nam), 2 (Nữ), hoặc 3 (Khác)")]
-        public int Sex { get; set; }
+        [Range(0, 2, ErrorMessage = "Giới tính không hợp lệ. Vui lòng chọn: 0 (Nam), 1 (Nữ), hoặc 2 (Khác)")]
+        public int? Sex { get; set; }
         [Required(ErrorMessage = "Ngày sinh không được để trống")]
-        [DataType(DataType.Date)]
+        //[BirthYearValidation(1890)]
         [AssertThat("Dob <= Now()", ErrorMessage = "Ngày sinh không vượt quá ngày hiện tại!")]
-        [AssertThat("Dob.Year >= 1890", ErrorMessage = "Ngày sinh không hợp lệ!")]
-        public DateTime Dob { get; set; }
-        [StringLength(60, ErrorMessage = "Bio không được vượt quá 60 ký tự")]
-        public string Bio { get; set; }
+        public DateTime? Dob { get; set; }
+        [StringLength(50, ErrorMessage = "Bio không được vượt quá 50 ký tự")]
+        public string? Bio { get; set; }
+    }
+
+    public class BirthYearValidationAttribute : ValidationAttribute
+    {
+        private readonly int _minYear;
+        public BirthYearValidationAttribute(int minYear)
+        {
+            _minYear = minYear;
+        }
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value == null)
+                return ValidationResult.Success;
+
+            var date = (DateTime)value;
+
+            if (date.Year < _minYear)
+                return new ValidationResult($"Năm sinh phải lớn hơn hoặc bằng {_minYear}!");
+
+            return ValidationResult.Success;
+        }
     }
 }

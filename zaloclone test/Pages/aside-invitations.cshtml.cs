@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using zaloclone_test.Models;
 using zaloclone_test.Services;
+using zaloclone_test.ViewModels;
 
 namespace Server.Pages
 {
@@ -14,8 +15,8 @@ namespace Server.Pages
             _inviteService = inviteService;
         }
 
-        public IList<User> allInvitation { get; set; }
-        public IList<User> sentInvitation { get; set; }
+        public IList<InvitationVM> allInvitation { get; set; }
+        public IList<InvitationVM> sentInvitation { get; set; }
         public string MessageError { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
@@ -62,7 +63,7 @@ namespace Server.Pages
             {
                 var message = await _inviteService.RevokeInvitation(UserId1, UserId);
             }
-            return RedirectToPage("/home");
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostDeleteInvitation()
@@ -75,7 +76,7 @@ namespace Server.Pages
             {
                 var message = await _inviteService.RevokeInvitation(UserId1, UserId);
             }
-            return RedirectToPage("/home");
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostAcceptInvitation()
@@ -88,7 +89,7 @@ namespace Server.Pages
             {
                 var message = await _inviteService.AcceptInvitation(UserId1, UserId);
             }
-            return RedirectToPage("/home");
+            return RedirectToPage();
         }
     }
 }

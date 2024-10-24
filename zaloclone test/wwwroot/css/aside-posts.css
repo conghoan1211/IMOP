@@ -89,3 +89,9 @@
     padding-left: 4px;
 }
 }
+
+.apost-nopost_title {
+    height: 50%;
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+}

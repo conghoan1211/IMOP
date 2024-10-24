@@ -7,9 +7,11 @@ using zaloclone_test.Utilities;
 using zaloclone_test.Models;
 using Microsoft.AspNetCore.SignalR;
 using zaloclone_test.MyHub;
+using Microsoft.AspNetCore.Authorization;
 
 namespace zaloclone_test.Pages
 {
+    [Authorize]
     public class postModel : PageModel
     {
         private readonly IPostService _postService;
@@ -38,6 +40,7 @@ namespace zaloclone_test.Pages
             {
                 Message = msg;
             }
+            if (userToken == null) RedirectToPage("/login");
             UserToken = userToken;
             var (message, result) = await _postService.GetListPosts();
             if (message.Length > 0) Message = msg;
