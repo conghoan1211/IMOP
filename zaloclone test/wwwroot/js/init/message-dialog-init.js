@@ -47,7 +47,7 @@ function initMessageDialog() {
 
             if (messageText.length > 0) {
                 // Tạo và thêm tin nhắn mới vào giao diện
-                sendMessage(messageText);
+                addMessage(messageText);
 
                 // Xóa nội dung sau khi gửi tin nhắn
                 textarea.value = '';

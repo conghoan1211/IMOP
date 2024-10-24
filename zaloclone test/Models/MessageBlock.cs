@@ -11,7 +11,7 @@ namespace zaloclone_test.Models
         }
 
         public string MessageBlockId { get; set; } = null!;
-        public DateTime? FirstSendDate { get; set; }
+        public DateTime FirstSendDate { get; set; }
         public string ConversationId { get; set; } = null!;
 
         public virtual Conversation Conversation { get; set; } = null!;

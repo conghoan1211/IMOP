@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/message/{conversationId?}"
 @model zaloclone_test.Pages.messageModel
 @{
     Layout = "_Layout";
@@ -29,46 +29,29 @@
             <button class="btn-filter" id="btnUnread">Chưa đọc</button>
         </div>
         <div class="list-msg">
-             @* <div class="flex-align-center item-msg selected">
-                 <div class="flex-align-center avatar-msg">
-                     <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-                 </div>
-                 <div class="flex-column flex-justify-center item-infor">
-                     <div class="flex-justify-between item-infor-top">
-                         <div class="text__overflow-1 username-msg">Winter</div>
-                         <div class="flex-align-center-between mute-time-msg">
-                             <div class="bell-msg" style="display: block;">
-                                 <i class="fa-solid fa-bell-slash bell-mute"></i>
-                             </div>
-                             <span style="padding: 0 0 2px 0;">9 phút </span>
-                         </div>
-                     </div>
-                     <div class="flex-justify-between item-infor-bottom">
-                         <div class="last-msg">What are you doing?!</div>
-                         <span class="last-msg-count"></span>
-                     </div>
-                 </div>
-             </div>
-             <div class="flex-align-center item-msg ">
-                 <div class="flex-align-center avatar-msg">
-                     <img class="avatar-img" src="~/icon/cloud-blue.jpg" alt="">
-                 </div>
-                 <div class="flex-column flex-justify-center item-infor">
-                     <div class="flex-justify-between item-infor-top">
-                         <div class="text__overflow-1 username-msg">Cloud của tôi</div>
-                         <div class="flex-align-center-between mute-time-msg">
-                             <div class="bell-msg" style="visibility: visible;">
-                                 <i class="fa-solid fa-bell-slash bell-mute"></i>
-                             </div>
-                             <span style="padding: 0 0 2px 0;">9 phút </span>
-                         </div>
-                     </div>
-                     <div class="flex-justify-between item-infor-bottom">
-                         <div class="last-msg">Bạn: absolutely right!</div>
-                         <span class="last-msg-count"></span>
-                     </div>
-                 </div>
-             </div> *@
+            @foreach (var conversation in Model.Conversations)
+            {
+                <div class="flex-align-center item-msg" onclick="selectConversation(this)" hx-get="/message/@conversation.ConversationId" hx-target="#chatContainer">
+                    <div class="flex-align-center avatar-msg">
+                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
+                    </div>
+                    <div class="flex-column flex-justify-center item-infor">
+                        <div class="flex-justify-between item-infor-top">
+                            <div class="text__overflow-1 username-msg">Winter</div>
+                            <div class="flex-align-center-between mute-time-msg">
+                                <div class="bell-msg" style="display: block;">
+                                    <i class="fa-solid fa-bell-slash bell-mute"></i>
+                                </div>
+                                <span style="padding: 0 0 2px 0;">9 phút </span>
+                            </div>
+                        </div>
+                        <div class="flex-justify-between item-infor-bottom">
+                            <div class="last-msg">What are you doing?!</div>
+                            <span class="last-msg-count"></span>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
         <div class="list-msg list-msg-2">
             <!-- Danh sách tin nhắn chưa đọc -->
@@ -125,18 +108,17 @@
         </div> *@
     </div>
 </sidebar>
-
 <aside class="flex-column aside-container-msg">
     <header class="flex-align-center-between cont-msg-header">
         <div class="flex-align-center">
             @* <div class="avatar-chat-msg">
-                <img class="avatar-img" src="~/img/avt.jpeg" alt="">
+            <img class="avatar-img" src="~/img/avt.jpeg" alt="">
             </div>
             <div class="flex-column aside-head-info">
-                <div class="aside-head-name">Winter</div>
-                <div class="aside-head-tag">
-                    <i class="fa-solid fa-tag"></i>
-                </div>
+            <div class="aside-head-name">Winter</div>
+            <div class="aside-head-tag">
+            <i class="fa-solid fa-tag"></i>
+            </div>
             </div> *@
         </div>
         <div>
@@ -157,116 +139,6 @@
     <!-- list chat -->
     <div class="aside-cont-list-chat">
         <div id="chatContainer" class="list-chat">
-            @* <div class="block-date">
-                <div class="flex-align-justify-center time-seen">
-                    <span class="flex-align-justify-center">09:08 12/11/2020</span>
-                </div>
-                <div class="flex chat-item">
-                    <div class="avatar-chat-msg">
-                        <img class="avatar-img avt-their" src="~/img/avt.jpeg" alt="">
-                    </div>
-                    <div class="chat-content">
-                        <div class="chat-message">
-                            <div class="chat-text-time">
-                                <div class="text-msg">An nhonn</div>
-                                <span class="chat-time">14:06</span>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                        <div class="chat-message">
-                            <div class="chat-text-time">
-                                <div class="text-msg">What are you doing?</div>
-                                <span class="chat-time">14:06</span>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex chat-item me">
-                    <div class="avatar-chat-msg">
-                        <img class="avatar-img avt-their" src="~/img/avt.jpeg" alt="">
-                    </div>
-                    <div class="chat-content me">
-                        <div class="chat-message">
-                            <div class="chat-text-time me">
-                                <div class="text-msg">An nhonn</div>
-                                <span class="chat-time"></span>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                        <div class="chat-message">
-                            <div class="chat-text-time me">
-                                <div class="text-msg">What's up, sweetie?</div>
-                                <span class="chat-time">14:06</span>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="block-date">
-                <div class="flex-align-justify-center time-seen">
-                    <span class="flex-align-justify-center">23:08 13/11/2020</span>
-                </div>
-                <div class="flex chat-item">
-                    <div class="avatar-chat-msg">
-                        <img class="avatar-img avt-their" src="~/img/avt.jpeg" alt="">
-                    </div>
-                    <div class="chat-content">
-                        <div class="chat-message">
-                            <div class="chat-text-time">
-                                <div class="text-msg">
-                                    Just wanna talk to youJust wanna talk to youJust wanna
-                                    talk to
-                                    youJust wanna talk to youJust wanna talk to youJust wanna talk to youJust
-                                    wanna
-                                    talk to youJust wanna talk to youJust wanna talk to you
-                                </div>
-                                <span class="chat-time">14:06</span>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                        <div class="chat-message">
-                            <div class="chat-img">
-                                <div class="flex-align-center img-msg">
-                                    <img class="" src="~/img/rosie-apt.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex chat-item me">
-                    <div class="avatar-chat-msg">
-                        <img class="avatar-img avt-their" src="~/img/avt.jpeg" alt="">
-                    </div>
-                    <div class="chat-content me">
-                        <div class="chat-message">
-                            <div class="chat-img">
-                                <div class="flex-align-center img-msg">
-                                    <img class="" src="~/img/lía.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="flex-align-justify-center chat-react">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ... add more chat mesg -->
-                </div>
-            </div>*@
         </div>
     </div>
     <!-- footer aside -->
@@ -368,6 +240,7 @@
 </aside>
 
 <script type="module" src="~/js/message/message-dialog-init.js"></script>
+<script type="module" src="~/js/message/message-dialog-init.js"></script>
 <script type="module" src="~/js/profile/message-dialog-init.js"></script>
 <script type="module" src="~/js/message/message-file-upload.js"></script>
 <script type="module" src="~/js/message/message-list-switcher.js"></script>
@@ -396,5 +269,10 @@
         });
     } else {
         console.error('Emoji button hoặc Emoji picker không tìm thấy!');
+    }
+    async function selectConversation(conversation) {
+        const allConversations = document.querySelectorAll('.list-msg .item-msg');
+        allConversations.forEach(item => item.classList.remove('selected'));
+        conversation.classList.add("selected");
     }
 </script>

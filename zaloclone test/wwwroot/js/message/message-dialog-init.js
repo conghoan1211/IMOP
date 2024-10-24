@@ -143,13 +143,28 @@ function checkDateTimeSendYear(sendDateTime, checkPointDateTime, minYear) {
     // Check if the difference is more than the specified number of years
     return differenceInYears > minYear;
 }
+function selectConversation(linkElement) {
+    // Remove the "selected" class from all items
+    const allItems = document.querySelectorAll('.list-msg .item-msg');
+    allItems.forEach(item => item.classList.remove('selected'));
 
-function sendMessage(text) {
+    // Add the "selected" class to the clicked item
+    const clickedItem = linkElement.querySelector('.item-msg');
+    if (clickedItem) {
+        clickedItem.classList.add('selected');
+    }
+}
+function addMessage(text, sender = null) {
     // Create the new message structure
-    const newMessageDiv = createElementWithClasses('div', ['flex', 'chat-item', 'me']);
-    const newMessageContentDiv = createElementWithClasses('div', ['chat-content', 'me']);
+    const newMessageDiv = createElementWithClasses('div', ['flex', 'chat-item']);
+    const newMessageContentDiv = createElementWithClasses('div', ['chat-content']);
+    const newChatTextTimeDiv = createElementWithClasses('div', ['chat-text-time']);
+    if (sender == 'me') {
+        newMessageDiv.classList.add('me');
+        newMessageContentDiv.classList.add('me');
+        newChatTextTimeDiv.classList.add('me');
+    }
     const newChatMessageDiv = createElementWithClasses('div', ['chat-message']);
-    const newChatTextTimeDiv = createElementWithClasses('div', ['chat-text-time', 'me']);
     const newTextMessageDiv = createElementWithClasses('div', ['text-msg']);
     const newChatTimeSpan = createElementWithClasses('span', ['chat-time']);
     const reactionDiv = createElementWithClasses('div', ['flex-align-justify-center', 'chat-react'], '<i class="fa-solid fa-heart"></i>');
@@ -175,7 +190,7 @@ function sendMessage(text) {
     newChatTextTimeDiv.appendChild(newTextMessageDiv);
     newChatTextTimeDiv.appendChild(newChatTimeSpan);
 
-    lastSender = 'me';
+    lastSender = sender;
 
     const isDisplayHour = checkDateTimeSendMinute(new Date(), lastDateTimeCheckPoint, MIN_MINUTE_GAP);
     // Handle block date creation
@@ -212,66 +227,6 @@ function createElementWithClasses(tagName, classList, innerHTML = '') {
     element.innerHTML = innerHTML;
     return element;
 }
-
-function addMessage(text, sender = null) {
-    // Create the new message structure
-    const newMessageDiv = createElementWithClasses('div', ['flex', 'chat-item', 'me']);
-    const newMessageContentDiv = createElementWithClasses('div', ['chat-content', 'me']);
-    const newChatMessageDiv = createElementWithClasses('div', ['chat-message']);
-    const newChatTextTimeDiv = createElementWithClasses('div', ['chat-text-time', 'me']);
-    const newTextMessageDiv = createElementWithClasses('div', ['text-msg']);
-    const newChatTimeSpan = createElementWithClasses('span', ['chat-time']);
-    const reactionDiv = createElementWithClasses('div', ['flex-align-justify-center', 'chat-react'], '<i class="fa-solid fa-heart"></i>');
-
-    // Add content to the new elements
-    newTextMessageDiv.innerText = text;
-    newChatTimeSpan.innerText = getCurrentTime();
-
-    // Handle avatar logic
-    if (shouldShowAvatar) {
-        const avatarDiv = createElementWithClasses('div', ['avatar-chat-msg']);
-        const avatar = createElementWithClasses('img', ['avatar-img', 'avt-their']);
-        avatar.src = '/img/avt.jpeg';
-        avatarDiv.appendChild(avatar);
-        newMessageDiv.appendChild(avatarDiv);
-    }
-
-    // Build the message structure
-    newMessageDiv.appendChild(newMessageContentDiv);
-    newMessageContentDiv.appendChild(newChatMessageDiv);
-    newChatMessageDiv.appendChild(newChatTextTimeDiv);
-    newChatMessageDiv.appendChild(reactionDiv);
-    newChatTextTimeDiv.appendChild(newTextMessageDiv);
-    newChatTextTimeDiv.appendChild(newChatTimeSpan);
-
-    lastSender = 'me';
-
-    const isDisplayHour = checkDateTimeSendMinute(new Date(), lastDateTimeCheckPoint, MIN_MINUTE_GAP);
-    // Handle block date creation
-    if (!currentBlockDateDiv || isDisplayHour) {
-
-        const isDisplayDay = checkDateTimeSendDay(new Date(), lastDateTimeCheckPoint, MIN_DAY_GAP);
-        const isDisplayYear = checkDateTimeSendYear(new Date(), lastDateTimeCheckPoint, MIN_YEAR_GAP);
-
-        currentBlockDateDiv = createElementWithClasses('div', ['block-date'], `
-            <div class="flex-align-justify-center time-seen">
-                <span class="flex-align-justify-center">
-                    ${getCurrentTimeFormatted(isDisplayHour, isDisplayDay, isDisplayYear)}
-                </span>
-            </div>
-        `);
-        chatContainer.prepend(currentBlockDateDiv);
-    }
-
-    // Update checkpoint and append the new message
-    lastDateTimeCheckPoint = new Date();
-    currentBlockDateDiv.appendChild(newMessageDiv);
-
-    // Scroll to the bottom
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-    initChatReact();
-}
-
 function initChatReact() {
     const reactButtons = document.querySelectorAll('.chat-react');
 
