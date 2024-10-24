@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using zaloclone_test.Services;
-using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
 using zaloclone_test.ViewModels.Token;
+using zaloclone_test.Utilities;
 
 namespace Server.Pages
 {
