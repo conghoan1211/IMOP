@@ -10,7 +10,7 @@ namespace zaloclone_test.Services
         Task<List<AsideContactVM>> FilterFriends(string userId, FriendFilterModel filter);
         Task<FriendOperationResult> DeleteFriend(string userId, string friendId);
         Task<FriendOperationResult> BlockFriend(string userId, BlockFriendModel model);
-        Task<FriendProfileModel> GetFriendProfile(string userId, string friendId);
+        Task<FriendOperationResult> UnblockFriend(string userId, string friendId);
     }
 
     public class AsideContactService : IAsideContactService
@@ -25,7 +25,7 @@ namespace zaloclone_test.Services
         public async Task<List<AsideContactVM>> GetFriendsList(string userId)
         {
             var friends = await _context.Friends
-                .Where(f => (f.UserId1 == userId || f.UserId2 == userId) && f.Status == 1)
+                .Where(f => (f.UserId1 == userId || f.UserId2 == userId))
                 .Include(f => f.UserId1Navigation)
                 .Include(f => f.UserId2Navigation)
                 .Select(f => new AsideContactVM
@@ -37,7 +37,7 @@ namespace zaloclone_test.Services
                     Avatar = f.UserId1 == userId ?
                         f.UserId2Navigation.Avatar :
                         f.UserId1Navigation.Avatar,
-                    IsBlocked = false,
+                    IsBlocked = f.Status == 2,
                     LastInteraction = f.UpdateAt,
                     IsOnline = f.UserId1 == userId ?
                         f.UserId2Navigation.Status == 1 :
@@ -51,7 +51,7 @@ namespace zaloclone_test.Services
         public async Task<List<AsideContactVM>> FilterFriends(string userId, FriendFilterModel filter)
         {
             var query = _context.Friends
-                .Where(f => (f.UserId1 == userId || f.UserId2 == userId) && f.Status == 1)
+                .Where(f => (f.UserId1 == userId || f.UserId2 == userId))
                 .Include(f => f.UserId1Navigation)
                 .Include(f => f.UserId2Navigation)
                 .AsQueryable();
@@ -68,7 +68,7 @@ namespace zaloclone_test.Services
             if (filter.FilterType == "online")
             {
                 query = query.Where(f =>
-                    (f.UserId1Navigation.Status == 1 || f.UserId2Navigation.Status == 1));
+                    ((f.UserId1Navigation.Status == 1 || f.UserId2Navigation.Status == 1) && f.Status == 1));
             }
             else if (filter.FilterType == "blocked")
             {
@@ -168,54 +168,42 @@ namespace zaloclone_test.Services
             };
         }
 
-        public async Task<FriendProfileModel> GetFriendProfile(string userId, string friendId)
+        public async Task<FriendOperationResult> UnblockFriend(string userId, string friendId)
         {
             var friendship = await _context.Friends
-                .Include(f => f.UserId1Navigation)
-                .Include(f => f.UserId2Navigation)
                 .FirstOrDefaultAsync(f =>
                     (f.UserId1 == userId && f.UserId2 == friendId) ||
                     (f.UserId1 == friendId && f.UserId2 == userId));
 
             if (friendship == null)
             {
-                return null;
+                return new FriendOperationResult
+                {
+                    Success = false,
+                    Message = "Không tìm thấy mối quan hệ bạn bè"
+                };
             }
 
-            var friendUser = friendship.UserId1 == userId ?
-                friendship.UserId2Navigation :
-                friendship.UserId1Navigation;
-
-            var mutualFriends = await GetMutualFriendsCount(userId, friendId);
-
-            return new FriendProfileModel
+            if (friendship.Status != 2)
             {
-                UserId = friendUser.UserId,
-                Username = friendUser.Username,
-                Avatar = friendUser.Avatar,
-                Bio = friendUser.Bio,
-                Dob = friendUser.Dob,
-                Email = friendUser.Email,
-                Phone = friendUser.Phone,
-                IsVerified = friendUser.IsVerified ?? false,
-                FriendsSince = friendship.CreateAt,
-                MutualFriends = mutualFriends
+                return new FriendOperationResult
+                {
+                    Success = false,
+                    Message = "Người dùng này không bị chặn"
+                };
+            }
+
+            friendship.Status = 1; // Unblocked/Friend status
+            friendship.UpdateAt = DateTime.Now;
+            friendship.UpdateUser = userId;
+
+            await _context.SaveChangesAsync();
+
+            return new FriendOperationResult
+            {
+                Success = true,
+                Message = "Đã bỏ chặn người dùng thành công"
             };
-        }
-
-        private async Task<int> GetMutualFriendsCount(string userId1, string userId2)
-        {
-            var user1Friends = await _context.Friends
-                .Where(f => (f.UserId1 == userId1 || f.UserId2 == userId1) && f.Status == 1)
-                .Select(f => f.UserId1 == userId1 ? f.UserId2 : f.UserId1)
-                .ToListAsync();
-
-            var user2Friends = await _context.Friends
-                .Where(f => (f.UserId1 == userId2 || f.UserId2 == userId2) && f.Status == 1)
-                .Select(f => f.UserId1 == userId2 ? f.UserId2 : f.UserId1)
-                .ToListAsync();
-
-            return user1Friends.Intersect(user2Friends).Count();
         }
     }
 }

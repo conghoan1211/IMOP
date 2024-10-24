@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using zaloclone_test.Services;
-using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;
 using zaloclone_test.ViewModels.Token;
+using zaloclone_test.Utilities;
 
 namespace Server.Pages
 {
@@ -20,15 +20,6 @@ namespace Server.Pages
 
         [BindProperty]
         public List<AsideContactVM> Friends { get; set; }
-
-        [BindProperty]
-        public FriendFilterModel FilterModel { get; set; }
-
-        [BindProperty]
-        public BlockFriendModel BlockModel { get; set; }
-
-        [BindProperty]
-        public FriendProfileModel SelectedProfile { get; set; }
 
         public UserToken UserToken { get; set; }
 
@@ -63,11 +54,6 @@ namespace Server.Pages
             {
                 return new JsonResult(new { success = false, message = ex.Message });
             }
-        }
-
-        public class DeleteFriendModel
-        {
-            public string FriendId { get; set; }
         }
 
         public async Task<IActionResult> OnPostDeleteFriendAsync([FromBody] DeleteFriendModel model)
@@ -110,7 +96,7 @@ namespace Server.Pages
             }
         }
 
-        public async Task<IActionResult> OnGetFriendProfileAsync(string friendId)
+        public async Task<IActionResult> OnPostUnblockFriendAsync([FromBody] BlockFriendModel model)
         {
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
@@ -121,13 +107,18 @@ namespace Server.Pages
 
             try
             {
-                var profile = await _asideContactService.GetFriendProfile(UserToken.UserID.ToString(), friendId);
-                return new JsonResult(new { success = true, data = profile });
+                var result = await _asideContactService.UnblockFriend(UserToken.UserID.ToString(), model.UserId);
+                return new JsonResult(result);
             }
             catch (Exception ex)
             {
                 return new JsonResult(new { success = false, message = ex.Message });
             }
         }
+    }
+
+    public class DeleteFriendModel
+    {
+        public string FriendId { get; set; }
     }
 }
