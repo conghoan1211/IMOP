@@ -42,6 +42,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcaGVhZGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/HE170404/Ky7_HE170404/IMOP/zaloclone test/Pages/home.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcaG9tZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/HE170404/Ky7_HE170404/IMOP/zaloclone test/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -72,6 +76,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/HE170404/Ky7_HE170404/IMOP/zaloclone test/Pages/sidebar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcc2lkZWJhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/HE170404/Ky7_HE170404/IMOP/zaloclone test/Pages/verify.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcdmVyaWZ5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/HE170404/Ky7_HE170404/IMOP/zaloclone test/Pages/_ViewImports.cshtml]
