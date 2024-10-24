@@ -17,7 +17,7 @@ namespace zaloclone_test.Models
         public string? Content { get; set; }
         public bool? IsDelete { get; set; }
         public bool? IsHide { get; set; }
-        public DateTime? CreateAt { get; set; }
+        public DateTime CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public string? File { get; set; }
 

@@ -31,22 +31,61 @@
         <div class="list-msg">
             @foreach (var conversation in Model.Conversations)
             {
+                List<zaloclone_test.Models.User> participants = conversation.ConversationParticipants
+                    .Select(cp => cp.User)
+                    .Where(cp => cp.UserId != Model.LoggedInUser.UserID.ToString())
+                    .Take(2)
+                    .ToList();
                 <div class="flex-align-center item-msg" onclick="selectConversation(this)" hx-get="/message/@conversation.ConversationId" hx-target="#chatContainer">
                     <div class="flex-align-center avatar-msg">
-                        <img class="avatar-img" src="~/img/avt.jpeg" alt="">
+                        @if (conversation.Avatar != null)
+                        {
+                            <img class="avatar-img" src="~@conversation.Avatar" alt="">
+                        }
+                        else
+                        {
+                            @foreach(var user in participants)
+                            {
+                                <img class="avatar-img" src="~@user.Avatar" alt="">
+                            }
+                        }
                     </div>
                     <div class="flex-column flex-justify-center item-infor">
                         <div class="flex-justify-between item-infor-top">
-                            <div class="text__overflow-1 username-msg">Winter</div>
+                            @{
+                                string conversationName = "";
+                                @if (conversation.ConversationName != null)
+                                {
+                                    conversationName = conversation.ConversationName;
+                                }
+                                else
+                                {
+                                    System.Text.StringBuilder stringBuilder = new();
+                                    foreach(var participant in participants)
+                                    {
+                                        stringBuilder.Append(participant.Username).Append(",");
+                                    }
+                                    stringBuilder.Append("...");
+                                    conversationName = stringBuilder.ToString();
+                                }
+                            }
+                            <div class="text__overflow-1 username-msg">@conversationName</div>
+                            <div class="text__overflow-1 username-msg">@conversation.ConversationName</div>
+                            @{
+                                zaloclone_test.Models.Message lastMessage = conversation.MessageBlocks.Last().Messages.Last();
+                                string displayTime = "";
+                                DateTime now = DateTime.Now;
+                                double timeGap = lastMessage.CreateAt.Subtract(now).TotalMilliseconds;
+                            }
                             <div class="flex-align-center-between mute-time-msg">
-                                <div class="bell-msg" style="display: block;">
+                                <div class="bell-msg" style="display: block;"> 
                                     <i class="fa-solid fa-bell-slash bell-mute"></i>
                                 </div>
-                                <span style="padding: 0 0 2px 0;">9 phút </span>
+                                <span style="padding: 0 0 2px 0;">@lastMessage.CreateAt</span>
                             </div>
                         </div>
                         <div class="flex-justify-between item-infor-bottom">
-                            <div class="last-msg">What are you doing?!</div>
+                            <div class="last-msg">@lastMessage.Content</div>
                             <span class="last-msg-count"></span>
                         </div>
                     </div>

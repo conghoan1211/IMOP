@@ -27,7 +27,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true; // Chắc chắn cookie có mặt
 });
-
+builder.Services.AddSignalR();
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
@@ -81,6 +81,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseStatusCodePagesWithRedirects("/login");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chat");
+});
 
 app.MapGet("/", async (HttpContext context) =>
 {

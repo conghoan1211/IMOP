@@ -1,7 +1,9 @@
+const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+connection.on("ReceiveMessage", addMessage);
+connection.start();
 document.addEventListener("DOMContentLoaded", function () {
     const textarea = document.querySelector('.aside-chat-input_text');
     const sendButton = document.querySelector('.aside-chat-bar-btn_send');
-
 
     if (textarea && sendButton) {
         // Điều chỉnh chiều cao của textarea dựa trên nội dung
@@ -85,9 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error('Emoji button hoặc Emoji picker không tìm thấy!');
     }
 });
-var lastSender = null;
-var lastDateTimeCheckPoint = null;
-var currentBlockDateDiv = null;
+let lastSender = null;
+let lastDateTimeCheckPoint = null;
+let currentBlockDateDiv = null;
 const MIN_MINUTE_GAP = 15;
 const MIN_DAY_GAP = 1;
 const MIN_YEAR_GAP = 1;
@@ -181,7 +183,7 @@ function addMessage(text, sender = null) {
         avatarDiv.appendChild(avatar);
         newMessageDiv.appendChild(avatarDiv);
     }
-
+    lastSender = sender;
     // Build the message structure
     newMessageDiv.appendChild(newMessageContentDiv);
     newMessageContentDiv.appendChild(newChatMessageDiv);
@@ -248,8 +250,7 @@ function getCurrentTime() {
 }
 function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year = true) {
     const now = new Date();
-    var result = [];
-    if (houraAndMinute == true) {
+    if (houraAndMinute) {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         result.push(hours);
@@ -257,7 +258,7 @@ function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year
         result.push(minutes);
     }
 
-    if (dayAndMonth == true) {
+    if (dayAndMonth) {
         const day = String(now.getDate()).padStart(2, '0');
         const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         result.push(" ");
@@ -265,7 +266,7 @@ function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year
         result.push("/");
         result.push(month);
     }
-    if (year == true) {
+    if (year) {
         const year = now.getFullYear();
         result.push("/")
         result.push(year);

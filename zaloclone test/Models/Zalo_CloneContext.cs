@@ -86,7 +86,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<CommentImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__CommentI__7516F4EC2CE14AC3");
+                    .HasName("PK__CommentI__7516F4EC9FA5382D");
 
                 entity.Property(e => e.ImageId)
                     .HasMaxLength(36)
@@ -113,7 +113,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<CommentLike>(entity =>
             {
                 entity.HasKey(e => e.LikeId)
-                    .HasName("PK__CommentL__A2922CF473DA4255");
+                    .HasName("PK__CommentL__A2922CF4BBD75AA1");
 
                 entity.Property(e => e.LikeId)
                     .HasMaxLength(36)
@@ -170,7 +170,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<ConversationParticipant>(entity =>
             {
                 entity.HasKey(e => new { e.ConversationId, e.UserId })
-                    .HasName("PK__Conversa__1128545D2350E8A5");
+                    .HasName("PK__Conversa__1128545D3552C68E");
 
                 entity.ToTable("ConversationParticipant");
 
@@ -198,11 +198,10 @@ namespace zaloclone_test.Models
 
             modelBuilder.Entity<Friend>(entity =>
             {
+                entity.HasKey(e => e.Friend1)
+                    .HasName("PK__Friends__DEE0643EA601D7C2");
 
-                entity.HasKey(e => e.FriendId)
-                    .HasName("PK__Friends__DEE0643E2A69B3A0");
-
-                entity.Property(e => e.FriendId)
+                entity.Property(e => e.Friend1)
                     .HasMaxLength(36)
                     .HasColumnName("Friend");
 
@@ -294,7 +293,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<MessageReaction>(entity =>
             {
                 entity.HasKey(e => new { e.MessageId, e.UserId })
-                    .HasName("PK__MessageR__19048FB6CD039732");
+                    .HasName("PK__MessageR__19048FB6498D356E");
 
                 entity.ToTable("MessageReaction");
 
@@ -333,7 +332,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<MessageStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__MessageS__C8EE20434F4860CB");
+                    .HasName("PK__MessageS__C8EE2043FA59A0AE");
 
                 entity.ToTable("MessageStatus");
 
@@ -408,7 +407,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<PostImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__PostImag__7516F4ECA4D437BB");
+                    .HasName("PK__PostImag__7516F4ECE885A6FD");
 
                 entity.Property(e => e.ImageId)
                     .HasMaxLength(36)
@@ -435,7 +434,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<PostLike>(entity =>
             {
                 entity.HasKey(e => e.LikeId)
-                    .HasName("PK__PostLike__A2922CF49B0384EA");
+                    .HasName("PK__PostLike__A2922CF43674BBE3");
 
                 entity.Property(e => e.LikeId)
                     .HasMaxLength(36)
@@ -480,7 +479,7 @@ namespace zaloclone_test.Models
             modelBuilder.Entity<SearchHistory>(entity =>
             {
                 entity.HasKey(e => e.SearchId)
-                    .HasName("PK__SearchHi__21C535144D325906");
+                    .HasName("PK__SearchHi__21C535142E8FFDE6");
 
                 entity.ToTable("SearchHistory");
 

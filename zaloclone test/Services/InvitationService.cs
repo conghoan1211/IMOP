@@ -67,7 +67,7 @@ namespace zaloclone_test.Services
 
             var newFriend = new Friend
             {
-                FriendId = Guid.NewGuid().ToString(),
+                //FriendId = Guid.NewGuid().ToString(),
                 UserId1 = UserId,
                 UserId2 = UserOtherId,
                 Status = 0,

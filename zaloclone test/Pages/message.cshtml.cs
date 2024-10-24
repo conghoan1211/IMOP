@@ -12,6 +12,7 @@ namespace zaloclone_test.Pages
     {
         private readonly IMessageService _messageService;
         private readonly JwtAuthentication _authentication;
+        [BindProperty] public UserToken LoggedInUser { get; set; }
         [BindProperty] public List<Conversation> Conversations { get; set; }
         public messageModel(IMessageService messageService, JwtAuthentication authentication)
         {
@@ -22,7 +23,11 @@ namespace zaloclone_test.Pages
         public IActionResult OnGet(string? conversationId)
         {
             string? jwtToken = HttpContext.Request.Cookies["JwtToken"];
-            UserToken loggedInUser = _authentication.ParseJwtToken(jwtToken);
+            if (jwtToken != null)
+            {
+                LoggedInUser = _authentication.ParseJwtToken(jwtToken);
+            }
+            
             return Request.IsHtmx() 
                 ? Content($"<h1></h1>", "text/html") 
                 : Page();
