@@ -73,14 +73,19 @@ namespace zaloclone_test.Services
                 Bio = user.Bio
             };
 
-            oldProfile.UserName = updatedProfile.UserName ?? updatedProfile.UserName;
-            oldProfile.Bio = updatedProfile.Bio ?? oldProfile.Bio;
-            oldProfile.Dob = updatedProfile.Dob ?? oldProfile.Dob;
-            oldProfile.Sex = updatedProfile.Sex ?? oldProfile.Sex;
+            oldProfile.UserName = updatedProfile.UserName;
+            oldProfile.Bio = updatedProfile.Bio;
+            oldProfile.Dob = updatedProfile.Dob;
+            oldProfile.Sex = updatedProfile.Sex;
 
-            if (oldProfile.IsObjectEqual(updatedProfile))  return "";   // check if nothing change, return 
+            if (oldProfile.AreObjectsDifferent(updatedProfile))
+                return "";   // check if nothing change, return 
             try
             {
+                user.Sex = updatedProfile.Sex;
+                user.Dob = updatedProfile.Dob;
+                user.Bio = updatedProfile.Bio;
+                user.Username = updatedProfile.UserName;
                 user.UpdateAt = DateTime.Now;  
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -129,6 +134,8 @@ namespace zaloclone_test.Services
             var oldAvatarPath = Path.Combine(Directory.GetCurrentDirectory(), Constant.UrlImagePath, user.Avatar);
             try
             {
+                user.Avatar = fileName;
+                _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
                 if (File.Exists(oldAvatarPath))  File.Delete(oldAvatarPath);
@@ -147,7 +154,7 @@ namespace zaloclone_test.Services
             {
                 return $"An error occurred while updating the avatar: {ex.Message}";
             }
-        }
             return "";
+        }
     }
 }
