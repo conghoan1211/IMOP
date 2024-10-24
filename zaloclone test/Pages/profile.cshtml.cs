@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.Linq;
 using zaloclone_test.Models;
@@ -189,23 +190,18 @@ namespace zaloclone_test.Pages
             }
             UserToken = userToken;
 
-            msg = await _profileService.UpdateProfile(UserToken.UserID.ToString(), UpdateProfile);
+            msg = await _profileService.UpdateProfile(UserToken.UserID.ToString(), UpdateProfile, HttpContext);
             if (msg.Length > 0)
             {
                 Message = msg;
                 return Page();
             }
+
             return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostChangeAvatar(string userid)
         {
-            ModelState.Remove(nameof(Input.Content));
-            ModelState.Remove(nameof(UpdateProfile.Sex));
-            ModelState.Remove(nameof(UpdateProfile.Bio));
-            ModelState.Remove(nameof(UpdateProfile.Dob));
-            ModelState.Remove(nameof(UpdateProfile.UserName));
-
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
@@ -218,13 +214,14 @@ namespace zaloclone_test.Pages
                 Message = "Please correct the Model state.";
                 await OnGet();
             }
-
-            msg = await _profileService.DoChangeAvatar(userid, UpdateAvatarVM);
+          
+            msg = await _profileService.DoChangeAvatar(userid, UpdateAvatarVM, HttpContext);
             if (msg.Length > 0)
             {
                 Message = msg;
                 await OnGet();
             }
+       
             return RedirectToPage();
         }
 

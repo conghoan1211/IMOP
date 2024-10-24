@@ -94,7 +94,7 @@
     <div class="setting-modal">
         <div class="flex-column">
             <button class="setting-btn"> Thông tin tài khoản </button>
-            <button class="setting-btn"> Đổi mật khẩu</button>
+            <a asp-page="/ChangePassword" class="setting-btn" style="color:black"> Đổi mật khẩu </a>
             <button class="setting-btn"> Cài đặt</button>
             <form method="post" asp-page="/login" asp-page-handler="Logout" class="" onsubmit="clearLocalStorage()">
                 <button class="setting-btn btn-red width-100pt" type="submit">Đăng xuất</button>

@@ -1,7 +1,5 @@
-﻿using AppGlobal.Common;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using zaloclone_test.Models;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;
 using zaloclone_test.ViewModels;

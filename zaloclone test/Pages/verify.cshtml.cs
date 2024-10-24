@@ -14,7 +14,7 @@ namespace zaloclone_test.Pages
         }
         public string MessageError { get; set; } = string.Empty;
         public string MessageSuccess { get; set; } = string.Empty;
-        
+
         public async Task<IActionResult> OnPostVerifiedOTP()
         {
             var otp = Request.Form["InputOTP"];

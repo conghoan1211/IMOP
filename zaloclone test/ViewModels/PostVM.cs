@@ -56,10 +56,10 @@ namespace zaloclone_test.ViewModels
 
     public class PostCommentVM
     {
-        public Guid CommentId { get; set; } 
-        public Guid PostId { get; set; }  
-        public Guid UserId { get; set; }  
-        public string? Content { get; set; } 
+        public Guid CommentId { get; set; }
+        public Guid PostId { get; set; }
+        public Guid UserId { get; set; }
+        public string? Content { get; set; }
         public int? Likes { get; set; }
         public int? IsHide { get; set; }
         public bool? IsPinTop { get; set; }
@@ -68,21 +68,21 @@ namespace zaloclone_test.ViewModels
 
     public class CommentImageVM
     {
-        public Guid ImageId { get; set; }  
-        public Guid CommentId { get; set; }  
+        public Guid ImageId { get; set; }
+        public Guid CommentId { get; set; }
         public string ImageUrl { get; set; } = null!;
         public DateTime? CreatedAt { get; set; }
     }
 
     public class CommentLikeVM
     {
-        public Guid LikeId { get; set; } 
-        public Guid UserId { get; set; }  
+        public Guid LikeId { get; set; }
+        public Guid UserId { get; set; }
         public string CommentId { get; set; } = null!;
         public DateTime? CreatedAt { get; set; }
     }
 
-    public class PostSearchVM  
+    public class PostSearchVM
     {
         public string UserID { get; set; }
         public int? Privacy { get; set; }
