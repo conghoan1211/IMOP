@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using zaloclone_test.Configurations;
+using zaloclone_test.Models;
+using zaloclone_test.MyHub;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -22,7 +27,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true; // Chắc chắn cookie có mặt
 });
-
+builder.Services.AddSignalR();
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
@@ -54,6 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 
 builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -73,17 +79,27 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStatusCodePagesWithRedirects("/login");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chat");
+});
+
 app.MapGet("/", async (HttpContext context) =>
 {
-    // Sử dụng Authentication scheme đã được thêm vào
     var authenticateResult = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
-    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated ==  false)
+
+    // Redirect to login if the user is not authenticated
+    if (!authenticateResult.Succeeded || !context.User.Identity?.IsAuthenticated == true)
     {
         return Results.Redirect("/login");
     }
-    return Results.Redirect("/home");
+    return Results.Redirect("/post");
 });
 
+// Map SignalR hubs
+app.MapHub<PostHub>("/postHub");
 
 app.MapRazorPages();
 

@@ -1,0 +1,10 @@
+﻿.post-cmt-view_activity {
+    padding: 18px 20px;
+    font-size: 1.4rem;
+    border-bottom: 1px solid var(--border);
+    div
+
+{
+    color: var(--text-tertiary);
+}
+}

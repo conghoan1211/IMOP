@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,12 +31,35 @@ namespace AppGlobal.Common
         }
 
         //add more utils here ...
+        public static bool IsObjectEqual<T1, T2>(this T1 obj1, T2 obj2)
+        {
+            if (obj1 == null || obj2 == null) 
+                return false;
+
+            var properties1 = typeof(T1).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var properties2 = typeof(T2).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            // So sánh từng thuộc tính trong obj1 và obj2
+            foreach (var property1 in properties1)
+            {
+                var property2 = properties2.FirstOrDefault(p => p.Name == property1.Name && p.PropertyType == property1.PropertyType);
+                if (property2 == null) continue;
+
+                var value1 = property1.GetValue(obj1);
+                var value2 = property2.GetValue(obj2);
+
+                if (!Equals(value1, value2))
+                    return false;
+            }
+
+            return true; // Nếu tất cả các thuộc tính đều giống nhau
+        }
 
     }
 
     public static class GuidHelper
     {
-        public static Guid? ToGuid(this string guid)
+        public static Guid ToGuid(this string guid)
         {
             return string.IsNullOrEmpty(guid) ? Guid.Empty : Guid.Parse(guid);
         }

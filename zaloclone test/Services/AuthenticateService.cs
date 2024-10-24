@@ -12,11 +12,11 @@ namespace zaloclone_test.Services
     {
         public Task<string> DoLogin(UserLogin userLogin, HttpContext httpContext);
         public Task<string> DoRegister(UserRegister userRegister);
-        public Task<string> DoLogout(HttpContext httpContext);
+        public Task<string> DoLogout(HttpContext httpContext, string phone);
         public Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext);
         public Task<string> DoVerifyOTP(string otp, HttpContext httpContext);
         public Task<string> DoResetPassword(ResetPassword input);
-        public Task<string> DoChangePassword(string username, ChangePassword input);
+        public Task<string> DoChangePassword(string id, ChangePassword input);
         public Task<(string message, User? user)> DoSearchByEmail(string? email);
         public Task<(string message, User? user)> DoSearchByPhone(string? phone);
     }
@@ -31,9 +31,30 @@ namespace zaloclone_test.Services
             _jwtAuthen = jwtAuthen;
         }
 
-        public Task<string> DoChangePassword(string username, ChangePassword input)
+        public async Task<string> DoChangePassword(string id, ChangePassword input)
         {
-            throw new NotImplementedException();
+            // Tìm người dùng bằng UserId
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return "Người dùng không tồn tại";
+
+            // Kiểm tra mật khẩu hiện tại
+            string msg = Converter.StringToMD5(input.ExPassword, out string exPasswordMd5);
+            if (msg.Length > 0) return $"Error convert to MD5: {msg}";
+            if (!user.Password.ToUpper().Equals(exPasswordMd5.ToUpper())) return "Mật khẩu hiện tại không đúng";
+
+            // Mã hóa mật khẩu mới
+            msg = Converter.StringToMD5(input.Password, out string newPasswordMd5);
+            if (msg.Length > 0) return $"Error convert to MD5: {msg}";
+
+            // Cập nhật mật khẩu
+            user.Password = newPasswordMd5;
+            user.UpdateAt = DateTime.Now;
+            user.UpdateUser = user.UserId;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return "Mật khẩu đã thay đổi thành công";
         }
 
         public async Task<string> DoForgetPassword(ForgetPassword input, HttpContext httpContext)
@@ -75,31 +96,32 @@ namespace zaloclone_test.Services
             user.Status = (int)UserStatus.Active;
             await _context.SaveChangesAsync();
 
-            //create token here...
             var token = _jwtAuthen.GenerateJwtToken(user);
             httpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, 
+                Secure = true,
                 SameSite = SameSiteMode.Strict // Prevent cross-site attacks
             });
             return "";
         }
 
-        public Task<string> DoLogout(HttpContext httpContext)
+        public async Task<string> DoLogout(HttpContext httpContext, string? phone)
         {
-            // Xóa cookie chứa JWT token
+            var (msg, user) = await DoSearchByPhone(phone);
+            if (msg.Length > 0) return msg;
+            else if (user != null)
+            {
+                user.Status = (int)UserStatus.Inactive;
+                user.UpdateAt = DateTime.Now;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+            }
+
             httpContext.Response.Cookies.Delete("JwtToken");
-
-            // Nếu có session, bạn có thể xóa session tại đây (tùy theo yêu cầu ứng dụng của bạn)
             httpContext.Session.Clear();
-
-            //user.Status = (int)UserStatus.Inactive;
-            //await _context.SaveChangesAsync();
-
-            return Task.FromResult("Đăng xuất thành công.");
+            return "";
         }
-
 
         public async Task<string> DoRegister(UserRegister input)
         {
@@ -132,7 +154,7 @@ namespace zaloclone_test.Services
                 CreateUser = userid,
             };
 
-            _context.Users.Add(user);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return "";
         }

@@ -1,0 +1,85 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<body>
+    <sidebar class="message-container">
+        <header class="flex header-search">
+            <div class="flex-justify-center search">
+                <button class="flex-align-center search-icon">
+                    <i class="fa-solid fa-magnifying-glass "></i>
+                </button>
+                <input class="search-input" type="text" placeholder="Tìm kiếm">
+                <button class="flex-align-center clear-icon">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+            <button class="btn-search-add">
+                <i class="fa-solid fa-user-plus btn-search-add__icon"></i>
+            </button>
+            <button class="btn-search-add">
+                <i class="fa-solid fa-user-group btn-search-add__icon"></i>
+            </button>
+        </header>
+
+        <div class="cont-list-msg">
+            <div class="flex-column contact-menu">
+                <a href="aside-contact" class="flex-align-center item-menu" id="friendList">
+                    <img class="img-menu-item" src="https://cdn-icons-png.flaticon.com/512/77/77543.png" alt="">
+                    <div class="name-menu">Danh sách bạn bè</div>
+                </a>
+                <a href="aside-invitations" class="flex-align-center item-menu" id="friendRequest">
+                    <img class="img-menu-item" src="https://cdn4.iconfinder.com/data/icons/users-114/24/user_login-512.png" alt="">
+                    <div class="name-menu">Lời mời kết bạn</div>
+                </a>
+                <a href="aside-groups" class="flex-align-center item-menu" id="groupList">
+                    <img class="img-menu-item" src="https://cdn-icons-png.flaticon.com/256/1040/1040056.png" alt="">
+                    <div class="name-menu">Danh sách nhóm và cộng đồng</div>
+                </a>
+                <a class="flex-align-center item-menu" id="groupInvite">
+                    <img class="img-menu-item" src="https://cdn-icons-png.flaticon.com/512/1387/1387940.png" alt="">
+                    <div class="name-menu">Lời mời vào nhóm và cộng đồng</div>
+                </a>
+            </div>
+        </div>
+    </sidebar>
+    <sidebar class="message-container" style="display:none">
+        <header class="flex header-search">
+            <div class="flex-justify-center search">
+                <button class="flex-align-center search-icon">
+                    <i class="fa-solid fa-magnifying-glass "></i>
+                </button>
+                <input class="search-input" type="text" placeholder="Tìm kiếm">
+                <button class="flex-align-center clear-icon">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+            <button class="btn-search-close">Đóng</button>
+        </header>
+
+        <!-- list search friend  -->
+        <div class="cont-list-msg">
+            <div class="list-search-friend">
+                <div class="list-search-title">Tìm gần đây</div>
+                <div class="flex-align-center list-search-item">
+                    <img src="~/img/avt.jpeg" class="avatar-img" alt="">
+                    <span class="text__overflow-1 list-search-item__name">Dad</span>
+                </div>
+                <div class="flex-align-center list-search-item">
+                    <img src="~/img/avt.jpeg" class="avatar-img" alt="">
+                    <span class="text__overflow-1 list-search-item__name">Young sis</span>
+                </div>
+            </div>
+        </div>
+    </sidebar>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+    <script type="module" src="~/js/contact/menu-sidebar-contact.js"></script>
+    <script type="module" src="~/js/helper/format-date.js"></script>
+
+</body>

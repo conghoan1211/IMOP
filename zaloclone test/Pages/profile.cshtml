@@ -1,0 +1,677 @@
+﻿@page "/profile/{id?}"
+@model zaloclone_test.Pages.profileModel
+@{
+    Layout = "_Layout";
+}
+
+<aside class="flex-column aside-container-msg profile-page">
+    <header class="cont-msg-header aside-profile-header">
+        <div class="flex-align-center-between aside-profile-head">
+            <div class="flex-align-justify-center aside-profile-return">
+                <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            <div class="flex-justify-center aside-profile-head__title">
+                Trang cá nhân
+            </div>
+            <div class="flex-justify-end"></div>
+        </div>
+    </header>
+
+    <div class="aside-profile flex-align-justify-center">
+        <div class="flex-column aprofile-container">
+            <div class="flex-column aprofile-header">
+                <div class="flex-align-center aprofile-header-infor">
+                    <div class="flex-column aprofile-infor-name">
+                        <div>@Model.Profile.UserName</div>
+                        <span class="aprofile-infor-gender">
+                            @{
+                                var genderIcon = Model.Profile.Sex == 0
+                                ? "<i class='fa-solid fa-mars' style='color: blue'></i>"
+                                : Model.Profile.Sex == 1
+                                ? "<i class='fa-solid fa-venus' style='color: var(--text-information)'></i>"
+                                : "<i class='fa-solid fa-mars-and-venus' style='color: purple'></i>";
+                            }
+                            @Html.Raw(genderIcon)
+                        </span>
+                    </div>
+                    @{
+                        string avatar = Model.Profile.Avatar;
+                        if (string.IsNullOrEmpty(avatar)) avatar = "default-avatar.png";
+                    }
+                    <img id="avatar-img" class="avatar-img aprofile-avt" src="~/img/@avatar" alt="" />
+                    <!-- Modal zoom image -->
+                    <div id="imageModal" class="modal">
+                        <span class="modal-close" id="imgProfileZoomClose">&times;</span>
+                        <div class="flex-align-justify-center aprofile-avt-zoom">
+                            <img class="avatar-img aprofile-avt-zoom__img" id="imageModalImg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="aprofile-bio">☆Not impersonating anyone! @Model.Profile.Bio</div>
+                <div class="flex-align-center-between aprofile-friends">
+                    <div class="aprofile-friends-count">
+                        <span>@Model.Profile.NumberOfFriends</span>
+                        <span>followers</span>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="flex-align-justify-center aprofile-friends-more">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <!-- modal profile other more action  -->
+                        <div class=" aprofile-other__modal" id="modalProfileAction" style="display: none;">
+                            <button class="flex-justify-between" id="openOtherProfileDialog">
+                                <div class="aprofile-post-more__title">
+                                    About this profile
+                                </div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-circle-info"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Report</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-flag"></i></div>
+                            </button>
+                            <button class="flex-justify-between">
+                                <div class="aprofile-post-more__title">Block</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-ban"></i></div>
+                            </button>
+                            <span class="aprofile-border-top"></span>
+                            <button class="flex-justify-between btn-red">
+                                <div class="aprofile-post-more__title ">Unfriend</div>
+                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-user-large-slash"></i></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
+                {
+                    <button class="btn btn-default large aprofile-btn-edit openProfileDialog">Edit profile</button>
+                }
+                @if (Model.Profile.UserID != Model.UserToken.UserID.ToString())
+                {
+                    <form method="post" class="aprofile-btn__other-action">
+                        <input type="hidden" name="otherUserId" value="@Model.Profile.UserID" />
+                        @if (!Model.IsFriend)
+                        {
+                            <button formaction="?handler=SendRequest" type="submit" class="btn btn-secondary small aprofile-post">Add friend</button>
+                        }
+                        else
+                        {
+                            <button formaction="?handler=UnFriend" type="submit" class="btn btn-default small aprofile-post">Unfriend</button>
+                        }
+                        <button class="btn btn-default small">Message</button>
+                    </form>
+                }
+
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <h2 class="flex-align-justify-center" style="color: red">@Model.Message</h2>
+            }
+            @if (!ModelState.IsValid)
+            {
+                <div asp-validation-summary="All" class="text-danger"></div>
+            }
+            <!-- add post  -->
+            @if (Model.Profile.UserID == Model.UserToken.UserID.ToString())
+            {
+                <div class="aprofile-post">
+                    <div class="flex-align-center aprofile-box">
+                        <img class="avatar-img aprofile-post-avt" src="~/img/@avatar" alt="">
+                        <div class="flex-justify-between width-100pt openAddPost">
+                            <span class="aprofile-box__title">What's new?</span>
+                            <button class="btn aprofile-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="aprofile-list-posts">
+                <!-- list post  -->
+                @if (Model.ListPost == null || Model.ListPost.Count() == 0)
+                {
+                    <div class="flex-align-justify-center apost-nopost_title">No post yet.</div>
+                }
+                else
+                {
+                    @foreach (var item in Model.ListPost ?? new())
+                    {
+
+                        <div class="flex-justify-between flex-column aprofile-post-item">
+                            @if (item.PinToTop == true)
+                            {
+                                <div class="apost-post-pinned">
+                                    <i class="fa-solid fa-thumbtack"></i>
+                                    <span>Pinned</span>
+                                </div>
+                            }
+                            <div class="flex">
+                                <img class="avatar-img aprofile-post-avt" src="~/img/@Model.Profile.Avatar" alt="">
+                                <div class="flex-column aprofile-post-wrapper">
+                                    <div class="flex-align-center aprofile-post_name-time">
+                                        <div class="aprofile-post-name">@item.Username</div>
+                                        <div class="aprofile-post-time format-date" data-time="@item.CreateAt">@item.CreateAt </div>
+                                        <div class="aprofile-post-time">
+                                            &bull;
+                                            @{
+                                                var privacyIcon = item.Privacy == 0
+                                                ? "<i class='fa-solid fa-earth-asia'></i>"
+                                                : item.Privacy == 1
+                                                ? "<i class='fa-solid fa-user-group' style='font-size: 1.1rem'></i>"
+                                                : "<i class='fa-solid fa-lock'></i>";
+                                            }
+                                            @Html.Raw(privacyIcon)
+                                        </div>
+                                    </div>
+                                    <div class="aprofile-post-content">@item.Content</div>
+                                    @if (!string.IsNullOrEmpty(item.Images))
+                                    {
+                                        <div class="flex-align-center aprofile-post__list-img">
+                                            @{
+                                                var imgFiles = item.Images.Split(";");
+                                                foreach (var img in imgFiles)
+                                                {
+                                                    if (!string.IsNullOrEmpty(img))
+                                                    {
+                                                        var filePath = "/img/" + img.Trim();
+                                                        <img class="aprofile-post__item-img" src="@filePath" alt="">
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                    <div class="flex-align-center aprofile-post-action">
+                                        <div class="aprofile-post-action__btn post-react-heart">
+                                            <i class="fa-regular fa-heart"></i>
+                                            <i class="fa-solid fa-heart" style="display:none;"></i>
+                                            <span>@item.Likes</span>
+                                        </div>
+                                        <div class="aprofile-post-action__btn post-comment-btn">
+                                            @if (item.IsComment == true)
+                                            {
+                                                <div><i class="fa-regular fa-comment"></i></div>
+                                            }
+                                            else
+                                            {
+                                                <div><i class="fa-solid fa-comment-slash"></i></div>
+                                            }
+                                            <span>@item.Comments</span>
+                                        </div>
+                                        <div class="aprofile-post-action__btn">
+                                            <div><i class="fa-solid fa-repeat"></i></div>
+                                            <span>@item.Shares</span>
+                                        </div>
+                                        <div class="aprofile-post-action__btn">
+                                            <div><i class="fa-regular fa-paper-plane"></i></div>
+                                            <span>166</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="position: relative;">
+                                    <div class="flex-align-justify-center aprofile-post-more">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </div>
+                                    <!-- modal post more action  -->
+                                    <form method="post" class="aprofile-post-more__modal" id="modalPostAction" style="display: none;">
+                                        @if (item.UserID == Model.UserToken.UserID.ToString())
+                                        {
+                                            <input type="hidden" name="postId" value="@item.PostID" />
+                                            @if (item.PinToTop == false)
+                                            {
+                                                <button formaction="?handler=PinTop" type="submit" class="flex-justify-between">
+                                                    <div class="aprofile-post-more__title">Pin to top</div>
+                                                    <div class="aprofile-post-more__icon"><i class="fa-solid fa-thumbtack"></i></div>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button formaction="?handler=PinTop" type="submit" class="flex-justify-between">
+                                                    <div class="aprofile-post-more__title">Unpin to top</div>
+                                                    <div class="aprofile-post-more__icon"><i class="fa-solid fa-link-slash"></i></div>
+                                                </button>
+                                            }
+                                            <button type="button" class="flex-justify-between openEditPost"
+                                                    onclick="openEditPost('@item.PostID', '@item.Username', '@item.Content', '@item.Privacy', '/img/@Model.UserToken.Avatar')">
+                                                <div class="aprofile-post-more__title">Edit post</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-pen"></i></div>
+                                            </button>
+                                            @if (item.IsComment == true)
+                                            {
+                                                <button formaction="?handler=AllowComment" type="submit" class="flex-justify-between">
+                                                    <div class="aprofile-post-more__title">Unallow comments</div>
+                                                    <div class="aprofile-post-more__icon"><i class="fa-solid fa-comment-slash"></i></div>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button formaction="?handler=AllowComment" type="submit" class="flex-justify-between">
+                                                    <div class="aprofile-post-more__title">Allow comments</div>
+                                                    <div class="aprofile-post-more__icon"><i class="fa-solid fa-comment"></i></div>
+                                                </button>
+                                            }
+                                            <span class="aprofile-border-top"></span>
+                                            <button formaction="?handler=DeletePost" type="submit" class="flex-justify-between btn-red">
+                                                <div class="aprofile-post-more__title ">Delete</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-trash"></i></div>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" name="postId" value="@item.PostID" />
+                                            <button type="button" class="flex-justify-between">
+                                                <div class="aprofile-post-more__title">Save</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-regular fa-bookmark"></i></div>
+                                            </button>
+                                            <button type="button" class="flex-justify-between">
+                                                <div class="aprofile-post-more__title">Not interested</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-regular fa-eye-slash"></i></div>
+                                            </button>
+                                            <span class="aprofile-border-top"></span>
+                                            <button type="button" class="flex-justify-between">
+                                                <div class="aprofile-post-more__title">Unfriend</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-user-minus"></i></div>
+                                            </button>
+                                            <button type="button" class="flex-justify-between btn-red">
+                                                <div class="aprofile-post-more__title">Block</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-user-slash"></i></div>
+                                            </button>
+                                            <button type="button" class="flex-justify-between btn-red">
+                                                <div class="aprofile-post-more__title ">Report</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-regular fa-flag"></i></div>
+                                            </button>
+                                            <span class="aprofile-border-top"></span>
+                                            <button formaction="?handler=AllowComment" type="submit" class="flex-justify-between">
+                                                <div class="aprofile-post-more__title">Copy link</div>
+                                                <div class="aprofile-post-more__icon"><i class="fa-solid fa-link"></i></div>
+                                            </button>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>  <!-- end post item -->
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- modal update profile user -->
+<div id="profileDialog" class="dialog-overlay" style="display: none;">
+    <div class="dialog-content">
+        <div id="view-profile">
+            <div class="flex-align-center-between profile-head">
+                <div class="profile-title">Thông tin tài khoản</div>
+                <span class="flex-align-justify-center close-btn" id="close-profile-btn">
+                    <i class="fa-solid fa-xmark "></i>
+                </span>
+            </div>
+            <form method="post" class="flex-align-center profile-info" id="avatarForm" enctype="multipart/form-data">
+                <input type="hidden" name="userid" value="@Model.Profile.UserID" />
+                <img src="/img/@avatar" class="avatar-img profile-avatar" alt="avatar" id="profileAvatar">
+                <div class="profile-name">@Model.Profile.UserName &nbsp;</div>
+                <button class="profile-edit"><i class="fa-solid fa-pencil"></i></button>
+                <input asp-for="@Model.UpdateAvatarVM.Image" type="file" id="fileInput" style="display: none;" accept="image/*">
+                <button type="button" asp-page-handler="ChangeAvatar" id="changeAvatarBtn" class="flex-align-justify-center profile-change-avatar">
+                    <i class="fa-solid fa-camera"></i>
+                </button>
+
+            </form>
+            <div class="profile-title">Thông tin cá nhân</div>
+            <div class="profile-detail">
+                <div class="profile-detail-list">
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Bio</span>
+                        <span>@Model.Profile.Bio</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Giới tính</span>
+                        <span>
+                            @{
+                                string gender = Model.Profile.Sex == 0 ? "Nam" : "Nữ";
+                            }
+                            <span>@gender</span>
+                        </span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Ngày sinh</span>
+                        @{
+                            string? dob = Model.Profile.Dob?.ToString();
+                            string formatteddate = "Chưa cập nhật";
+
+                            if (!string.IsNullOrEmpty(dob))
+                            {
+                                DateTime date;
+                                bool isValidDate = DateTime.TryParse(dob, out date);
+
+                                if (isValidDate)
+                                {
+                                    formatteddate = date.ToString("dd 'tháng' MM, yyyy", new System.Globalization.CultureInfo("vi-vn"));
+                                }
+                            }
+                        }
+                        <span>@formatteddate</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Điện thoại</span>
+                        <span>@Model.Profile.Phone</span>
+                    </div>
+                    <div class="profile-note">Chỉ bạn bè đã chấp nhận kết bạn mới xem được số điện thoại này</div>
+                </div>
+                <button class="profile-edit-btn">
+                    <i class="fa-solid fa-pencil"></i>
+                    <span>&nbsp;Cập nhật</span>
+                </button>
+            </div>
+        </div>
+
+        <form method="post" id="edit-profile" style="display: none ;">
+            <div class="flex-align-center-between profile-head">
+                <div class="flex-align-center profile-title">
+                    <span class="flex-align-justify-center return-btn">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </span>
+                    <span>Cập nhật thông tin tài khoản</span>
+                </div>
+            </div>
+            <div class="profile-edit-cont">
+                <div>
+                    <div class="flex-column profile-edit">
+                        <span class="profile-edit-text">Tên hiển thị</span>
+                        <input asp-for="UpdateProfile.UserName" class="profile-edit-name" id="profile-edit-name" type="text" maxlength="50" min="5">
+                    </div>
+                    <span asp-validation-for="UpdateProfile.UserName" class="register-input-error"></span>
+                </div>
+                <div class="edit-profile-title">Thông tin cá nhân</div>
+                <div class="flex-align-center edit-profile-gender">
+                    <div class="flex-align-center">
+                        <input asp-for="@Model.UpdateProfile.Sex" value="0" id="male" type="radio" class="edit-profile-gender_btn">
+                        <label for="male" class="profile-edit-gender_text">Nam</label>
+                    </div>
+                    <div class="flex-align-center">
+                        <input asp-for="@Model.UpdateProfile.Sex" value="1" id="female" type="radio" class="edit-profile-gender_btn">
+                        <label for="female" class="profile-edit-gender_text">Nữ</label>
+                    </div>
+                    <div class="flex-align-center">
+                        <input asp-for="@Model.UpdateProfile.Sex" value="2" id="other" type="radio" class="edit-profile-gender_btn">
+                        <label for="other" class="profile-edit-gender_text">Khác</label>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <span class="profile-edit-text">Ngày sinh</span>
+                    <input asp-for="@Model.UpdateProfile.Dob" class="profile-edit-date" type="date">
+                    <span asp-validation-for="@Model.UpdateProfile.Dob" class="register-input-error"></span>
+                </div>
+                <div class="flex-column profile-edit-bio_wrapper">
+                    <span class="profile-edit-text">Bio</span>
+                    <textarea asp-for="@Model.UpdateProfile.Bio" class="profile-edit-bio" maxlength="60"></textarea>
+                    <span asp-validation-for="@Model.UpdateProfile.Bio"  class="register-input-error"></span>
+                </div>
+            </div>
+            <div class="edit-profile-footer">
+                <button type="button" class="btn btn-neutral profile-btn-cancel">Hủy</button>
+                <button type="submit" formaction="?handler=UpdateProfile" class="btn btn-primary profile-btn-update">Cập nhật</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--  other profile dialog  -->
+<div id="profileOtherDialog" class="dialog-overlay" style="display: none">
+    <div class="dialog-content">
+        <div id="view-profile">
+            <div class="flex-align-center-between profile-head">
+                <div class="profile-title">Thông tin tài khoản</div>
+                <span class="flex-align-justify-center close-btn" id="close-other-profile">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </div>
+            <div class="flex-align-center profile-info">
+                <img src="/img/@avatar"
+                     class="avatar-img profile-avatar" alt="avatar" id="profileAvatar" />
+                <div class="profile-name">@Model.Profile.UserName &nbsp;</div>
+                <button class="profile-edit"><i class="fa-solid fa-pencil"></i></button>
+            </div>
+            <button class="btn btn-secondary large profile-btn-message">
+                Nhắn tin
+            </button>
+            <div class="profile-border-4px"></div>
+            <div class="profile-title">Thông tin cá nhân</div>
+            <div class="profile-detail">
+                <div class="profile-detail-list">
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Bio</span>
+                        <span>@Model.Profile.Bio -.-</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Giới tính</span>
+                        <span>@gender</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Ngày sinh</span>
+                        <span>@formatteddate</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="profile-detail-title">Điện thoại</span>
+                        @if (Model.IsFriend)
+                        {
+                            <span>@Model.Profile.Phone</span>
+                        }
+                        else
+                        {
+                            <span>0**********</span>
+                        }
+                    </div>
+                    <div class="profile-note">Chỉ bạn bè đã chấp nhận kết bạn mới xem được số điện thoại này</div>
+                </div>
+            </div>
+            <div class="profile-other-action">
+                <button class="flex-align-center profile-action-btn">
+                    <i class="fa-solid fa-ban"></i>
+                    <div class="profile-action-btn__name">Chặn tin nhắn và cuộc gọi</div>
+                </button>
+                <button class="flex-align-center profile-action-btn">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div class="profile-action-btn__name">Báo xấu</div>
+                </button>
+                <button class="flex-align-center profile-action-btn">
+                    <i class="fa-regular fa-trash-can"></i>
+                    <div class="profile-action-btn__name">Xóa khỏi danh sách bạn bè</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal add post  -->
+<div class="flex-align-justify-center modal-addpost modalAddPost" style="display: none;">
+    <div class="flex-column modal-addpost__wrapper">
+        <div style="position: relative;">
+            <div class="flex-align-justify-center modal-addpost__title">New post</div>
+            <div class="modal-addpost__close">
+                &times;</span>
+            </div>
+            <form class="flex modal-addpost__content" method="post" enctype="multipart/form-data">
+                <img class="avatar-img aprofile-post-avt" src="~/img/@avatar" alt="">
+                <div class="flex-column modal-addpost__container">
+                    <div class="modal-addpost__name">@Model.UserToken.UserName</div>
+                    <select asp-for="@Model.Input.Privacy" class="modal-addpost__privacy">
+                        <option value="0">Public</option>
+                        <option value="1">Friends</option>
+                        <option value="2">Only me</option>
+                    </select>
+                    <div class="modal-addpost__input">
+                        <textarea asp-for="@Model.Input.Content" required class="modal-addpost__input-text" maxlength="500"
+                                  placeholder="What's new?"></textarea>
+                    </div>
+                    <div class="flex-align-center modal-addpost__list-img">
+                    </div>
+                    <div class="flex-justify-between modal-addpost__footer">
+                        <div class="modal-addpost__more-icon">
+                            <button type="button" id="upload-image-btn">
+                                <i class="fa-regular fa-images"></i>
+                            </button>
+                            <input asp-for="@Model.Input.Images" type="file" id="image-upload-input" multiple accept="image/*"
+                                   style="display: none;">
+                            <button>
+                                <i class="fa-regular fa-file-image"></i>
+                            </button>
+                            <button>
+                                <i class="fa-solid fa-hashtag"></i>
+                            </button>
+                            <button>
+                                <i class="fa-solid fa-location-dot"></i>
+                            </button>
+                        </div>
+                        <button type="submit" formaction="?handler=AddPost"  class="btn btn-default modal-addpost__btn"> Post</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+ <!-- modal edit post -->
+<div class="flex-align-justify-center modal-addpost modalEditPost" id="globalModalEditPost" style="display: none;">
+    <div class="flex-column modal-addpost__wrapper">
+        <div style="position: relative;">
+            <div class="flex-align-justify-center modal-addpost__title">Edit post</div>
+            <div class="modal-addpost__close">
+                &times;
+            </div>
+            <form class="flex modal-addpost__content" method="post" enctype="multipart/form-data">
+                <input asp-for="@Model.Input.PostID" type="hidden" id="editPostId" />
+                <img class="avatar-img aprofile-post-avt" id="editPostAvatar" src="" alt="">
+                <div class="flex-column modal-addpost__container">
+                    <div class="modal-addpost__name" id="editPostUsername"></div>
+                    <select asp-for="@Model.Input.Privacy" id="editPostPrivacy" class="modal-addpost__privacy">
+                        <option value="0">Public</option>
+                        <option value="1">Friends</option>
+                        <option value="2">Only me</option>
+                    </select>
+                    <div class="modal-addpost__input">
+                        <textarea asp-for="@Model.Input.Content" id="editPostContent" required class="modal-addpost__input-text" maxlength="500" placeholder="What's new?"></textarea>
+                    </div>
+                    <div class="flex-justify-between modal-addpost__footer">
+                        <div class="modal-addpost__more-icon"></div>
+                        <button type="submit" formaction="?handler=AddPost" class="btn btn-default modal-addpost__btn"> Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+<script type="text/javascript">
+    // Hàm mở modal và cập nhật nội dung
+    function openEditPost(postId, username, content, privacy, avatar) {
+        // Cập nhật các trường trong modal với dữ liệu từ post
+        document.getElementById('editPostId').value = postId;
+        document.getElementById('editPostUsername').textContent = username;
+        document.getElementById('editPostContent').value = content;
+        document.getElementById('editPostPrivacy').value = privacy;
+        document.getElementById('editPostAvatar').src = avatar;
+
+        // Hiển thị modal
+        document.getElementById('globalModalEditPost').style.display = 'block';
+    }
+</script>
+<script type="module" src="~/js/profile/avt-zoom.js"></script>
+
+<script>
+    function validateProfileForm() {
+        let isValid = true;
+
+        Get form elements
+        const userName = document.querySelector('input[name="UpdateProfile.UserName"]');
+        const dob = document.querySelector('input[name="UpdateProfile.Dob"]');
+        const bio = document.querySelector('textarea[name="UpdateProfile.Bio"]');
+        const sex = document.querySelector('input[name="UpdateProfile.Sex"]:checked');
+
+        Clear previous error messages
+        clearErrors();
+
+        Validate Username
+        if (!userName.value.trim()) {
+            showError(userName, 'Tên hiển thị không được để trống');
+            isValid = false;
+        } else if (userName.value.length < 5) {
+            showError(userName, 'Tên hiển thị phải ít nhất 5 ký tự');
+            isValid = false;
+        } else if (userName.value.length > 50) {
+            showError(userName, 'Tên hiển thị không được vượt quá 50 ký tự');
+            isValid = false;
+        }
+
+        Validate Sex
+        if (!sex) {
+            showError(document.querySelector('.edit-profile-gender'), 'Giới tính không được để trống');
+            isValid = false;
+        }
+
+        Validate Date of Birth
+        if (!dob.value) {
+            showError(dob, 'Ngày sinh không được để trống');
+            isValid = false;
+        } else {
+            const selectedDate = new Date(dob.value);
+            const today = new Date();
+            const minDate = new Date('1890-01-01');
+
+            if (selectedDate > today) {
+                showError(dob, 'Ngày sinh không vượt quá ngày hiện tại!');
+                isValid = false;
+            } else if (selectedDate < minDate) {
+                showError(dob, 'Năm sinh phải lớn hơn hoặc bằng 1890!');
+                isValid = false;
+            }
+        }
+
+        Validate Bio
+        if (bio.value.length > 60) {
+            showError(bio, 'Bio không được vượt quá 60 ký tự');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showError(element, message) {
+        Create error element
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'validation-error text-danger mt-1';
+        errorDiv.textContent = message;
+
+        Add inline CSS style for red text
+        errorDiv.style.color = 'red'; Red color for error message
+
+        Add error class to input
+        element.classList.add('is-invalid');
+
+        Insert error after the input element
+        element.parentNode.insertBefore(errorDiv, element.nextSibling);
+    }
+
+    function clearErrors() {
+        Remove all error messages
+        document.querySelectorAll('.validation-error').forEach(error => error.remove());
+
+        Remove error classes from inputs
+        document.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
+    }
+
+    Add event listeners for real-time validation
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('edit-profile');
+        const inputs = form.querySelectorAll('input, textarea');
+
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                validateProfileForm();
+            });
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!validateProfileForm()) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>

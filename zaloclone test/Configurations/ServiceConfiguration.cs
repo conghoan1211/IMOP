@@ -16,7 +16,11 @@ namespace zaloclone_test.Configurations
 
             services.AddScoped<IAuthenticateService, AuthenticateService>();
             services.AddScoped<JwtAuthentication>(); // Register JwtAuthentication
-
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IAsideContactService, AsideContactService>();
+            services.AddScoped<IInvitationService, InvitationService>();
         }
     }
 }
