@@ -89,41 +89,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Open file input when the button is clicked
-    changeAvatarBtn.addEventListener("click", function () {
-        fileInput.click();
-    });
+    //document.getElementById('changeAvatarBtn').addEventListener('click', function () {
+    //    document.getElementById('fileInput').click();
+    //});
 
-    // Handle file selection
-    fileInput.addEventListener("change", function () {
-        const file = fileInput.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                profileAvatar.src = event.target.result; // Set the new image source
-            };
-            reader.readAsDataURL(file); // Read the file as a data URL
+    //document.getElementById('fileInput').addEventListener('change', function () {
+    //    if (this.files && this.files.length > 0) {
+    //        let formData = new FormData(document.getElementById('avatarForm'));
 
-            // Use FormData to send the file asynchronously
-            const formData = new FormData(avatarForm);
-            formData.append("Image", file); // Add the file to the FormData object
-
-            // Send the form asynchronously with fetch
-            fetch(avatarForm.action, {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text(); // Handle the response (you can update UI or handle success)
-                    } else {
-                        console.error("Form submission failed");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error submitting form:", error);
-                });
-        }
-    });
+    //        // Send form data via AJAX
+    //        fetch('@Url.Page("/profile", new { handler = "ChangeAvatar" })', {
+    //            method: 'POST',
+    //            body: formData
+    //        })
+    //            .then(response => {
+    //                if (response.ok) {
+    //                    return response.text();  // Or response.json() if returning JSON data
+    //                }
+    //                throw new Error('Failed to update avatar.');
+    //            })
+    //            .then(result => {
+    //                // Reload the page after successful submission
+    //                location.reload();
+    //            })
+    //            .catch(error => {
+    //                console.error('Error:', error);
+    //            });
+    //    }
+    //});
 
 });
 

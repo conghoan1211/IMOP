@@ -37,8 +37,6 @@ namespace zaloclone_test.ViewModels
 
     public class UpdateProfileModels
     {
-        public string? UserId { get; set; }
-
         [Required(ErrorMessage = "Tên hiển thị không được để trống")]
         [StringLength(50, ErrorMessage = "Tên đăng nhập không được vượt quá 50 ký tự")]
         public string? UserName { get; set; }
