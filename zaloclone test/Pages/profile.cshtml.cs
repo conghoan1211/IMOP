@@ -19,15 +19,19 @@ namespace zaloclone_test.Pages
         private readonly IPostService _postService;
         private readonly IProfileService _profileService;
         private readonly IInvitationService _inviteService;
+        private readonly IAsideContactService _asideContactService;
 
-        public profileModel(IPostService postService, JwtAuthentication jwtAuthen, IProfileService profileService, IInvitationService inviteService)
+        public profileModel(IPostService postService, JwtAuthentication jwtAuthen, IProfileService profileService, 
+            IInvitationService inviteService , IAsideContactService asideContactService)
         {
             _postService = postService;
             _jwtAuthen = jwtAuthen;
             _profileService = profileService;
             _inviteService = inviteService;
+            _asideContactService = asideContactService;
         }
         public string? Message { get; set; } = string.Empty;
+        public bool IsFriend { get; set; }
         public List<PostVM>? ListPost { get; set; } = new();
         public ProfileVM? Profile { get; set; } = new();
         public UserToken? UserToken { get; set; }
@@ -51,6 +55,8 @@ namespace zaloclone_test.Pages
             if (UserToken == null) UserToken = userToken;
 
             string userid = string.IsNullOrEmpty(id) ? userToken.UserID.ToString() : id;
+            if (id != null)   IsFriend = await _asideContactService.IsFriend(UserToken.UserID.ToString(), id);
+
             if (!string.IsNullOrEmpty(id) && id != userToken.UserID.ToString())
             {
                 (msg, ListPost) = await _postService.GetPostsProfile(null, id);
@@ -174,6 +180,7 @@ namespace zaloclone_test.Pages
             {
                 Message = "Please correct the Model state.";
                 await OnGet();
+                return Page();
             }
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
@@ -193,19 +200,23 @@ namespace zaloclone_test.Pages
 
         public async Task<IActionResult> OnPostChangeAvatar(string userid)
         {
-            ModelState.Remove(nameof(Input));
-            ModelState.Remove(nameof(UpdateProfile));
+            ModelState.Remove(nameof(Input.Content));
+            ModelState.Remove(nameof(UpdateProfile.Sex));
+            ModelState.Remove(nameof(UpdateProfile.Bio));
+            ModelState.Remove(nameof(UpdateProfile.Dob));
+            ModelState.Remove(nameof(UpdateProfile.UserName));
+
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
+                await OnGet();
                 Message = msg;
             }
-            UserToken = userToken;
+            if (UserToken == null) UserToken = userToken;
             if (!ModelState.IsValid)
             {
                 Message = "Please correct the Model state.";
                 await OnGet();
-                return RedirectToPage();
             }
 
             msg = await _profileService.DoChangeAvatar(userid, UpdateAvatarVM);
@@ -219,7 +230,7 @@ namespace zaloclone_test.Pages
 
         #endregion
 
-        #region Area add user
+        #region Area Friend
         public async Task<IActionResult> OnPostSendRequest(string otherUserId)
         {
             if (string.IsNullOrEmpty(otherUserId))
@@ -242,7 +253,6 @@ namespace zaloclone_test.Pages
             }
             return RedirectToPage();
         }
-
         #endregion
 
     }

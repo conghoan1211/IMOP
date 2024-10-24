@@ -57,7 +57,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-builder.Services.AddDbContext<Zalo_CloneContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyDB")));
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

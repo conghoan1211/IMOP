@@ -31,19 +31,23 @@
                 {
                     <div class="flex-column invitation-item">
                         <div class="flex-align-center invitation-user">
-                            <a asp-page="/profile" asp-route-id="@invite.UserId">
-                                <img class="avatar-img" src="/img/@invite.Avatar" alt="">
+                            @{
+                                string? avatar = invite.Avatar;
+                                if (string.IsNullOrEmpty(avatar)) avatar = "default-avatar.png";
+                            }
+                            <a asp-page="/profile" asp-route-id="@invite.UserID">
+                                <img class="avatar-img" src="/img/@avatar" alt="">
                             </a>
                             <div class="flex-column invitation-info">
-                                <span class="invitation-name">@invite.Username</span>
+                                <span class="invitation-name">@invite.UserName</span>
                                 <div>
-                                    <span class="invitation-time format-dateonly" data-time="@invite.UpdateAt ">@invite.UpdateAt </span>
+                                    <span class="invitation-time " >@invite.CreateAt </span>
                                     <span class="invitation-time">- Từ số điện thoại</span>
                                 </div>
                             </div>
                         </div>
                         <form method="post" class="flex-justify-between invitation-action">
-                            <input type="hidden" name="UserId" value="@invite.UserId" />
+                            <input type="hidden" name="UserId" value="@invite.UserID" />
                             <button formaction="?handler=DeleteInvitation" type="submit" class="btn small btn-neutral">Từ chối</button>
                             <button formaction="?handler=AcceptInvitation" type="submit" class="btn small btn-secondary">Đồng ý</button>
                         </form>
@@ -74,20 +78,24 @@
                 {
                     <div class="flex-column invitation-item">
                         <div class="flex-align-center invitation-user">
-                            <a asp-page="/profile" asp-route-id="@request.UserId">
-                                <img class="avatar-img" src="/img/@request.Avatar" alt="">
+                            @{
+                                string? avatar = request.Avatar;
+                                if (string.IsNullOrEmpty(avatar)) avatar = "default-avatar.png";
+                            }
+                            <a asp-page="/profile" asp-route-id="@request.UserID">
+                                <img class="avatar-img" src="/img/@avatar" alt="">
                             </a>
                             <div class="flex-column invitation-info">
-                                <span class="invitation-name">@request.Username</span>
+                                <span class="invitation-name">@request.UserName</span>
                                 <div>
-                                    <span class="invitation-time format-dateonly" data-time="@request.UpdateAt">@request.CreateAt </span>
+                                    <span class="invitation-time  ">@request.CreateAt </span>
                                     <span class="invitation-time">- Bạn đã gửi lời mời</span>
                                 </div>
                             </div>
                         </div>
                         <form method="post" asp-page-handler="Invoke">
                             <div class="flex-justify-between invitation-action">
-                                <input type="hidden" name="Id" value="@request.UserId">
+                                <input type="hidden" name="Id" value="@request.UserID">
                                 <button type="submit" class="btn large btn-neutral">Thu hồi lời mời</button>
                             </div>
                         </form>
