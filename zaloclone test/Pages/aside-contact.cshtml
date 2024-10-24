@@ -49,7 +49,11 @@
                     {
                         <div class="flex-align-center contact-item" data-friend-id="@friend.UserId">
                             <div style="position: relative;">
-                                <img class="avatar-img friend-avatar" src="/img/@(string.IsNullOrEmpty(friend.Avatar) ? "/img/default-avatar.png" : friend.Avatar)" alt="">
+                                @{
+                                    string? avatar = friend.Avatar;
+                                    if (string.IsNullOrEmpty(avatar)) avatar = "default-avatar.png";
+                                }
+                                <img class="avatar-img friend-avatar" src="/img/@avatar" alt="">
                                 @if (friend.IsOnline)
                                 {
                                     <div class="friend-online"><i class="fa-solid fa-circle"></i></div>

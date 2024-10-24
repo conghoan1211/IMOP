@@ -28,7 +28,7 @@ namespace zaloclone_test.Services
             if (string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
 
             var allInvitation = await _context.Friends
-                .Where(f => f.UpdateUser == UserId && f.Status == 0) // Người nhận là UserId và Status = 0 (chưa chấp nhận)
+                .Where(f => f.UpdateUser == UserId && f.Status == 0) 
                 .Join(_context.Users, f => f.CreateUser, u => u.UserId, (f, u) => new InvitationVM // Chọn các trường cần thiết
                 {
                     UserID = u.UserId,
@@ -48,8 +48,8 @@ namespace zaloclone_test.Services
             if (string.IsNullOrEmpty(UserId)) return ("UserId is null", null);
 
             var sentInvitation = await _context.Friends
-                .Where(f => f.UserId1 == UserId && f.CreateUser == UserId && f.Status == 0) // Yêu cầu gửi đi với Status = 0
-                .Join(_context.Users, f => f.UserId2, u => u.UserId, (f, u) => new InvitationVM // Chọn các trường cần thiết
+                .Where(f => f.UserId1 == UserId && f.CreateUser == UserId && f.Status == 0)
+                .Join(_context.Users, f => f.UserId2, u => u.UserId, (f, u) => new InvitationVM
                 {
                     UserID = u.UserId,
                     UserName = u.Username, 
@@ -65,7 +65,7 @@ namespace zaloclone_test.Services
         public async Task<string> RevokeInvitation(string UserId1, string UserId2)
         {
             if (string.IsNullOrEmpty(UserId1)) return "UserId is null";
-            var friend = await _context.Friends.FirstOrDefaultAsync(f => f.UserId1 == UserId1 && f.UserId2 == UserId2);
+            var friend = await _context.Friends.FirstOrDefaultAsync(f => (f.UserId1 == UserId1 && f.UserId2 == UserId2) || (f.UserId1 == UserId2 && f.UserId2 == UserId1) && f.Status == (int)FriendStatus.Pending);
             if (friend == null) return "Friend not found";
             _context.Friends.Remove(friend);
             await _context.SaveChangesAsync();
@@ -75,8 +75,10 @@ namespace zaloclone_test.Services
         public async Task<string> AcceptInvitation(string UserId1, string UserId2)
         {
             if (string.IsNullOrEmpty(UserId1)) return "UserId is null";
-            var friend = await _context.Friends.FirstOrDefaultAsync(f => f.UserId1 == UserId1 && f.UserId2 == UserId2);
-            if (friend == null) return "Friend not found";
+            var friend = await _context.Friends.FirstOrDefaultAsync(f => f.UserId2 == UserId1 && f.UserId1 == UserId2 && f.Status == (int)FriendStatus.Pending);
+            if (friend == null)
+                return "Friend not found";
+
             friend.Status = (int)FriendStatus.Accepted;
             friend.UpdateAt = DateTime.Now;
             await _context.SaveChangesAsync();
