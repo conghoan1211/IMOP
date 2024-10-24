@@ -395,7 +395,7 @@
                 <div class="flex-column profile-edit-bio_wrapper">
                     <span class="profile-edit-text">Bio</span>
                     <textarea asp-for="@Model.UpdateProfile.Bio" class="profile-edit-bio" maxlength="60"></textarea>
-                    <span asp-validation-for="@Model.UpdateProfile.Bio"  class="register-input-error"></span>
+                    <span asp-validation-for="@Model.UpdateProfile.Bio" class="register-input-error"></span>
                 </div>
             </div>
             <div class="edit-profile-footer">
@@ -405,6 +405,105 @@
         </form>
     </div>
 </div>
+
+<script>
+    function validateProfileForm() {
+        let isValid = true;
+
+        // Get form elements
+        const userName = document.querySelector('input[name="UpdateProfile.UserName"]');
+        const dob = document.querySelector('input[name="UpdateProfile.Dob"]');
+        const bio = document.querySelector('textarea[name="UpdateProfile.Bio"]');
+        const sex = document.querySelector('input[name="UpdateProfile.Sex"]:checked');
+
+        // Clear previous error messages
+        clearErrors();
+
+        // Validate Username
+        if (!userName.value.trim()) {
+            showError(userName, 'Tên hiển thị không được để trống');
+            isValid = false;
+        } else if (userName.value.length > 50) {
+            showError(userName, 'Tên đăng nhập không được vượt quá 50 ký tự');
+            isValid = false;
+        }
+
+        // Validate Sex
+        if (!sex) {
+            showError(document.querySelector('.edit-profile-gender'), 'Giới tính không được để trống');
+            isValid = false;
+        }
+
+        // Validate Date of Birth
+        if (!dob.value) {
+            showError(dob, 'Ngày sinh không được để trống');
+            isValid = false;
+        } else {
+            const selectedDate = new Date(dob.value);
+            const today = new Date();
+            const minDate = new Date('1890-01-01');
+
+            if (selectedDate > today) {
+                showError(dob, 'Ngày sinh không vượt quá ngày hiện tại!');
+                isValid = false;
+            } else if (selectedDate < minDate) {
+                showError(dob, 'Năm sinh phải lớn hơn hoặc bằng 1890!');
+                isValid = false;
+            }
+        }
+
+        // Validate Bio
+        if (bio.value.length > 60) {
+            showError(bio, 'Bio không được vượt quá 60 ký tự');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showError(element, message) {
+        // Create error element
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'validation-error text-danger mt-1';
+        errorDiv.textContent = message;
+
+        // Add inline CSS style for red text
+        errorDiv.style.color = 'red'; // Màu đỏ cho thông báo lỗi
+
+        // Add error class to input
+        element.classList.add('is-invalid');
+
+        // Insert error after the input element
+        element.parentNode.insertBefore(errorDiv, element.nextSibling);
+    }
+
+    function clearErrors() {
+        // Remove all error messages
+        document.querySelectorAll('.validation-error').forEach(error => error.remove());
+
+        // Remove error classes from inputs
+        document.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
+    }
+
+    // Add event listeners for real-time validation
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('edit-profile');
+        const inputs = form.querySelectorAll('input, select, textarea');
+
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                validateProfileForm();
+            });
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!validateProfileForm()) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
 
 <!--  other profile dialog  -->
 <div id="profileOtherDialog" class="dialog-overlay" style="display: none">

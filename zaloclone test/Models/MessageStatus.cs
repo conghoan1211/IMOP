@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace zaloclone_test.Models
+﻿namespace zaloclone_test.Models
 {
     public partial class MessageStatus
     {
