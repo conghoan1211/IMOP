@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using zaloclone_test.Models;
 using zaloclone_test.Services;
 using zaloclone_test.Utilities;

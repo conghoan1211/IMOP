@@ -147,7 +147,7 @@ namespace zaloclone_test.Services
             {
                 return $"An error occurred while updating the avatar: {ex.Message}";
             }
-            return "";
         }
+            return "";
     }
 }

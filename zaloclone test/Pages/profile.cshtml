@@ -402,7 +402,7 @@
                 <div class="flex-column profile-edit-bio_wrapper">
                     <span class="profile-edit-text">Bio</span>
                     <textarea asp-for="@Model.UpdateProfile.Bio" class="profile-edit-bio" maxlength="60"></textarea>
-                    <span asp-validation-for="@Model.UpdateProfile.Bio"  class="register-input-error"></span>
+                    <span asp-validation-for="@Model.UpdateProfile.Bio" class="register-input-error"></span>
                 </div>
             </div>
             <div class="edit-profile-footer">
@@ -412,6 +412,105 @@
         </form>
     </div>
 </div>
+
+<script>
+    function validateProfileForm() {
+        let isValid = true;
+
+        // Get form elements
+        const userName = document.querySelector('input[name="UpdateProfile.UserName"]');
+        const dob = document.querySelector('input[name="UpdateProfile.Dob"]');
+        const bio = document.querySelector('textarea[name="UpdateProfile.Bio"]');
+        const sex = document.querySelector('input[name="UpdateProfile.Sex"]:checked');
+
+        // Clear previous error messages
+        clearErrors();
+
+        // Validate Username
+        if (!userName.value.trim()) {
+            showError(userName, 'Tên hiển thị không được để trống');
+            isValid = false;
+        } else if (userName.value.length > 50) {
+            showError(userName, 'Tên đăng nhập không được vượt quá 50 ký tự');
+            isValid = false;
+        }
+
+        // Validate Sex
+        if (!sex) {
+            showError(document.querySelector('.edit-profile-gender'), 'Giới tính không được để trống');
+            isValid = false;
+        }
+
+        // Validate Date of Birth
+        if (!dob.value) {
+            showError(dob, 'Ngày sinh không được để trống');
+            isValid = false;
+        } else {
+            const selectedDate = new Date(dob.value);
+            const today = new Date();
+            const minDate = new Date('1890-01-01');
+
+            if (selectedDate > today) {
+                showError(dob, 'Ngày sinh không vượt quá ngày hiện tại!');
+                isValid = false;
+            } else if (selectedDate < minDate) {
+                showError(dob, 'Năm sinh phải lớn hơn hoặc bằng 1890!');
+                isValid = false;
+            }
+        }
+
+        // Validate Bio
+        if (bio.value.length > 60) {
+            showError(bio, 'Bio không được vượt quá 60 ký tự');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showError(element, message) {
+        // Create error element
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'validation-error text-danger mt-1';
+        errorDiv.textContent = message;
+
+        // Add inline CSS style for red text
+        errorDiv.style.color = 'red'; // Màu đỏ cho thông báo lỗi
+
+        // Add error class to input
+        element.classList.add('is-invalid');
+
+        // Insert error after the input element
+        element.parentNode.insertBefore(errorDiv, element.nextSibling);
+    }
+
+    function clearErrors() {
+        // Remove all error messages
+        document.querySelectorAll('.validation-error').forEach(error => error.remove());
+
+        // Remove error classes from inputs
+        document.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
+    }
+
+    // Add event listeners for real-time validation
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('edit-profile');
+        const inputs = form.querySelectorAll('input, select, textarea');
+
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                validateProfileForm();
+            });
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!validateProfileForm()) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
 
 <!--  other profile dialog  -->
 <div id="profileOtherDialog" class="dialog-overlay" style="display: none">
@@ -576,104 +675,104 @@
 <script type="module" src="~/js/profile/avt-zoom.js"></script>
 
 <script>
-    // function validateProfileForm() {
-    //     let isValid = true;
+    function validateprofileform() {
+        let isvalid = true;
 
-    //     Get form elements
-    //     const userName = document.querySelector('input[name="UpdateProfile.UserName"]');
-    //     const dob = document.querySelector('input[name="UpdateProfile.Dob"]');
-    //     const bio = document.querySelector('textarea[name="UpdateProfile.Bio"]');
-    //     const sex = document.querySelector('input[name="UpdateProfile.Sex"]:checked');
+        get form elements
+        const username = document.queryselector('input[name="updateprofile.username"]');
+        const dob = document.queryselector('input[name="updateprofile.dob"]');
+        const bio = document.queryselector('textarea[name="updateprofile.bio"]');
+        const sex = document.queryselector('input[name="updateprofile.sex"]:checked');
 
-    //     Clear previous error messages
-    //     clearErrors();
+        clear previous error messages
+        clearerrors();
 
-    //     Validate Username
-    //     if (!userName.value.trim()) {
-    //         showError(userName, 'Tên hiển thị không được để trống');
-    //         isValid = false;
-    //     } else if (userName.value.length < 5) {
-    //         showError(userName, 'Tên hiển thị phải ít nhất 5 ký tự');
-    //         isValid = false;
-    //     } else if (userName.value.length > 50) {
-    //         showError(userName, 'Tên hiển thị không được vượt quá 50 ký tự');
-    //         isValid = false;
-    //     }
+        validate username
+        if (!username.value.trim()) {
+            showerror(username, 'tên hiển thị không được để trống');
+            isvalid = false;
+        } else if (username.value.length < 5) {
+            showerror(username, 'tên hiển thị phải ít nhất 5 ký tự');
+            isvalid = false;
+        } else if (username.value.length > 50) {
+            showerror(username, 'tên hiển thị không được vượt quá 50 ký tự');
+            isvalid = false;
+        }
 
-    //     Validate Sex
-    //     if (!sex) {
-    //         showError(document.querySelector('.edit-profile-gender'), 'Giới tính không được để trống');
-    //         isValid = false;
-    //     }
+        validate sex
+        if (!sex) {
+            showerror(document.queryselector('.edit-profile-gender'), 'giới tính không được để trống');
+            isvalid = false;
+        }
 
-    //     Validate Date of Birth
-    //     if (!dob.value) {
-    //         showError(dob, 'Ngày sinh không được để trống');
-    //         isValid = false;
-    //     } else {
-    //         const selectedDate = new Date(dob.value);
-    //         const today = new Date();
-    //         const minDate = new Date('1890-01-01');
+        validate date of birth
+        if (!dob.value) {
+            showerror(dob, 'ngày sinh không được để trống');
+            isvalid = false;
+        } else {
+            const selecteddate = new date(dob.value);
+            const today = new date();
+            const mindate = new date('1890-01-01');
 
-    //         if (selectedDate > today) {
-    //             showError(dob, 'Ngày sinh không vượt quá ngày hiện tại!');
-    //             isValid = false;
-    //         } else if (selectedDate < minDate) {
-    //             showError(dob, 'Năm sinh phải lớn hơn hoặc bằng 1890!');
-    //             isValid = false;
-    //         }
-    //     }
+            if (selecteddate > today) {
+                showerror(dob, 'ngày sinh không vượt quá ngày hiện tại!');
+                isvalid = false;
+            } else if (selecteddate < mindate) {
+                showerror(dob, 'năm sinh phải lớn hơn hoặc bằng 1890!');
+                isvalid = false;
+            }
+        }
 
-    //     Validate Bio
-    //     if (bio.value.length > 60) {
-    //         showError(bio, 'Bio không được vượt quá 60 ký tự');
-    //         isValid = false;
-    //     }
+        validate bio
+        if (bio.value.length > 60) {
+            showerror(bio, 'bio không được vượt quá 60 ký tự');
+            isvalid = false;
+        }
 
-    //     return isValid;
-    // }
+        return isvalid;
+    }
 
-    // function showError(element, message) {
-    //     Create error element
-    //     const errorDiv = document.createElement('div');
-    //     errorDiv.className = 'validation-error text-danger mt-1';
-    //     errorDiv.textContent = message;
+    function showerror(element, message) {
+        create error element
+        const errordiv = document.createelement('div');
+        errordiv.classname = 'validation-error text-danger mt-1';
+        errordiv.textcontent = message;
 
-    //     Add inline CSS style for red text
-    //     errorDiv.style.color = 'red'; Red color for error message
+        add inline css style for red text
+        errordiv.style.color = 'red'; red color for error message
 
-    //     Add error class to input
-    //     element.classList.add('is-invalid');
+        add error class to input
+        element.classlist.add('is-invalid');
 
-    //     Insert error after the input element
-    //     element.parentNode.insertBefore(errorDiv, element.nextSibling);
-    // }
+        insert error after the input element
+        element.parentnode.insertbefore(errordiv, element.nextsibling);
+    }
 
-    // function clearErrors() {
-    //     Remove all error messages
-    //     document.querySelectorAll('.validation-error').forEach(error => error.remove());
+    function clearerrors() {
+        remove all error messages
+        document.queryselectorall('.validation-error').foreach(error => error.remove());
 
-    //     Remove error classes from inputs
-    //     document.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
-    // }
+        remove error classes from inputs
+        document.queryselectorall('.is-invalid').foreach(input => input.classlist.remove('is-invalid'));
+    }
 
-    // Add event listeners for real-time validation
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const form = document.getElementById('edit-profile');
-    //     const inputs = form.querySelectorAll('input, textarea');
+    add event listeners for real-time validation
+    document.addeventlistener('domcontentloaded', function () {
+        const form = document.getelementbyid('edit-profile');
+        const inputs = form.queryselectorall('input, textarea');
 
-    //     inputs.forEach(input => {
-    //         input.addEventListener('blur', function () {
-    //             validateProfileForm();
-    //         });
-    //     });
+        inputs.foreach(input => {
+            input.addeventlistener('blur', function () {
+                validateprofileform();
+            });
+        });
 
-    //     form.addEventListener('submit', function (e) {
-    //         if (!validateProfileForm()) {
-    //             e.preventDefault();
-    //         }
-    //     });
-    // });
+        form.addeventlistener('submit', function (e) {
+            if (!validateprofileform()) {
+                e.preventdefault();
+            }
+        });
+    });
 </script>
 
 <script>

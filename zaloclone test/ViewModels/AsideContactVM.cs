@@ -50,4 +50,3 @@
             public object? Data { get; set; }
         }
     }
-
