@@ -49,7 +49,7 @@ namespace zaloclone_test.ViewModels
         //[BirthYearValidation(1890)]
         [AssertThat("Dob <= Now()", ErrorMessage = "Ngày sinh không vượt quá ngày hiện tại!")]
         public DateTime? Dob { get; set; }
-        [StringLength(60, ErrorMessage = "Bio không được vượt quá 60 ký tự")]
+        [StringLength(50, ErrorMessage = "Bio không được vượt quá 50 ký tự")]
         public string? Bio { get; set; }
     }
 

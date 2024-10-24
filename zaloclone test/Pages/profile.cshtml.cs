@@ -174,6 +174,7 @@ namespace zaloclone_test.Pages
             {
                 Message = "Please correct the Model state.";
                 await OnGet();
+                return Page();
             }
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
@@ -193,19 +194,23 @@ namespace zaloclone_test.Pages
 
         public async Task<IActionResult> OnPostChangeAvatar(string userid)
         {
-            ModelState.Remove(nameof(Input));
-            ModelState.Remove(nameof(UpdateProfile));
+            ModelState.Remove(nameof(Input.Content));
+            ModelState.Remove(nameof(UpdateProfile.Sex));
+            ModelState.Remove(nameof(UpdateProfile.Bio));
+            ModelState.Remove(nameof(UpdateProfile.Dob));
+            ModelState.Remove(nameof(UpdateProfile.UserName));
+
             string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
             if (msg.Length > 0)
             {
+                await OnGet();
                 Message = msg;
             }
-            UserToken = userToken;
+            if (UserToken == null) UserToken = userToken;
             if (!ModelState.IsValid)
             {
                 Message = "Please correct the Model state.";
                 await OnGet();
-                return RedirectToPage();
             }
 
             msg = await _profileService.DoChangeAvatar(userid, UpdateAvatarVM);
