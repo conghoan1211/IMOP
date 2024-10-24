@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using zaloclone_test.Helper;
 using zaloclone_test.Models;
 using zaloclone_test.ViewModels;
 
@@ -12,6 +13,9 @@ namespace zaloclone_test.Services
         Task<FriendOperationResult> DeleteFriend(string userId, string friendId);
         Task<FriendOperationResult> BlockFriend(string userId, BlockFriendModel model);
         Task<FriendProfileModel> GetFriendProfile(string userId, string friendId);
+
+        public Task<bool> IsFriend(string userId, string friendId);
+
     }
 
     public class AsideContactService : IAsideContactService
@@ -217,6 +221,14 @@ namespace zaloclone_test.Services
                 .ToListAsync();
 
             return user1Friends.Intersect(user2Friends).Count();
+        }
+
+        public async Task<bool> IsFriend(string userId, string friendId)
+        {
+            var IsFriend = await _context.Friends.AnyAsync(x => (x.UserId1 == userId && x.UserId2 == friendId)
+                || (x.UserId2 == userId && x.UserId1 == friendId) && x.Status == (int)FriendStatus.Accepted);
+
+            return IsFriend;
         }
     }
 }

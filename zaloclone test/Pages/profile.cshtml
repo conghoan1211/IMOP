@@ -89,8 +89,15 @@
                 {
                     <form method="post" class="aprofile-btn__other-action">
                         <input type="hidden" name="otherUserId" value="@Model.Profile.UserID" />
-                        <button formaction="?handler=SendRequest" type="submit" class="btn btn-secondary small aprofile-post">Add friend</button>
-                        <button class="btn btn-neutral small">Message</button>
+                        @if (!Model.IsFriend)
+                        {
+                            <button formaction="?handler=SendRequest" type="submit" class="btn btn-secondary small aprofile-post">Add friend</button>
+                        }
+                        else
+                        {
+                            <button formaction="?handler=UnFriend" type="submit" class="btn btn-default small aprofile-post">Unfriend</button>
+                        }
+                        <button class="btn btn-default small">Message</button>
                     </form>
                 }
 
@@ -296,22 +303,23 @@
                     <i class="fa-solid fa-xmark "></i>
                 </span>
             </div>
-            <form method="post" class="flex-align-center profile-info" id="avatarForm">
-                <input type="hidden" name="postId" value="@Model.Profile.UserID" />
+            <form method="post" class="flex-align-center profile-info" id="avatarForm" enctype="multipart/form-data">
+                <input type="hidden" name="userid" value="@Model.Profile.UserID" />
                 <img src="/img/@avatar" class="avatar-img profile-avatar" alt="avatar" id="profileAvatar">
                 <div class="profile-name">@Model.Profile.UserName &nbsp;</div>
                 <button class="profile-edit"><i class="fa-solid fa-pencil"></i></button>
                 <input asp-for="@Model.UpdateAvatarVM.Image" type="file" id="fileInput" style="display: none;" accept="image/*">
-                <button type="button" formaction="?handler=ChangeAvatar" id="changeAvatarBtn" class="flex-align-justify-center profile-change-avatar">
+                <button type="button" asp-page-handler="ChangeAvatar" id="changeAvatarBtn" class="flex-align-justify-center profile-change-avatar">
                     <i class="fa-solid fa-camera"></i>
                 </button>
+
             </form>
             <div class="profile-title">Thông tin cá nhân</div>
             <div class="profile-detail">
                 <div class="profile-detail-list">
                     <div class="profile-detail-item">
                         <span class="profile-detail-title">Bio</span>
-                        <span>@Model.Profile.Bio sdbsfb</span>
+                        <span>@Model.Profile.Bio</span>
                     </div>
                     <div class="profile-detail-item">
                         <span class="profile-detail-title">Giới tính</span>
@@ -367,7 +375,7 @@
                 <div>
                     <div class="flex-column profile-edit">
                         <span class="profile-edit-text">Tên hiển thị</span>
-                        <input asp-for="UpdateProfile.UserName" class="profile-edit-name" type="text" maxlength="50">
+                        <input asp-for="UpdateProfile.UserName" class="profile-edit-name" id="profile-edit-name" type="text" maxlength="50" min="5">
                     </div>
                     <span asp-validation-for="UpdateProfile.UserName" class="register-input-error"></span>
                 </div>
@@ -398,7 +406,7 @@
                 </div>
             </div>
             <div class="edit-profile-footer">
-                <button class="btn btn-neutral profile-btn-cancel">Hủy</button>
+                <button type="button" class="btn btn-neutral profile-btn-cancel">Hủy</button>
                 <button type="submit" formaction="?handler=UpdateProfile" class="btn btn-primary profile-btn-update">Cập nhật</button>
             </div>
         </form>
@@ -442,7 +450,14 @@
                     </div>
                     <div class="profile-detail-item">
                         <span class="profile-detail-title">Điện thoại</span>
-                        <span>@Model.Profile.Phone</span>
+                        @if (Model.IsFriend)
+                        {
+                            <span>@Model.Profile.Phone</span>
+                        }
+                        else
+                        {
+                            <span>0**********</span>
+                        }
                     </div>
                     <div class="profile-note">Chỉ bạn bè đã chấp nhận kết bạn mới xem được số điện thoại này</div>
                 </div>
@@ -513,7 +528,7 @@
     </div>
 </div>
 
-<!-- modal edit post -->
+ <!-- modal edit post -->
 <div class="flex-align-justify-center modal-addpost modalEditPost" id="globalModalEditPost" style="display: none;">
     <div class="flex-column modal-addpost__wrapper">
         <div style="position: relative;">
@@ -542,7 +557,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> 
 
 <script type="text/javascript">
     // Hàm mở modal và cập nhật nội dung
@@ -559,3 +574,104 @@
     }
 </script>
 <script type="module" src="~/js/profile/avt-zoom.js"></script>
+
+<script>
+    function validateProfileForm() {
+        let isValid = true;
+
+        Get form elements
+        const userName = document.querySelector('input[name="UpdateProfile.UserName"]');
+        const dob = document.querySelector('input[name="UpdateProfile.Dob"]');
+        const bio = document.querySelector('textarea[name="UpdateProfile.Bio"]');
+        const sex = document.querySelector('input[name="UpdateProfile.Sex"]:checked');
+
+        Clear previous error messages
+        clearErrors();
+
+        Validate Username
+        if (!userName.value.trim()) {
+            showError(userName, 'Tên hiển thị không được để trống');
+            isValid = false;
+        } else if (userName.value.length < 5) {
+            showError(userName, 'Tên hiển thị phải ít nhất 5 ký tự');
+            isValid = false;
+        } else if (userName.value.length > 50) {
+            showError(userName, 'Tên hiển thị không được vượt quá 50 ký tự');
+            isValid = false;
+        }
+
+        Validate Sex
+        if (!sex) {
+            showError(document.querySelector('.edit-profile-gender'), 'Giới tính không được để trống');
+            isValid = false;
+        }
+
+        Validate Date of Birth
+        if (!dob.value) {
+            showError(dob, 'Ngày sinh không được để trống');
+            isValid = false;
+        } else {
+            const selectedDate = new Date(dob.value);
+            const today = new Date();
+            const minDate = new Date('1890-01-01');
+
+            if (selectedDate > today) {
+                showError(dob, 'Ngày sinh không vượt quá ngày hiện tại!');
+                isValid = false;
+            } else if (selectedDate < minDate) {
+                showError(dob, 'Năm sinh phải lớn hơn hoặc bằng 1890!');
+                isValid = false;
+            }
+        }
+
+        Validate Bio
+        if (bio.value.length > 60) {
+            showError(bio, 'Bio không được vượt quá 60 ký tự');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showError(element, message) {
+        Create error element
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'validation-error text-danger mt-1';
+        errorDiv.textContent = message;
+
+        Add inline CSS style for red text
+        errorDiv.style.color = 'red'; Red color for error message
+
+        Add error class to input
+        element.classList.add('is-invalid');
+
+        Insert error after the input element
+        element.parentNode.insertBefore(errorDiv, element.nextSibling);
+    }
+
+    function clearErrors() {
+        Remove all error messages
+        document.querySelectorAll('.validation-error').forEach(error => error.remove());
+
+        Remove error classes from inputs
+        document.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
+    }
+
+    Add event listeners for real-time validation
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('edit-profile');
+        const inputs = form.querySelectorAll('input, textarea');
+
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                validateProfileForm();
+            });
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!validateProfileForm()) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>

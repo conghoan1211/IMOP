@@ -171,7 +171,7 @@
     transition: all .3s;
     margin-top: 10px;
     height: 36px;
-
+    cursor: text;
 
     &:focus-within {
         border-color: var(--button-primary-normal);

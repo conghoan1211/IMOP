@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AppGlobal.Common;
+using Microsoft.EntityFrameworkCore;
 using zaloclone_test.Helper;
 using zaloclone_test.Models;
 using zaloclone_test.Utilities;
@@ -58,14 +59,16 @@ namespace zaloclone_test.Services
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userID);
             if (user == null) return "User not found";
 
-            user.Username = updatedProfile.UserName ?? user.Username;
+            user.Username = updatedProfile.UserName.Trim();
             user.Bio = updatedProfile.Bio ?? user.Bio;
             user.Dob = updatedProfile.Dob ?? user.Dob;
             user.Sex = updatedProfile.Sex ?? user.Sex;
-            user.UpdateAt = DateTime.Now; // Cập nhật thời gian chỉnh sửa
 
+            //if (user.IsObjectEqual(updatedProfile)) 
+            //    return "";
             try
             {
+                user.UpdateAt = DateTime.Now; // Cập nhật thời gian chỉnh sửa
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
             }
