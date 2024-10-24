@@ -30,30 +30,37 @@ namespace AppGlobal.Common
             return new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        //add more utils here ...
-        public static bool IsObjectEqual<T1, T2>(this T1 obj1, T2 obj2)
+        public static bool AreObjectsDifferent<T1, T2>(this T1 obj1, T2 obj2)
         {
-            if (obj1 == null || obj2 == null) 
-                return false;
+            if (obj1 == null || obj2 == null)
+                return true; // If either object is null, treat them as different
 
             var properties1 = typeof(T1).GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var properties2 = typeof(T2).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            // So sánh từng thuộc tính trong obj1 và obj2
+            // Dictionary of properties from obj2 for fast lookup
+            var properties2Dict = properties2.ToDictionary(p => p.Name, p => p);
+
             foreach (var property1 in properties1)
             {
-                var property2 = properties2.FirstOrDefault(p => p.Name == property1.Name && p.PropertyType == property1.PropertyType);
-                if (property2 == null) continue;
+                if (!properties2Dict.TryGetValue(property1.Name, out var property2) ||
+                    property1.PropertyType != property2.PropertyType)
+                {
+                    return true; // If property names or types don't match, they are considered different
+                }
 
                 var value1 = property1.GetValue(obj1);
                 var value2 = property2.GetValue(obj2);
 
                 if (!Equals(value1, value2))
-                    return false;
+                {
+                    return true; // Return true if any property values are different
+                }
             }
 
-            return true; // Nếu tất cả các thuộc tính đều giống nhau
+            return false; // Return false if no differences are found
         }
+
 
     }
 

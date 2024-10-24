@@ -1,5 +1,4 @@
 ﻿using AppGlobal.Common;
-using System.Linq;
 using System.Text.RegularExpressions;
 using zaloclone_test.Models;
 
@@ -64,7 +63,7 @@ namespace zaloclone_test.Helper
             return (string.Empty, fileNames?.FirstOrDefault());
         }
 
-        public static async Task<(string, List<string>?)> GetUrlImages(IFormFile[] files )
+        public static async Task<(string, List<string>?)> GetUrlImages(IFormFile[] files)
         {
             List<string> fileNames = new List<string>();
             var allowedExtensions = Constant.IMAGE_EXTENDS; // Định dạng file được phép

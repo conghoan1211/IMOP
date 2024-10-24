@@ -75,13 +75,39 @@
                                 zaloclone_test.Models.Message lastMessage = conversation.MessageBlocks.Last().Messages.Last();
                                 string displayTime = "";
                                 DateTime now = DateTime.Now;
-                                double timeGap = lastMessage.CreateAt.Subtract(now).TotalMilliseconds;
+                                double timeGap = now.Subtract(lastMessage.CreateAt).TotalMinutes; // Calculate the time gap in minutes
+
+                                if (timeGap >= 525600) // More than a year (525600 minutes)
+                                {
+                                    // Display in "dd/MM/yyyy" format
+                                    displayTime = lastMessage.CreateAt.ToString("dd/MM/yyyy");
+                                }
+                                else if (timeGap >= 10080) // More than a week (10080 minutes)
+                                {
+                                    // Display in "dd/MM" format
+                                    displayTime = lastMessage.CreateAt.ToString("dd/MM");
+                                }
+                                else if (timeGap >= 1440) // More than a day (1440 minutes)
+                                {
+                                    // Display in day format
+                                    displayTime = $"{(int)(timeGap / 1440)} ngày";
+                                }
+                                else if (timeGap >= 60) // More than an hour
+                                {
+                                    // Display in hour format
+                                    displayTime = $"{(int)(timeGap / 60)} giờ";
+                                }
+                                else
+                                {
+                                    // Display in minute format
+                                    displayTime = $"{(int)timeGap} phút";
+                                }
                             }
                             <div class="flex-align-center-between mute-time-msg">
                                 <div class="bell-msg" style="display: block;"> 
                                     <i class="fa-solid fa-bell-slash bell-mute"></i>
                                 </div>
-                                <span style="padding: 0 0 2px 0;">@lastMessage.CreateAt</span>
+                                <span style="padding: 0 0 2px 0;">@displayTime</span>
                             </div>
                         </div>
                         <div class="flex-justify-between item-infor-bottom">
@@ -117,167 +143,171 @@
         </div>
     </div>
 </sidebar>
+@{
+    bool isShowChat = Model.CurrentConversationID == null;
+}
+<div hidden="@isShowChat">
+    <sidebar class="message-container" style="display:none">
+        <header class="flex header-search">
+            <div class="flex-justify-center search">
+                <button class="flex-align-center search-icon">
+                    <i class="fa-solid fa-magnifying-glass "></i>
+                </button>
+                <input class="search-input" type="text" placeholder="Tìm kiếm">
+                <button class="flex-align-center clear-icon">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+            <button class="btn-search-close">Đóng</button>
+        </header>
 
-<sidebar class="message-container" style="display:none">
-    <header class="flex header-search">
-        <div class="flex-justify-center search">
-            <button class="flex-align-center search-icon">
-                <i class="fa-solid fa-magnifying-glass "></i>
-            </button>
-            <input class="search-input" type="text" placeholder="Tìm kiếm">
-            <button class="flex-align-center clear-icon">
-                <i class="fa-solid fa-circle-xmark"></i>
-            </button>
-        </div>
-        <button class="btn-search-close">Đóng</button>
-    </header>
-
-    <!-- list search friend  -->
-    <div class="cont-list-msg">
-        @* <div class="list-search-friend">
-            <div class="list-search-title">Tìm gần đây</div>
-            <div class="flex-align-center list-search-item">
-                <img src="~/img/avt.jpeg" class="avatar-img" alt="">
-                <span class="text__overflow-1 list-search-item__name">Dad</span>
-            </div>
-            <div class="flex-align-center list-search-item">
-                <img src="~/img/avt.jpeg" class="avatar-img" alt="">
-                <span class="text__overflow-1 list-search-item__name">Young sis</span>
-            </div>
-        </div> *@
-    </div>
-</sidebar>
-<aside class="flex-column aside-container-msg">
-    <header class="flex-align-center-between cont-msg-header">
-        <div class="flex-align-center">
-            @* <div class="avatar-chat-msg">
-            <img class="avatar-img" src="~/img/avt.jpeg" alt="">
-            </div>
-            <div class="flex-column aside-head-info">
-            <div class="aside-head-name">Winter</div>
-            <div class="aside-head-tag">
-            <i class="fa-solid fa-tag"></i>
-            </div>
+        <!-- list search friend  -->
+        <div class="cont-list-msg">
+            @* <div class="list-search-friend">
+                <div class="list-search-title">Tìm gần đây</div>
+                <div class="flex-align-center list-search-item">
+                    <img src="~/img/avt.jpeg" class="avatar-img" alt="">
+                    <span class="text__overflow-1 list-search-item__name">Dad</span>
+                </div>
+                <div class="flex-align-center list-search-item">
+                    <img src="~/img/avt.jpeg" class="avatar-img" alt="">
+                    <span class="text__overflow-1 list-search-item__name">Young sis</span>
+                </div>
             </div> *@
         </div>
-        <div>
-            <button class="btn-search-add">
-                <i class="fa-solid fa-user-group btn-search-add__icon"></i>
-            </button>
-            <button class="btn-search-add">
-                <i class="fa-solid fa-magnifying-glass btn-search-add__icon"></i>
-            </button>
-            <button class="btn-search-add">
-                <i class="fa-solid fa-video btn-search-add__icon"></i>
-            </button>
-            <button class="btn-search-add">
-                <i class="fa-regular fa-window-restore btn-search-add__icon"></i>
-            </button>
-        </div>
-    </header>
-    <!-- list chat -->
-    <div class="aside-cont-list-chat">
-        <div id="chatContainer" class="list-chat">
-        </div>
-    </div>
-    <!-- footer aside -->
-    <div class="flex-column aside-chat-container">
-        <div class="aside-chat-bar">
-            <div class="aside-chat-toolbar">
-                <button class="aside-chat-bar-btn">
-                    <img class="aside-chat-bar-btn_img" src="~/icon/sticker icon.png" alt="">
-                </button>
-                <button class="aside-chat-bar-btn" id="btnSelectImage">
-                    <img class="aside-chat-bar-btn_img" src="~/icon/image.png" alt="">
-                    <input type="file" id="imageInput" style="display: none;" accept="image/*">
-                </button>
-                <button class="aside-chat-bar-btn" id="btnSelectFile">
-                    <input type="file" id="fileInput" style="display: none;">
-                    <img class="aside-chat-bar-btn_img" src="~/icon/link icon.png" alt="">
-                </button>
-                <button class="aside-chat-bar-btn">
-                    <img class="aside-chat-bar-btn_img" src="~/icon/card icon.png" alt="">
-                </button>
-            </div>
-
-        </div>
-        <div class="flex-align-center-between aside-chat-cont-input">
-            <div class="aside-chat-input">
-                <textarea class="aside-chat-input_text" type="text" placeholder="Gửi tin nhắn..."></textarea>
-            </div>
-            <div class="flex aside-chat-icon-with-send">
-                <button class="aside-chat-bar-btn emoji-btn">
-                    <img class="aside-chat-bar-btn_img" src="~/icon/smile icon.png" alt="">
-                </button>
-                <div class="emoji-picker" style="display: none;">
-                    <div class="emoji-list">
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙂</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😖</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😍</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😂</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😎</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😢</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😀</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥳</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😡</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😇</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤔</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥺</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😊</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😇</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙃</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😉</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😌</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥰</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😘</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😗</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😙</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😚</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😋</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😛</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😝</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😜</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤪</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤨</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🧐</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😎</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤓</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥸</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤩</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥳</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙂‍↕️</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😏</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙂‍↔️</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😞</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😔</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😟</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😟</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😟</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😣</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😫</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😩</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😭</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😮‍💨</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙌</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">👍</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">👎</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🔥</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">💯</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">❤️</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🎉</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">👏</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤝</span></div>
-                        <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙈</span></div>
-                    </div>
+    </sidebar>
+    <aside class="flex-column aside-container-msg">
+        <header class="flex-align-center-between cont-msg-header">
+            <div class="flex-align-center">
+                @* <div class="avatar-chat-msg">
+                <img class="avatar-img" src="~/img/avt.jpeg" alt="">
                 </div>
-                <button class="aside-chat-bar-btn_send">
-                    <i class="fa-solid fa-paper-plane aside-chat-bar-btn_icon"></i>
+                <div class="flex-column aside-head-info">
+                <div class="aside-head-name">Winter</div>
+                <div class="aside-head-tag">
+                <i class="fa-solid fa-tag"></i>
+                </div>
+                </div> *@
+            </div>
+            <div>
+                <button class="btn-search-add">
+                    <i class="fa-solid fa-user-group btn-search-add__icon"></i>
+                </button>
+                <button class="btn-search-add">
+                    <i class="fa-solid fa-magnifying-glass btn-search-add__icon"></i>
+                </button>
+                <button class="btn-search-add">
+                    <i class="fa-solid fa-video btn-search-add__icon"></i>
+                </button>
+                <button class="btn-search-add">
+                    <i class="fa-regular fa-window-restore btn-search-add__icon"></i>
                 </button>
             </div>
+        </header>
+        <!-- list chat -->
+        <div class="aside-cont-list-chat">
+            <div id="chatContainer" class="list-chat">
+            </div>
         </div>
-    </div>
-</aside>
+        <!-- footer aside -->
+        <div class="flex-column aside-chat-container">
+            <div class="aside-chat-bar">
+                <div class="aside-chat-toolbar">
+                    <button class="aside-chat-bar-btn">
+                        <img class="aside-chat-bar-btn_img" src="~/icon/sticker icon.png" alt="">
+                    </button>
+                    <button class="aside-chat-bar-btn" id="btnSelectImage">
+                        <img class="aside-chat-bar-btn_img" src="~/icon/image.png" alt="">
+                        <input type="file" id="imageInput" style="display: none;" accept="image/*">
+                    </button>
+                    <button class="aside-chat-bar-btn" id="btnSelectFile">
+                        <input type="file" id="fileInput" style="display: none;">
+                        <img class="aside-chat-bar-btn_img" src="~/icon/link icon.png" alt="">
+                    </button>
+                    <button class="aside-chat-bar-btn">
+                        <img class="aside-chat-bar-btn_img" src="~/icon/card icon.png" alt="">
+                    </button>
+                </div>
 
+            </div>
+            <div class="flex-align-center-between aside-chat-cont-input">
+                <div class="aside-chat-input">
+                    <textarea class="aside-chat-input_text" type="text" placeholder="Gửi tin nhắn..."></textarea>
+                </div>
+                <div class="flex aside-chat-icon-with-send">
+                    <button class="aside-chat-bar-btn emoji-btn">
+                        <img class="aside-chat-bar-btn_img" src="~/icon/smile icon.png" alt="">
+                    </button>
+                    <div class="emoji-picker" style="display: none;">
+                        <div class="emoji-list">
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙂</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😖</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😍</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😂</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😎</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😢</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😀</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥳</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😡</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😇</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤔</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥺</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😊</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😇</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙃</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😉</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😌</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥰</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😘</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😗</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😙</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😚</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😋</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😛</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😝</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😜</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤪</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤨</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🧐</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😎</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤓</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥸</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤩</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🥳</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙂‍↕️</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😏</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙂‍↔️</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😞</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😔</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😟</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😟</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😟</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😣</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😫</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😩</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😭</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">😮‍💨</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙌</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">👍</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">👎</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🔥</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">💯</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">❤️</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🎉</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">👏</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🤝</span></div>
+                            <div class="flex-align-justify-center emoji-icon-btn"><span class="emoji-item-icon">🙈</span></div>
+                        </div>
+                    </div>
+                    <button class="aside-chat-bar-btn_send">
+                        <i class="fa-solid fa-paper-plane aside-chat-bar-btn_icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+<div class="user-id" id="@Model.LoggedInUser.UserID" hidden="hidden"></div>
 <script type="module" src="~/js/message/message-dialog-init.js"></script>
 <script type="module" src="~/js/message/message-dialog-init.js"></script>
 <script type="module" src="~/js/profile/message-dialog-init.js"></script>
