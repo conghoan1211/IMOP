@@ -1,6 +1,14 @@
+"use strict";
+
 const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+const userId = document.querySelector('.user-id').id;
+console.log(userId);
 connection.on("ReceiveMessage", addMessage);
-connection.start();
+connection.start().then(function () {
+    console.log("start connectioon");
+}).catch(function (err) {
+    return console.error(err.toString());
+});
 document.addEventListener("DOMContentLoaded", function () {
     const textarea = document.querySelector('.aside-chat-input_text');
     const sendButton = document.querySelector('.aside-chat-bar-btn_send');
@@ -17,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 sendButton.classList.remove('visible'); // Ẩn nút gửi nếu không có nội dung
             }
         });
-
         // Sự kiện nhấn phím Enter để gửi tin nhắn
         textarea.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
@@ -44,10 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         sendButton.addEventListener('click', function () {
             const messageText = textarea.value.trim();
-
             if (messageText.length > 0) {
                 // Tạo và thêm tin nhắn mới vào giao diện
-                addMessage(messageText, 'me');
+                connection.invoke("SendMessage", messageText, userId).catch(function (err) {
+                    return console.error(err.toString());
+                });
 
                 // Xóa nội dung sau khi gửi tin nhắn
                 textarea.value = '';
@@ -161,7 +169,7 @@ function addMessage(text, sender = null) {
     const newMessageDiv = createElementWithClasses('div', ['flex', 'chat-item']);
     const newMessageContentDiv = createElementWithClasses('div', ['chat-content']);
     const newChatTextTimeDiv = createElementWithClasses('div', ['chat-text-time']);
-    if (sender == 'me') {
+    if (sender == userId) {
         newMessageDiv.classList.add('me');
         newMessageContentDiv.classList.add('me');
         newChatTextTimeDiv.classList.add('me');
@@ -250,6 +258,7 @@ function getCurrentTime() {
 }
 function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year = true) {
     const now = new Date();
+    let result = [];
     if (houraAndMinute) {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -272,7 +281,6 @@ function getCurrentTimeFormatted(houraAndMinute = true, dayAndMonth = true, year
         result.push(year);
     }
 
-    console.log(houraAndMinute + " " + dayAndMonth + " " + year);
     // Format the date and time
     return result.join('');
 }

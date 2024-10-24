@@ -81,10 +81,6 @@ app.UseAuthorization();
 
 app.UseStatusCodePagesWithRedirects("/login");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<ChatHub>("/chat");
-});
 
 app.MapGet("/", async (HttpContext context) =>
 {
@@ -100,7 +96,8 @@ app.MapGet("/", async (HttpContext context) =>
 
 // Map SignalR hubs
 app.MapHub<PostHub>("/postHub");
+app.MapHub<ChatHub>("/chatHub");
 
 app.MapRazorPages();
 
-app.Run();
+await app.RunAsync();
