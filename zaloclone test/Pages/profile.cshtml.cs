@@ -250,6 +250,29 @@ namespace zaloclone_test.Pages
             }
             return RedirectToPage();
         }
+        public async Task<IActionResult> OnPostUnfriend(string otherUserId)
+        {
+            if (string.IsNullOrEmpty(otherUserId))
+            {
+                Message = "User request Id không hợp lệ.";
+                return RedirectToPage();
+            }
+            string msg = _jwtAuthen.ParseCurrentToken(User, out UserToken userToken);
+            if (msg.Length > 0)
+            {
+                Message = msg;
+                return Page();
+            }
+            UserToken = userToken;
+            FriendOperationResult result = await _asideContactService.DeleteFriend(userToken.UserID.ToString(), otherUserId);
+            if (result.Success)
+            {
+                Message = result.Message;
+                await OnGet();
+            }
+            return RedirectToPage();
+        }
+
         #endregion
 
     }

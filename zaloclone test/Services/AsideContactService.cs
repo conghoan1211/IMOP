@@ -31,7 +31,7 @@ namespace zaloclone_test.Services
         public async Task<List<AsideContactVM>> GetFriendsList(string userId)
         {
             var friends = await _context.Friends
-                .Where(f => (f.UserId1 == userId || f.UserId2 == userId))
+                .Where(f => (f.UserId1 == userId || f.UserId2 == userId) && f.Status ==(int)FriendStatus.Accepted)
                 .Include(f => f.UserId1Navigation)
                 .Include(f => f.UserId2Navigation)
                 .Select(f => new AsideContactVM
@@ -57,7 +57,7 @@ namespace zaloclone_test.Services
         public async Task<List<AsideContactVM>> FilterFriends(string userId, FriendFilterModel filter)
         {
             var query = _context.Friends
-                .Where(f => (f.UserId1 == userId || f.UserId2 == userId))
+                .Where(f => (f.UserId1 == userId || f.UserId2 == userId) && f.Status == (int)FriendStatus.Accepted)
                 .Include(f => f.UserId1Navigation)
                 .Include(f => f.UserId2Navigation)
                 .AsQueryable();
@@ -74,7 +74,7 @@ namespace zaloclone_test.Services
             if (filter.FilterType == "online")
             {
                 query = query.Where(f =>
-                    ((f.UserId1Navigation.Status == 1 || f.UserId2Navigation.Status == 1) && f.Status == 1));
+                    ((f.UserId1Navigation.Status == 1 || f.UserId2Navigation.Status == 1)));
             }
             else if (filter.FilterType == "blocked")
             {

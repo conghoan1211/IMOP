@@ -86,7 +86,7 @@ namespace zaloclone_test.Services
                 user.Dob = updatedProfile.Dob;
                 user.Bio = updatedProfile.Bio;
                 user.Username = updatedProfile.UserName;
-                user.UpdateAt = DateTime.Now;  
+                user.UpdateAt = DateTime.Now;
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
             }
@@ -126,19 +126,22 @@ namespace zaloclone_test.Services
             if (user == null) return "User not found";
 
             var files = input.Image;
-            if (files == null) return "";
+            if (files == null)
+                return "";
 
             var (msg, fileName) = await Common.GetUrlImage(files);
-            if (msg.Length > 0) return msg;
+            if (msg.Length > 0)
 
-            var oldAvatarPath = Path.Combine(Directory.GetCurrentDirectory(), Constant.UrlImagePath, user.Avatar);
+                return msg;
+            var oldAvatarPath = Path.Combine(Directory.GetCurrentDirectory(), Constant.UrlImagePath, user.Avatar ?? "");
+            if (File.Exists(oldAvatarPath)) File.Delete(oldAvatarPath);
+
             try
             {
                 user.Avatar = fileName;
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
-                if (File.Exists(oldAvatarPath))  File.Delete(oldAvatarPath);
 
                 // Update the JWT token
                 http.Response.Cookies.Delete("JwtToken"); // Remove the old token
