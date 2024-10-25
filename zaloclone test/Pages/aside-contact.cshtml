@@ -92,12 +92,13 @@
 </aside>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Filter friends
         function filterFriends() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const sortOrder = document.getElementById('sortOrder').value;
-            const filterType = document.getElementById('filterType').value;
+            const searchTerm = $('#searchInput').val();
+            const sortOrder = $('#sortOrder').val();
+            const filterType = $('#filterType').val();
 
             const filter = {
                 searchTerm: searchTerm,
@@ -105,102 +106,92 @@
                 filterType: filterType
             };
 
-            fetch('?handler=Filter', {
-                method: 'POST',
+            $.ajax({
+                url: '?handler=Filter',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filter),
                 headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                 },
-                body: JSON.stringify(filter)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(result => {
+                success: function(result) {
                     if (result.success) {
                         updateFriendsList(result.data);
                     } else {
                         showToast(result.message || 'Có lỗi xảy ra khi lọc danh sách bạn bè');
                     }
-                })
-                .catch(error => {
+                },
+                error: function(xhr, status, error) {
                     console.error('Error:', error);
                     showToast('Có lỗi xảy ra khi lọc danh sách bạn bè');
-                });
+                }
+            });
         }
 
         // Block friend
         function blockFriend(friendId) {
             if (confirm('Bạn có chắc chắn muốn chặn người dùng này không?')) {
-                fetch('?handler=BlockFriend', {
-                    method: 'POST',
+                $.ajax({
+                    url: '?handler=BlockFriend',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ userId: friendId }),
                     headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                     },
-                    body: JSON.stringify({ userId: friendId })
-                })
-                    .then(response => response.json())
-                    .then(result => {
+                    success: function(result) {
                         if (result.success) {
                             filterFriends();
                         }
                         showToast(result.message);
-                    });
+                    }
+                });
             }
         }
 
         // Unblock friend
         function unblockFriend(friendId) {
             if (confirm('Bạn có chắc chắn muốn bỏ chặn người dùng này không?')) {
-                fetch('?handler=UnblockFriend', {
-                    method: 'POST',
+                $.ajax({
+                    url: '?handler=UnblockFriend',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ userId: friendId }),
                     headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                     },
-                    body: JSON.stringify({ userId: friendId })
-                })
-                    .then(response => response.json())
-                    .then(result => {
+                    success: function(result) {
                         if (result.success) {
                             filterFriends();
                         }
                         showToast(result.message);
-                    });
+                    }
+                });
             }
         }
 
         // Delete friend
         function deleteFriend(friendId) {
             if (confirm('Bạn có chắc chắn muốn xóa bạn bè không?')) {
-                fetch('?handler=DeleteFriend', {
-                    method: 'POST',
+                $.ajax({
+                    url: '?handler=DeleteFriend',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ friendId: friendId }),
                     headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                     },
-                    body: JSON.stringify({ friendId: friendId })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(result => {
+                    success: function(result) {
                         if (result.success) {
                             filterFriends();
                         }
                         showToast(result.message);
-                    })
-                    .catch(error => {
+                    },
+                    error: function(xhr, status, error) {
                         console.error('Error:', error);
                         showToast('Có lỗi xảy ra khi xóa bạn bè');
-                    });
+                    }
+                });
             }
         }
 
@@ -291,11 +282,11 @@
         }
 
         const debouncedFilter = debounce(() => filterFriends(), 300);
-        document.getElementById('searchInput').addEventListener('input', debouncedFilter);
-        document.getElementById('sortOrder').addEventListener('change', filterFriends);
-        document.getElementById('filterType').addEventListener('change', filterFriends);
-        document.getElementById('clearSearch').addEventListener('click', () => {
-            document.getElementById('searchInput').value = '';
+        $('#searchInput').on('input', debouncedFilter);
+        $('#sortOrder').on('change', filterFriends);
+        $('#filterType').on('change', filterFriends);
+        $('#clearSearch').on('click', function() {
+            $('#searchInput').val('');
             filterFriends();
         });
 
@@ -311,7 +302,7 @@
             };
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        $(document).ready(function() {
             filterFriends();
         });
     </script>

@@ -1,4 +1,8 @@
-﻿@{
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var token = Xsrf.GetAndStoreTokens(Context).RequestToken;
+}
+@{
     Layout = "_Layout";
 }
 
@@ -81,5 +85,8 @@
 
     <script type="module" src="~/js/contact/menu-sidebar-contact.js"></script>
     <script type="module" src="~/js/helper/format-date.js"></script>
+    <script>
+        var antiForgeryToken = '@token';
+    </script>
 
 </body>
